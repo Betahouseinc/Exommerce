@@ -277,6 +277,7 @@
 
   /* ── Scroll animations ── */
   .reveal { opacity: 0; transform: translateY(32px); }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
   /* ── Glow divs for sections ── */
   .glow-top-center {
@@ -1070,38 +1071,39 @@ function closeModal() {
 }
 document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
 
-function submitForm(e) {
+async function submitForm(e) {
   e.preventDefault();
   const form = e.target;
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const submitText = document.getElementById('submit-text');
+
+  // Show loading state
+  submitBtn.disabled = true;
+  submitText.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="animation:spin .8s linear infinite"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16 8 8 0 01-8-8z"/></svg> Sending…`;
+
   const data = new FormData(form);
-  const email = data.get('email');
-  const name = data.get('name');
-  const service = data.get('service');
-  const budget = data.get('budget');
-  const description = data.get('description');
-  const company = data.get('company');
 
-  // Send via mailto as fallback (opens email client with pre-filled details)
-  const subject = encodeURIComponent(`Project Enquiry: ${service} – ${name}`);
-  const body = encodeURIComponent(
-`New Project Enquiry from exommerce.online
+  try {
+    const res = await fetch('https://formspree.io/f/mqewrgqd', {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    });
 
-Name: ${name}
-Company: ${company || 'N/A'}
-Email: ${email}
-Phone: ${data.get('phone') || 'N/A'}
-Service: ${service}
-Budget: ${budget || 'Not specified'}
-
-Project Description:
-${description}
-`);
-  window.location.href = `mailto:exommerce.online@gmail.com?subject=${subject}&body=${body}`;
-
-  // Show success
-  form.style.display = 'none';
-  document.getElementById('form-success').style.display = 'block';
-  document.getElementById('success-email').textContent = email;
+    if (res.ok) {
+      // Show success
+      form.style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+      document.getElementById('success-email').textContent = data.get('email');
+    } else {
+      const json = await res.json();
+      throw new Error(json.errors?.[0]?.message || 'Submission failed');
+    }
+  } catch (err) {
+    submitText.innerHTML = `Try Again`;
+    submitBtn.disabled = false;
+    alert('Something went wrong: ' + err.message + '\n\nPlease email us directly at exommerce.online@gmail.com');
+  }
 }
 
 // ── GSAP Animations ──
