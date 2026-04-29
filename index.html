@@ -365,7 +365,7 @@
     <div class="section-header">
       <p class="section-label reveal">What We Do</p>
       <h2 class="section-title reveal">Consulting Services</h2>
-      <p class="section-sub reveal">End-to-end IT consulting — strategy, implementation, and ongoing support across every layer of your technology stack.</p>
+      <p class="section-sub reveal">End-to-end IT consulting — click any service to see the challenges we solve.</p>
     </div>
     <div class="services-grid" id="svc-grid"></div>
   </div>
@@ -550,37 +550,181 @@ document.getElementById('yr').textContent = new Date().getFullYear();
 
 // ── Services data ──
 const services = [
-  { title:"Cloud Services Consultation", tags:["AWS","Azure","GCP","Migration"], accent:"#22C55E",
-    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>` },
-  { title:"IT Operations Management", tags:["NOC","ITSM","Monitoring","SLA"], accent:"#4ADE80",
-    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>` },
-  { title:"Data Integration", tags:["ETL","APIs","Kafka","Pipelines"], accent:"#22C55E",
-    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>` },
-  { title:"Custom Projects & Development", tags:["Web Apps","Automation","Portals","APIs"], accent:"#4ADE80",
-    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>` },
-  { title:"Cybersecurity & Compliance", tags:["ISO 27001","SOC 2","Pen Testing","SIEM"], accent:"#22C55E",
-    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>` },
-  { title:"Data Analytics & Business Intelligence", tags:["Power BI","Tableau","Snowflake","SQL"], accent:"#4ADE80",
-    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg>` },
-  { title:"IT Infrastructure & Networking", tags:["SD-WAN","VMware","Cisco","HCI"], accent:"#22C55E",
-    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>` },
-  { title:"IT Strategy & Digital Transformation", tags:["Roadmapping","Vendor Mgmt","CIO Advisory"], accent:"#4ADE80",
-    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>` },
-  { title:"Managed IT Support", tags:["24/7 Helpdesk","Remote Support","Asset Mgmt"], accent:"#22C55E",
-    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>` },
+  {
+    title:"Cloud Services Consultation", tags:["AWS","Azure","GCP","Migration"], accent:"#22C55E",
+    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>`,
+    desc:"Strategic cloud adoption, multi-cloud architecture, cost optimisation, and migration planning across AWS, Azure, and GCP.",
+    painPoints:[
+      "Skyrocketing cloud bills with no visibility into what's driving costs",
+      "Teams stuck on legacy on-prem servers, unable to scale quickly",
+      "Failed or stalled cloud migration projects with no clear path forward",
+      "Multi-cloud sprawl leading to security gaps and management complexity"
+    ]
+  },
+  {
+    title:"IT Operations Management", tags:["NOC","ITSM","Monitoring","SLA"], accent:"#4ADE80",
+    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>`,
+    desc:"End-to-end management of your IT infrastructure — server admin, network monitoring, incident response, and capacity planning.",
+    painPoints:[
+      "Recurring downtime and outages disrupting business operations",
+      "No dedicated IT team — issues pile up and go unresolved for days",
+      "Reactive firefighting instead of proactive monitoring and prevention",
+      "Missed SLAs and frustrated end-users due to slow incident response"
+    ]
+  },
+  {
+    title:"Data Integration", tags:["ETL","APIs","Kafka","Pipelines"], accent:"#22C55E",
+    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>`,
+    desc:"Connect disparate systems, databases, and SaaS platforms into a unified data layer with ETL/ELT pipelines and real-time sync.",
+    painPoints:[
+      "Data siloed across CRM, ERP, and spreadsheets — no single source of truth",
+      "Manual data exports and copy-paste workflows eating up hours every week",
+      "Inconsistent data across departments leading to poor business decisions",
+      "SaaS tools that don't talk to each other, creating broken workflows"
+    ]
+  },
+  {
+    title:"Custom Projects & Development", tags:["Web Apps","Automation","Portals","APIs"], accent:"#4ADE80",
+    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>`,
+    desc:"From internal tooling and workflow automation to customer-facing portals and enterprise applications — built to your exact requirements.",
+    painPoints:[
+      "Off-the-shelf software doesn't fit your processes — constant workarounds",
+      "Manual, repetitive tasks consuming your team's time that should be automated",
+      "Customer portals or internal tools that are clunky, slow, and outdated",
+      "Vendor lock-in with expensive SaaS tools for simple, automatable workflows"
+    ]
+  },
+  {
+    title:"Cybersecurity & Compliance", tags:["ISO 27001","SOC 2","Pen Testing","SIEM"], accent:"#22C55E",
+    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>`,
+    desc:"Security assessments, vulnerability management, endpoint protection, and compliance readiness for ISO 27001, SOC 2, and GDPR.",
+    painPoints:[
+      "No clear picture of your attack surface or where vulnerabilities exist",
+      "Upcoming ISO 27001 / SOC 2 audit with no preparation in place",
+      "Employees clicking phishing links — zero security awareness training",
+      "Customer data at risk due to outdated access controls and weak policies"
+    ]
+  },
+  {
+    title:"Data Analytics & Business Intelligence", tags:["Power BI","Tableau","Snowflake","SQL"], accent:"#4ADE80",
+    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg>`,
+    desc:"Transform raw data into decisions with data warehouses, dashboards, and BI platforms for real-time KPI visibility.",
+    painPoints:[
+      "Leadership making decisions based on gut feel — no reliable data dashboards",
+      "Weekly reports that take hours to compile manually from multiple sources",
+      "Raw data sitting in databases with no way to visualise or act on it",
+      "Different teams reporting different numbers for the same metric"
+    ]
+  },
+  {
+    title:"IT Infrastructure & Networking", tags:["SD-WAN","VMware","Cisco","HCI"], accent:"#22C55E",
+    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>`,
+    desc:"Design, deployment, and management of on-prem and hybrid infrastructure — servers, storage, LAN/WAN, SD-WAN, and VPN.",
+    painPoints:[
+      "Ageing hardware causing slow performance and frequent failures",
+      "Network bottlenecks slowing down remote teams and branch offices",
+      "No disaster recovery plan — one hardware failure could mean data loss",
+      "Expanding offices with no scalable, standardised network architecture"
+    ]
+  },
+  {
+    title:"IT Strategy & Digital Transformation", tags:["Roadmapping","Vendor Mgmt","CIO Advisory"], accent:"#4ADE80",
+    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`,
+    desc:"CIO-level advisory to align your technology roadmap with business goals, from tech audits and vendor selection to digital transformation.",
+    painPoints:[
+      "Technology investments not delivering ROI — unclear if tools are the right fit",
+      "No technology roadmap — decisions are reactive rather than strategic",
+      "Too many vendors, too many tools, with no cohesive IT strategy",
+      "Digital transformation initiatives stalling due to lack of clear ownership"
+    ]
+  },
+  {
+    title:"Managed IT Support", tags:["24/7 Helpdesk","Remote Support","Asset Mgmt"], accent:"#22C55E",
+    icon:`<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`,
+    desc:"24/7 helpdesk, remote and on-site support, asset lifecycle management, and proactive maintenance to keep your teams productive.",
+    painPoints:[
+      "Employees losing hours waiting for IT issues to be resolved",
+      "No asset tracking — laptops, licences, and hardware go unmanaged",
+      "Onboarding/offboarding is chaotic with no standardised IT process",
+      "IT support costs are unpredictable — constant break-fix expenses"
+    ]
+  },
 ];
+
 const svcGrid = document.getElementById('svc-grid');
+let activeCard = null;
+
 services.forEach((s,i) => {
-  svcGrid.innerHTML += `
-  <div class="service-card reveal">
-    <span class="svc-num">${String(i+1).padStart(2,'0')}</span>
-    <div class="svc-icon" style="background:${s.accent}20;color:${s.accent}">${s.icon}</div>
-    <div class="svc-body">
-      <p class="svc-title">${s.title}</p>
-      <div class="svc-tags">${s.tags.map(t=>`<span class="svc-tag">${t}</span>`).join('')}</div>
+  const card = document.createElement('div');
+  card.className = 'service-card reveal';
+  card.style.cursor = 'pointer';
+  card.style.flexDirection = 'column';
+  card.style.alignItems = 'stretch';
+  card.style.padding = '0';
+  card.style.overflow = 'hidden';
+  card.style.transition = 'border-color .2s, background .2s';
+
+  card.innerHTML = `
+    <div class="svc-header" style="display:flex;align-items:center;gap:16px;padding:16px 20px;">
+      <span class="svc-num">${String(i+1).padStart(2,'0')}</span>
+      <div class="svc-icon" style="background:${s.accent}20;color:${s.accent}">${s.icon}</div>
+      <div class="svc-body" style="flex:1;min-width:0;">
+        <p class="svc-title">${s.title}</p>
+        <div class="svc-tags">${s.tags.map(t=>`<span class="svc-tag">${t}</span>`).join('')}</div>
+      </div>
+      <svg class="svc-arrow" style="transform:rotate(0deg);transition:transform .3s;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
     </div>
-    <svg class="svc-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-  </div>`;
+    <div class="svc-expand" style="max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(0.22,1,0.36,1);">
+      <div style="padding:0 20px 20px 20px;border-top:1px solid rgba(255,255,255,.06);">
+        <p style="color:rgba(255,255,255,.5);font-size:13px;line-height:1.65;margin:14px 0 14px;">${s.desc}</p>
+        <p style="font-size:11px;font-weight:700;letter-spacing:.15em;color:${s.accent};text-transform:uppercase;margin-bottom:10px;">Common Challenges We Solve</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          ${s.painPoints.map(p=>`
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:rgba(255,255,255,.6);line-height:1.5;">
+            <span style="color:${s.accent};margin-top:2px;flex-shrink:0;">
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+            </span>
+            ${p}
+          </li>`).join('')}
+        </ul>
+        <button onclick="event.stopPropagation();openModal()" class="btn btn-sm btn-primary" style="margin-top:16px;">
+          <span>Discuss This Challenge
+            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  `;
+
+  card.addEventListener('click', () => {
+    const expand = card.querySelector('.svc-expand');
+    const arrow = card.querySelector('.svc-arrow');
+    const isOpen = expand.style.maxHeight !== '0px' && expand.style.maxHeight !== '';
+
+    // Close previously open card
+    if (activeCard && activeCard !== card) {
+      activeCard.querySelector('.svc-expand').style.maxHeight = '0px';
+      activeCard.querySelector('.svc-arrow').style.transform = 'rotate(0deg)';
+      activeCard.style.borderColor = 'rgba(255,255,255,.07)';
+      activeCard.style.background = 'rgba(255,255,255,.02)';
+    }
+
+    if (isOpen) {
+      expand.style.maxHeight = '0px';
+      arrow.style.transform = 'rotate(0deg)';
+      card.style.borderColor = 'rgba(255,255,255,.07)';
+      card.style.background = 'rgba(255,255,255,.02)';
+      activeCard = null;
+    } else {
+      expand.style.maxHeight = expand.scrollHeight + 400 + 'px';
+      arrow.style.transform = 'rotate(180deg)';
+      card.style.borderColor = s.accent + '40';
+      card.style.background = s.accent + '08';
+      activeCard = card;
+    }
+  });
+
+  svcGrid.appendChild(card);
 });
 
 // ── Pillars ──
