@@ -358,6 +358,45 @@
   </div>
 </section>
 
+<!-- ── TECH LOGOS ── -->
+<section id="tech-logos" style="padding:48px 0;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05);overflow:hidden;position:relative;">
+  <div style="text-align:center;margin-bottom:28px;">
+    <p style="font-size:11px;font-weight:700;letter-spacing:.2em;color:rgba(255,255,255,.25);text-transform:uppercase;">Technologies &amp; Platforms We Work With</p>
+  </div>
+  <!-- Fade edges -->
+  <div style="position:absolute;top:0;left:0;width:120px;height:100%;background:linear-gradient(to right,#0A0F0A,transparent);z-index:2;pointer-events:none;"></div>
+  <div style="position:absolute;top:0;right:0;width:120px;height:100%;background:linear-gradient(to left,#0A0F0A,transparent);z-index:2;pointer-events:none;"></div>
+
+  <div class="marquee-track">
+    <div class="marquee-inner" id="marquee-inner">
+      <!-- logos injected by JS -->
+    </div>
+  </div>
+</section>
+
+<style>
+.marquee-track { overflow: hidden; }
+.marquee-inner {
+  display: flex; align-items: center; gap: 0;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+.marquee-inner:hover { animation-play-state: paused; }
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.logo-chip {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 0 40px; flex-shrink: 0;
+  opacity: .45; transition: opacity .3s;
+  cursor: default;
+}
+.logo-chip:hover { opacity: 1; }
+.logo-chip img { height: 28px; width: auto; filter: brightness(0) invert(1); }
+.logo-chip span { font-size: 10px; font-weight: 600; letter-spacing: .05em; color: rgba(255,255,255,.4); white-space: nowrap; }
+</style>
+
 <!-- ── SERVICES ── -->
 <section id="services">
   <div class="glow-top-center"></div>
@@ -545,6 +584,43 @@
 </footer>
 
 <script>
+// ── Tech Logos Marquee ──
+const techLogos = [
+  { name:"AWS",        slug:"amazonaws",         color:"#FF9900" },
+  { name:"Azure",      slug:"microsoftazure",     color:"#0089D6" },
+  { name:"Google Cloud",slug:"googlecloud",       color:"#4285F4" },
+  { name:"Microsoft",  slug:"microsoft",          color:"#00A4EF" },
+  { name:"Cisco",      slug:"cisco",              color:"#1BA0D7" },
+  { name:"VMware",     slug:"vmware",             color:"#607078" },
+  { name:"Snowflake",  slug:"snowflake",          color:"#29B5E8" },
+  { name:"Power BI",   slug:"powerbi",            color:"#F2C811" },
+  { name:"Tableau",    slug:"tableau",            color:"#E97627" },
+  { name:"Kubernetes", slug:"kubernetes",         color:"#326CE5" },
+  { name:"Docker",     slug:"docker",             color:"#2496ED" },
+  { name:"Terraform",  slug:"terraform",          color:"#7B42BC" },
+  { name:"Kafka",      slug:"apachekafka",        color:"#231F20" },
+  { name:"Grafana",    slug:"grafana",            color:"#F46800" },
+  { name:"Elastic",    slug:"elastic",            color:"#FEC514" },
+  { name:"GitHub",     slug:"github",             color:"#181717" },
+  { name:"Ansible",    slug:"ansible",            color:"#EE0000" },
+  { name:"Splunk",     slug:"splunk",             color:"#000000" },
+];
+
+const marqueeInner = document.getElementById('marquee-inner');
+// Duplicate for seamless loop
+const allLogos = [...techLogos, ...techLogos];
+allLogos.forEach(l => {
+  const chip = document.createElement('div');
+  chip.className = 'logo-chip';
+  chip.title = l.name;
+  chip.innerHTML = `
+    <img src="https://cdn.simpleicons.org/${l.slug}/ffffff" alt="${l.name}" loading="lazy"
+         onerror="this.style.display='none'">
+    <span>${l.name}</span>
+  `;
+  marqueeInner.appendChild(chip);
+});
+
 // ── Year ──
 document.getElementById('yr').textContent = new Date().getFullYear();
 
