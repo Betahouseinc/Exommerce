@@ -310,7 +310,7 @@
       <a href="#process">Process</a>
       <a href="#contact">Contact</a>
     </nav>
-    <a href="#contact" class="btn btn-sm btn-primary nav-cta"><span>Start a Project</span></a>
+    <button onclick="openModal()" class="btn btn-sm btn-primary nav-cta"><span>Start a Project</span></button>
     <button class="hamburger" id="ham" aria-label="Toggle menu">
       <span></span><span></span><span></span>
     </button>
@@ -320,7 +320,7 @@
     <a href="#whyus" onclick="closeMobile()">Why Us</a>
     <a href="#process" onclick="closeMobile()">Process</a>
     <a href="#contact" onclick="closeMobile()">Contact</a>
-    <a href="#contact" class="btn btn-sm btn-primary" style="width:fit-content"><span>Start a Project</span></a>
+    <button onclick="openModal();closeMobile()" class="btn btn-sm btn-primary" style="width:fit-content"><span>Start a Project</span></button>
   </div>
 </nav>
 
@@ -413,15 +413,115 @@
       Let's build something great together. Book a free 30-minute discovery call and we'll outline a clear path forward — no strings attached.
     </p>
     <div class="cta-btns reveal">
-      <a href="mailto:hello@exommerce.in" class="btn btn-lg btn-primary" style="box-shadow:0 0 40px rgba(34,197,94,.25)">
+      <button onclick="openModal()" class="btn btn-lg btn-primary" style="box-shadow:0 0 40px rgba(34,197,94,.25)">
         <span>Start a Project
           <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
         </span>
-      </a>
-      <a href="mailto:hello@exommerce.in" class="btn btn-lg btn-secondary">hello@exommerce.in</a>
+      </button>
+      <a href="mailto:exommerce.online@gmail.com" class="btn btn-lg btn-secondary">exommerce.online@gmail.com</a>
     </div>
   </div>
 </section>
+
+<!-- ── ENQUIRY MODAL ── -->
+<div id="enquiry-modal" style="display:none;position:fixed;inset:0;z-index:100;align-items:center;justify-content:center;padding:24px;">
+  <!-- Backdrop -->
+  <div onclick="closeModal()" style="position:absolute;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);"></div>
+  <!-- Modal box -->
+  <div style="position:relative;z-index:1;width:100%;max-width:560px;background:#0f1a0f;border:1px solid rgba(34,197,94,.2);border-radius:20px;padding:40px;box-shadow:0 0 80px rgba(34,197,94,.1);max-height:90vh;overflow-y:auto;">
+    <!-- Close -->
+    <button onclick="closeModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:22px;line-height:1;">✕</button>
+    <!-- Header -->
+    <div style="margin-bottom:28px;">
+      <div style="display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border-radius:99px;border:1px solid rgba(34,197,94,.3);background:rgba(34,197,94,.1);color:#4ADE80;font-size:11px;font-weight:600;margin-bottom:14px;">
+        <span style="width:6px;height:6px;border-radius:50%;background:#4ADE80;animation:pulse 2s infinite;display:inline-block;"></span>
+        Free 30-min Discovery Call
+      </div>
+      <h3 style="font-size:26px;font-weight:900;letter-spacing:-.02em;margin-bottom:6px;">Tell us about your project</h3>
+      <p style="color:rgba(255,255,255,.4);font-size:14px;">We'll get back to you within 24 hours.</p>
+    </div>
+    <!-- Form -->
+    <form id="enquiry-form" onsubmit="submitForm(event)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:6px;letter-spacing:.05em;">FULL NAME *</label>
+          <input required type="text" name="name" placeholder="Rahul Sharma"
+            style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;color:#fff;font-family:inherit;font-size:14px;outline:none;transition:border-color .2s;"
+            onfocus="this.style.borderColor='rgba(34,197,94,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:6px;letter-spacing:.05em;">COMPANY</label>
+          <input type="text" name="company" placeholder="Acme Pvt Ltd"
+            style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;color:#fff;font-family:inherit;font-size:14px;outline:none;transition:border-color .2s;"
+            onfocus="this.style.borderColor='rgba(34,197,94,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:6px;letter-spacing:.05em;">EMAIL *</label>
+          <input required type="email" name="email" placeholder="rahul@company.com"
+            style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;color:#fff;font-family:inherit;font-size:14px;outline:none;transition:border-color .2s;"
+            onfocus="this.style.borderColor='rgba(34,197,94,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:6px;letter-spacing:.05em;">PHONE</label>
+          <input type="tel" name="phone" placeholder="+91 98765 43210"
+            style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;color:#fff;font-family:inherit;font-size:14px;outline:none;transition:border-color .2s;"
+            onfocus="this.style.borderColor='rgba(34,197,94,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'">
+        </div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <label style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:6px;letter-spacing:.05em;">SERVICE NEEDED *</label>
+        <select required name="service"
+          style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;color:#fff;font-family:inherit;font-size:14px;outline:none;transition:border-color .2s;appearance:none;"
+          onfocus="this.style.borderColor='rgba(34,197,94,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'">
+          <option value="" style="background:#0f1a0f">Select a service…</option>
+          <option value="Cloud Services" style="background:#0f1a0f">Cloud Services Consultation</option>
+          <option value="IT Operations" style="background:#0f1a0f">IT Operations Management</option>
+          <option value="Data Integration" style="background:#0f1a0f">Data Integration</option>
+          <option value="Custom Development" style="background:#0f1a0f">Custom Projects & Development</option>
+          <option value="Cybersecurity" style="background:#0f1a0f">Cybersecurity & Compliance</option>
+          <option value="Data Analytics" style="background:#0f1a0f">Data Analytics & BI</option>
+          <option value="Infrastructure" style="background:#0f1a0f">IT Infrastructure & Networking</option>
+          <option value="IT Strategy" style="background:#0f1a0f">IT Strategy & Digital Transformation</option>
+          <option value="Managed Support" style="background:#0f1a0f">Managed IT Support</option>
+          <option value="Other" style="background:#0f1a0f">Other / Not Sure Yet</option>
+        </select>
+      </div>
+      <div style="margin-bottom:14px;">
+        <label style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:6px;letter-spacing:.05em;">BUDGET RANGE</label>
+        <select name="budget"
+          style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;color:#fff;font-family:inherit;font-size:14px;outline:none;transition:border-color .2s;appearance:none;"
+          onfocus="this.style.borderColor='rgba(34,197,94,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'">
+          <option value="" style="background:#0f1a0f">Select budget…</option>
+          <option value="Under 1L" style="background:#0f1a0f">Under ₹1 Lakh</option>
+          <option value="1L-5L" style="background:#0f1a0f">₹1L – ₹5L</option>
+          <option value="5L-20L" style="background:#0f1a0f">₹5L – ₹20L</option>
+          <option value="20L+" style="background:#0f1a0f">₹20L+</option>
+          <option value="Not sure" style="background:#0f1a0f">Not sure yet</option>
+        </select>
+      </div>
+      <div style="margin-bottom:24px;">
+        <label style="display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);margin-bottom:6px;letter-spacing:.05em;">PROJECT DESCRIPTION *</label>
+        <textarea required name="description" rows="4" placeholder="Tell us about your project, current challenges, and what you're hoping to achieve…"
+          style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;color:#fff;font-family:inherit;font-size:14px;outline:none;transition:border-color .2s;resize:vertical;"
+          onfocus="this.style.borderColor='rgba(34,197,94,.5)'" onblur="this.style.borderColor='rgba(255,255,255,.1)'"></textarea>
+      </div>
+      <button type="submit" class="btn btn-lg btn-primary" style="width:100%;box-shadow:0 0 30px rgba(34,197,94,.2);">
+        <span id="submit-text">Send Enquiry
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </span>
+      </button>
+    </form>
+    <!-- Success state -->
+    <div id="form-success" style="display:none;text-align:center;padding:20px 0;">
+      <div style="font-size:48px;margin-bottom:16px;">✅</div>
+      <h3 style="font-size:22px;font-weight:800;margin-bottom:8px;">Enquiry Received!</h3>
+      <p style="color:rgba(255,255,255,.5);font-size:14px;line-height:1.6;">Thanks for reaching out. We'll get back to you at <span id="success-email" style="color:#4ADE80;"></span> within 24 hours.</p>
+      <button onclick="closeModal()" class="btn btn-md btn-secondary" style="margin-top:24px;">Close</button>
+    </div>
+  </div>
+</div>
 
 <!-- ── FOOTER ── -->
 <footer>
@@ -439,7 +539,7 @@
     <div class="footer-links">
       <a href="#">Privacy</a>
       <a href="#">Terms</a>
-      <a href="mailto:hello@exommerce.in">hello@exommerce.in</a>
+      <a href="mailto:exommerce.online@gmail.com">exommerce.online@gmail.com</a>
     </div>
   </div>
 </footer>
@@ -542,6 +642,60 @@ ham.addEventListener('click', () => {
   }
 });
 function closeMobile() { mm.classList.remove('open'); }
+
+// ── Modal ──
+function openModal() {
+  const m = document.getElementById('enquiry-modal');
+  m.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  gsap.fromTo(m.querySelector('div:last-child'), { opacity:0, y:30, scale:.96 }, { opacity:1, y:0, scale:1, duration:.35, ease:'power3.out' });
+}
+function closeModal() {
+  const m = document.getElementById('enquiry-modal');
+  gsap.to(m.querySelector('div:last-child'), { opacity:0, y:20, scale:.97, duration:.25, ease:'power2.in', onComplete: () => {
+    m.style.display = 'none';
+    document.body.style.overflow = '';
+    // Reset form
+    document.getElementById('enquiry-form').style.display = 'block';
+    document.getElementById('form-success').style.display = 'none';
+    document.getElementById('enquiry-form').reset();
+  }});
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+function submitForm(e) {
+  e.preventDefault();
+  const form = e.target;
+  const data = new FormData(form);
+  const email = data.get('email');
+  const name = data.get('name');
+  const service = data.get('service');
+  const budget = data.get('budget');
+  const description = data.get('description');
+  const company = data.get('company');
+
+  // Send via mailto as fallback (opens email client with pre-filled details)
+  const subject = encodeURIComponent(`Project Enquiry: ${service} – ${name}`);
+  const body = encodeURIComponent(
+`New Project Enquiry from exommerce.online
+
+Name: ${name}
+Company: ${company || 'N/A'}
+Email: ${email}
+Phone: ${data.get('phone') || 'N/A'}
+Service: ${service}
+Budget: ${budget || 'Not specified'}
+
+Project Description:
+${description}
+`);
+  window.location.href = `mailto:exommerce.online@gmail.com?subject=${subject}&body=${body}`;
+
+  // Show success
+  form.style.display = 'none';
+  document.getElementById('form-success').style.display = 'block';
+  document.getElementById('success-email').textContent = email;
+}
 
 // ── GSAP Animations ──
 gsap.registerPlugin(ScrollTrigger);
