@@ -1913,10 +1913,10 @@ function selectRadio(el, groupId) {
 
 function handleSubmit(e) {
   e.preventDefault();
-  const challenges = [...document.querySelectorAll('#chip-group .chip.selected')].map(c => c.textContent).join(', ');
-  const infrastructure = document.querySelector('#infra-group .radio-card.selected')?.textContent.trim() || '';
-  const budget = document.querySelector('#budget-group .radio-card.selected')?.textContent.trim() || '';
-  const urgency = document.querySelector('#urgency-group .radio-card.selected')?.textContent.trim() || '';
+  const challenges = [...document.querySelectorAll('#chips .chip.selected')].map(c => c.textContent).join(', ');
+  const infrastructure = document.querySelector('#rg-infra .radio-card.selected')?.innerText.replace(/^\s*/, '').replace(/\s*$/, '') || '';
+  const budget = document.querySelector('#rg-budget .radio-card.selected')?.innerText.replace(/^\s*/, '').replace(/\s*$/, '') || '';
+  const urgency = document.querySelector('#rg-urgency .radio-card.selected')?.innerText.replace(/^\s*/, '').replace(/\s*$/, '') || '';
   const payload = {
     fname:          document.getElementById('f-fname').value.trim(),
     lname:          document.getElementById('f-lname').value.trim(),
@@ -1931,6 +1931,8 @@ function handleSubmit(e) {
   };
   fetch('https://script.google.com/macros/s/AKfycbxHKT4xXwVGOFd3SYix-rellkFrYLnYLiMclShUk2bBJJ2KPBxMYnSlUvYRqMl4tSaX/exec', {
     method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify(payload)
   }).catch(() => {});
   document.getElementById('lead-form').style.display = 'none';
