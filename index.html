@@ -1929,12 +1929,24 @@ function handleSubmit(e) {
     budget,
     urgency
   };
-  fetch('https://script.google.com/macros/s/AKfycbxHKT4xXwVGOFd3SYix-rellkFrYLnYLiMclShUk2bBJJ2KPBxMYnSlUvYRqMl4tSaX/exec', {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'text/plain' },
-    body: JSON.stringify(payload)
-  }).catch(() => {});
+  // Submit via hidden form to avoid CORS issues with Apps Script
+  const iframe = document.createElement('iframe');
+  iframe.name = 'hidden-submit';
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = 'https://script.google.com/macros/s/AKfycbwT3US5KUCNF24-MCpCpFv-WsTi_lSkVB5jwYEi8zKY9CXO0pELrQvxXHUc3JitgipX/exec';
+  form.target = 'hidden-submit';
+  form.style.display = 'none';
+  Object.entries(payload).forEach(([k, v]) => {
+    const inp = document.createElement('input');
+    inp.type = 'hidden'; inp.name = k; inp.value = v;
+    form.appendChild(inp);
+  });
+  document.body.appendChild(form);
+  form.submit();
+  setTimeout(() => { document.body.removeChild(form); document.body.removeChild(iframe); }, 3000);
   document.getElementById('lead-form').style.display = 'none';
   document.getElementById('form-steps').style.display = 'none';
   document.querySelector('.form-ttl').style.display = 'none';
