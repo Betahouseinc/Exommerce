@@ -1,0 +1,11 @@
+# Sensitive files — never deploy
+Creds.txt
+recovery-codes.txt
+resend_api_keys.txt
+supabase*.txt
+supabase secrets set *.txt
+supabase service role key.txt
+
+# Source / dev files
+App.jsx
+.claude/
