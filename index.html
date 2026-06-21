@@ -1913,6 +1913,26 @@ function selectRadio(el, groupId) {
 
 function handleSubmit(e) {
   e.preventDefault();
+  const challenges = [...document.querySelectorAll('#chip-group .chip.selected')].map(c => c.textContent).join(', ');
+  const infrastructure = document.querySelector('#infra-group .radio-card.selected')?.textContent.trim() || '';
+  const budget = document.querySelector('#budget-group .radio-card.selected')?.textContent.trim() || '';
+  const urgency = document.querySelector('#urgency-group .radio-card.selected')?.textContent.trim() || '';
+  const payload = {
+    fname:          document.getElementById('f-fname').value.trim(),
+    lname:          document.getElementById('f-lname').value.trim(),
+    email:          document.getElementById('f-email').value.trim(),
+    company:        document.getElementById('f-company').value.trim(),
+    role:           document.getElementById('f-role').value,
+    challenges,
+    painpoint:      document.getElementById('f-painpoint').value.trim(),
+    infrastructure,
+    budget,
+    urgency
+  };
+  fetch('https://script.google.com/macros/s/AKfycbxHKT4xXwVGOFd3SYix-rellkFrYLnYLiMclShUk2bBJJ2KPBxMYnSlUvYRqMl4tSaX/exec', {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  }).catch(() => {});
   document.getElementById('lead-form').style.display = 'none';
   document.getElementById('form-steps').style.display = 'none';
   document.querySelector('.form-ttl').style.display = 'none';
