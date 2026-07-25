@@ -312,6 +312,77 @@ function Services() {
   );
 }
 
+// ─── LeadgenAI Product Card ────────────────────────────────────────────────────
+function LeadgenAICard() {
+  return (
+    <section id="products" className="py-28 relative">
+      <div className="max-w-5xl mx-auto px-6 relative">
+        <AnimatedSection className="text-center mb-16">
+          <motion.p variants={fadeUp} className="text-[#22C55E] text-sm font-semibold uppercase tracking-[0.2em] mb-3">Our Products</motion.p>
+          <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl font-black text-white tracking-tight">AI-Powered Tools</motion.h2>
+          <motion.p variants={fadeUp} className="text-white/40 mt-4 max-w-xl mx-auto">Purpose-built software that solves real business problems.</motion.p>
+        </AnimatedSection>
+
+        <AnimatedSection>
+          <motion.div
+            whileHover={{ y: -6, scale: 1.01 }}
+            className="group relative rounded-3xl border border-white/[0.1] bg-gradient-to-br from-white/[0.06] to-white/[0.02] backdrop-blur-md overflow-hidden"
+          >
+            {/* Glow effect */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-[#22C55E]/20 via-[#4ADE80]/20 to-[#22C55E]/20 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500" />
+
+            <div className="relative p-8 md:p-10">
+              <div className="flex flex-col md:flex-row gap-8 items-start">
+                {/* Icon */}
+                <div className="shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center"
+                  style={{ background: "linear-gradient(135deg,#22C55E,#4ADE80)" }}>
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-3">
+                    <h3 className="text-2xl font-black text-white tracking-tight">LeadgenAI</h3>
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#22C55E]/15 text-[#4ADE80] border border-[#22C55E]/30">
+                      AI-Powered
+                    </span>
+                  </div>
+
+                  <p className="text-white/50 text-base leading-relaxed mb-6">
+                    An intelligent B2B lead generation platform that automates prospect discovery, enriches contact data, and delivers qualified leads directly to your pipeline. Powered by advanced AI to find decision-makers across industries and geographies.
+                  </p>
+
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {["B2B Leads", "AI Enrichment", "CRM Export", "Multi-Source"].map((tag) => (
+                      <span key={tag} className="text-xs px-3 py-1.5 rounded-full border border-white/[0.1] text-white/40 font-medium bg-white/[0.03]">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <a href="https://leadgenapp.vercel.app" target="_blank" rel="noopener noreferrer">
+                      <PrimaryButton size="md">
+                        Try LeadgenAI
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </PrimaryButton>
+                    </a>
+                    <PrimaryButton size="md" secondary>Learn More</PrimaryButton>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </AnimatedSection>
+      </div>
+    </section>
+  );
+}
+
 // ─── Why Us ───────────────────────────────────────────────────────────────────
 const pillars = [
   { num: "01", label: "Commerce DNA", desc: "Born as a drop-shipping business in 2019, we understand commercial operations from the inside — not just the tech side.", icon: "🛒" },
@@ -454,6 +525,7 @@ export default function App() {
       <Navbar />
       <Hero />
       <Services />
+      <LeadgenAICard />
       <WhyUs />
       <Process />
       <CTA />
