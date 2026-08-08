@@ -1,0 +1,12 @@
+{
+  "name": "exommerce",
+  "version": "1.0.0",
+  "description": "Exommerce LLP - IT Consulting and Business Transformation",
+  "private": true,
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.4.1"
+  }
+}
