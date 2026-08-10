@@ -111,6 +111,10 @@ export default async function handler(req, res) {
     if (!r.ok) {
       const detail = await r.text();
       console.error('contact: resend rejected', r.status, detail);
+      // TEMP DIAGNOSTIC — remove once delivery is confirmed.
+      if (req.query && req.query.diag === '1') {
+        return res.status(502).json({ error: 'Could not send', status: r.status, detail: detail });
+      }
       return res.status(502).json({ error: 'Could not send' });
     }
 
