@@ -116,11 +116,6 @@ export default async function handler(req, res) {
     if (!r.ok) {
       const detail = await r.text();
       console.error('contact: resend rejected', r.status, detail);
-      // TEMP DIAGNOSTIC — header-gated so it is not reachable by a normal
-      // visitor. Removed once delivery is confirmed.
-      if (req.headers['x-diag-4417'] === 'on') {
-        return res.status(502).json({ error: 'Could not send', status: r.status, detail: detail });
-      }
       return res.status(502).json({ error: 'Could not send' });
     }
 
