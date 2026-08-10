@@ -1,0 +1,17 @@
+# Vercel
+.vercel
+
+# Build output
+.next/
+
+# Local env
+.env
+.env.local
+.env*.local
+
+# Credentials — never commit
+Creds.txt
+recovery-codes.txt
+*api*key*.txt
+*secret*.txt
+supabase*.txt
