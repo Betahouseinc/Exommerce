@@ -666,7 +666,7 @@
     </div>
     <div class="form">
       <div id="formInner">
-        <form id="leadForm" action="https://formspree.io/f/your-form-id" method="POST">
+        <form id="leadForm" action="https://script.google.com/macros/s/AKfycbxHkydluxVg51Pi9vLJSyEem2YLHjMM9q-le3KZMmAJokty6aF0HZdFnbqPWslVtRQ6/exec" method="POST">
           <div class="two">
             <div class="field"><label for="fn">First name *</label><input id="fn" name="first_name" required /></div>
             <div class="field"><label for="ln">Last name *</label><input id="ln" name="last_name" required /></div>
@@ -690,6 +690,7 @@
         </form>
       </div>
       <div class="ok" id="ok"><div class="big">Thank you — enquiry received.</div><p class="sub" style="margin:0 auto">A senior consultant will get back to you within 1 business day.</p></div>
+      <div class="ok" id="err"><div class="big">We couldn't send that.</div><p class="sub" style="margin:0 auto">Something went wrong on our end. Please email us directly at <a href="mailto:admin@exommerce.online" style="color:var(--brand-green);text-decoration:underline">admin@exommerce.online</a> and we'll pick it up straight away.</p></div>
     </div>
   </div>
 </section>
@@ -747,15 +748,45 @@
     mb.setAttribute('aria-expanded', String(!open));
   });
 
-  // contact form
+  // contact form — posts to the Apps Script lead handler (see apps-script.gs)
   document.getElementById('leadForm').addEventListener('submit', function(e){
+    e.preventDefault();
     var f = e.target;
-    if (!f.checkValidity()) { e.preventDefault(); f.reportValidity(); return; }
-    if (f.action.indexOf('your-form-id') > -1) {
-      e.preventDefault();
+    if (!f.checkValidity()) { f.reportValidity(); return; }
+
+    var btn = f.querySelector('button[type="submit"]');
+    var btnText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    // Field names are mapped to the parameters the deployed Apps Script reads.
+    var payload = {
+      fname:      f.first_name.value.trim(),
+      lname:      f.last_name.value.trim(),
+      email:      f.email.value.trim(),
+      company:    f.company.value.trim(),
+      challenges: f.need.value,
+      painpoint:  f.message.value.trim(),
+      source:     'exommerce.online'
+    };
+
+    // Deliberately a real CORS request, not mode:'no-cors'. An opaque response
+    // resolves even when Apps Script bounces an unauthenticated POST to a Google
+    // login page, which would show the visitor a success screen while the lead is
+    // lost. A real request fails loudly instead, so we can tell them to email us.
+    fetch(f.action, {
+      method: 'POST',
+      body:   new URLSearchParams(payload)
+    }).then(function(res){
+      if (!res.ok) { throw new Error('bad status ' + res.status); }
       document.getElementById('formInner').style.display = 'none';
       document.getElementById('ok').style.display = 'block';
-    }
+    }).catch(function(){
+      btn.disabled = false;
+      btn.textContent = btnText;
+      document.getElementById('formInner').style.display = 'none';
+      document.getElementById('err').style.display = 'block';
+    });
   });
 
   // ================= HERO CANVAS — dotted particle wave =================
