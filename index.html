@@ -338,36 +338,6 @@
   .compliance{margin-top:20px;font-size:12px;color:var(--text3)}
   @media(max-width:920px){.about-grid{grid-template-columns:1fr}}
 
-  /* Case studies */
-  .cases{
-    display:flex;
-    flex-direction:column;
-    gap:0;
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    overflow:hidden
-  }
-  .case{
-    background:var(--surface);
-    padding:34px;
-    display:grid;
-    grid-template-columns:220px 1fr;
-    gap:32px;
-    align-items:start;
-    border-bottom:1px solid var(--border)
-  }
-  .case:last-child{border-bottom:0}
-  .case-tag{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand-green);font-weight:700}
-  .case h3{font-size:19px;margin:10px 0 8px}
-  .case-client{font-size:12.5px;color:var(--text3);margin-bottom:14px}
-  .case p.desc{font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:18px}
-  .case-stats{display:flex;gap:32px}
-  .case-stats div{display:flex;flex-direction:column}
-  .case-stats b{font-family:var(--ff-display);font-size:20px;color:var(--brand-green)}
-  .case-stats span{font-size:11.5px;color:var(--text3)}
-  @media(max-width:760px){.case{grid-template-columns:1fr}}
-
   /* Resources */
   .posts{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
   .post{
@@ -469,7 +439,6 @@
       <a href="#products">Products</a>
       <a href="#industries">Industries</a>
       <a href="#about">About</a>
-      <a href="#cases">Case Studies</a>
       <a href="#resources">Resources</a>
     </nav>
     <div class="nav-cta">
@@ -654,35 +623,6 @@
   </div>
 </section>
 
-<!-- ===== CASE STUDIES ===== -->
-<section id="cases">
-  <div class="wrap">
-    <div class="shead">
-      <span class="eyebrow">Case studies</span>
-      <h2>Selected client work</h2>
-      <p class="sub">A few of the projects we've delivered across industries. Client names are confidential, but the outcomes are real.</p>
-    </div>
-    <div class="cases">
-      <article class="case">
-        <div><span class="case-tag">Healthcare · Medical tourism</span></div>
-        <div>
-          <h3>Growing international patient acquisition for a UAE medical-tourism operator</h3>
-          <p class="case-client">Client confidential · United Arab Emirates</p>
-          <p class="desc">Reviewed the operator's digital setup, then built a multilingual patient-acquisition funnel, a CRM to track every enquiry, and automated follow-ups — so no lead slipped through.</p>
-        </div>
-      </article>
-      <article class="case">
-        <div><span class="case-tag">Automotive &amp; transportation</span></div>
-        <div>
-          <h3>Live vehicle tracking &amp; fleet management for transport operators</h3>
-          <p class="case-client">Client confidential · India</p>
-          <p class="desc">Built a live GPS tracking and fleet-management platform — real-time location, route history, and driver alerts — rolled out across the fleet for full visibility from a single dashboard.</p>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
 <!-- ===== RESOURCES ===== -->
 <section id="resources" class="sec-alt">
   <div class="wrap">
@@ -778,7 +718,6 @@
       </ul></div>
       <div><h4>Company</h4><ul>
         <li><a href="#about">About</a></li>
-        <li><a href="#cases">Case studies</a></li>
         <li><a href="#resources">Resources</a></li>
         <li><a href="#contact">Contact</a></li>
         <li><a href="mailto:admin@exommerce.online">admin@exommerce.online</a></li>
