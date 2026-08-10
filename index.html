@@ -719,7 +719,8 @@
     </div>
     <div class="form">
       <div id="formInner">
-        <form id="leadForm" action="https://script.google.com/macros/s/AKfycbxHkydluxVg51Pi9vLJSyEem2YLHjMM9q-le3KZMmAJokty6aF0HZdFnbqPWslVtRQ6/exec" method="POST">
+        <form id="leadForm" action="/api/contact" method="POST">
+          <div style="position:absolute;left:-9999px" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off" /></div>
           <div class="two">
             <div class="field"><label for="fn">First name *</label><input id="fn" name="first_name" required /></div>
             <div class="field"><label for="ln">Last name *</label><input id="ln" name="last_name" required /></div>
@@ -816,24 +817,24 @@
     btn.disabled = true;
     btn.textContent = 'Sending…';
 
-    // Field names are mapped to the parameters the deployed Apps Script reads.
     var payload = {
-      fname:      f.first_name.value.trim(),
-      lname:      f.last_name.value.trim(),
-      email:      f.email.value.trim(),
-      company:    f.company.value.trim(),
-      challenges: f.need.value,
-      painpoint:  f.message.value.trim(),
-      source:     'exommerce.online'
+      fname:   f.first_name.value.trim(),
+      lname:   f.last_name.value.trim(),
+      email:   f.email.value.trim(),
+      company: f.company.value.trim(),
+      need:    f.need.value,
+      message: f.message.value.trim(),
+      website: f.website.value,
+      source:  'exommerce.online'
     };
 
-    // Deliberately a real CORS request, not mode:'no-cors'. An opaque response
-    // resolves even when Apps Script bounces an unauthenticated POST to a Google
-    // login page, which would show the visitor a success screen while the lead is
-    // lost. A real request fails loudly instead, so we can tell them to email us.
+    // Same-origin, so this is a plain request with no CORS involved. The handler
+    // returns a real status code, which means a failure is a genuine failure —
+    // never a success screen shown over a lost lead.
     fetch(f.action, {
-      method: 'POST',
-      body:   new URLSearchParams(payload)
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
     }).then(function(res){
       if (!res.ok) { throw new Error('bad status ' + res.status); }
       document.getElementById('formInner').style.display = 'none';
@@ -847,9 +848,9 @@
         'Name: '    + payload.fname + ' ' + payload.lname,
         'Email: '   + payload.email,
         'Company: ' + payload.company,
-        'Need: '    + (payload.challenges || '—'),
+        'Need: '    + (payload.need || '—'),
         '',
-        payload.painpoint || ''
+        payload.message || ''
       ].join('\n');
       document.getElementById('errMailto').href =
         'mailto:admin@exommerce.online'
