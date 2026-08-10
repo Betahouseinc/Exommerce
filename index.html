@@ -427,6 +427,28 @@
   .fnote{font-size:12px;color:var(--text3);margin-top:14px}
   .ok{display:none;text-align:center;padding:40px 0}
   .ok .big{font-family:var(--ff-display);font-size:20px;margin-bottom:8px}
+  .alert{
+    display:none;
+    background:#FFF8E8;
+    border:1px solid #E8C97A;
+    border-radius:var(--radius);
+    padding:16px 18px;
+    margin-bottom:18px
+  }
+  .alert strong{display:block;font-size:14px;color:#7A5A12;margin-bottom:6px}
+  .alert p{font-size:13.5px;color:#7A5A12;line-height:1.6;margin-bottom:10px}
+  .alert a{
+    display:inline-block;
+    font-size:13.5px;
+    font-weight:600;
+    color:#FFFFFF;
+    background:var(--brand-green);
+    padding:10px 18px;
+    border-radius:8px;
+    min-height:44px;
+    line-height:24px
+  }
+  .alert a:hover{background:var(--brand-green-dark)}
 
   /* Footer */
   footer{background:#F2F8F4;border-top:1px solid var(--border);padding:76px 0 32px}
@@ -721,7 +743,11 @@
         </form>
       </div>
       <div class="ok" id="ok"><div class="big">Thank you — enquiry received.</div><p class="sub" style="margin:0 auto">A senior consultant will get back to you within 1 business day.</p></div>
-      <div class="ok" id="err"><div class="big">We couldn't send that.</div><p class="sub" style="margin:0 auto">Something went wrong on our end. Please email us directly at <a href="mailto:admin@exommerce.online" style="color:var(--brand-green);text-decoration:underline">admin@exommerce.online</a> and we'll pick it up straight away.</p></div>
+      <div class="alert" id="err" role="alert">
+        <strong>We couldn't send that automatically.</strong>
+        <p>Your details are still filled in below — nothing is lost. Click here and your email app will open with this enquiry ready to send:</p>
+        <a id="errMailto" href="mailto:admin@exommerce.online">Email this enquiry instead →</a>
+      </div>
     </div>
   </div>
 </section>
@@ -813,10 +839,25 @@
       document.getElementById('formInner').style.display = 'none';
       document.getElementById('ok').style.display = 'block';
     }).catch(function(){
+      // Keep the form filled in — the visitor should never have to retype.
+      // The mailto is pre-composed so the enquiry still reaches us.
       btn.disabled = false;
       btn.textContent = btnText;
-      document.getElementById('formInner').style.display = 'none';
-      document.getElementById('err').style.display = 'block';
+      var lines = [
+        'Name: '    + payload.fname + ' ' + payload.lname,
+        'Email: '   + payload.email,
+        'Company: ' + payload.company,
+        'Need: '    + (payload.challenges || '—'),
+        '',
+        payload.painpoint || ''
+      ].join('\n');
+      document.getElementById('errMailto').href =
+        'mailto:admin@exommerce.online'
+        + '?subject=' + encodeURIComponent('Enquiry from ' + (payload.company || payload.fname || 'the website'))
+        + '&body='    + encodeURIComponent(lines);
+      var alertBox = document.getElementById('err');
+      alertBox.style.display = 'block';
+      alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
   });
 
