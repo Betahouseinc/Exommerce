@@ -4,12 +4,17 @@
 // CORS never enters the picture. Requires one environment variable in Vercel:
 //
 //   RESEND_API_KEY   — your Resend API key
-//   CONTACT_FROM     — optional; defaults to onboarding@resend.dev, which Resend
-//                      only allows delivering to your own account address. Once
-//                      exommerce.online is verified in Resend, set this to
-//                      "eXommerce <noreply@exommerce.online>".
+//   CONTACT_FROM     — optional. Defaults to onboarding@resend.dev, which Resend
+//                      only permits delivering to the Resend account's own
+//                      address. Once exommerce.online is verified at
+//                      resend.com/domains, set this to
+//                      "eXommerce <noreply@exommerce.online>" and enquiries can
+//                      go to any recipient.
+//   CONTACT_TO       — optional; defaults to admin@exommerce.online. Until the
+//                      domain is verified this must be the Resend account's own
+//                      address, or Resend rejects the send with a 403.
 
-const TO = 'admin@exommerce.online';
+const TO = process.env.CONTACT_TO || 'admin@exommerce.online';
 const FROM = process.env.CONTACT_FROM || 'eXommerce <onboarding@resend.dev>';
 
 function esc(s) {
@@ -111,10 +116,6 @@ export default async function handler(req, res) {
     if (!r.ok) {
       const detail = await r.text();
       console.error('contact: resend rejected', r.status, detail);
-      // TEMP DIAGNOSTIC — remove once delivery is confirmed.
-      if (req.query && req.query.diag === '1') {
-        return res.status(502).json({ error: 'Could not send', status: r.status, detail: detail });
-      }
       return res.status(502).json({ error: 'Could not send' });
     }
 
