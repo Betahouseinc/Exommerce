@@ -427,28 +427,6 @@
   .fnote{font-size:12px;color:var(--text3);margin-top:14px}
   .ok{display:none;text-align:center;padding:40px 0}
   .ok .big{font-family:var(--ff-display);font-size:20px;margin-bottom:8px}
-  .alert{
-    display:none;
-    background:#FFF8E8;
-    border:1px solid #E8C97A;
-    border-radius:var(--radius);
-    padding:16px 18px;
-    margin-bottom:18px
-  }
-  .alert strong{display:block;font-size:14px;color:#7A5A12;margin-bottom:6px}
-  .alert p{font-size:13.5px;color:#7A5A12;line-height:1.6;margin-bottom:10px}
-  .alert a{
-    display:inline-block;
-    font-size:13.5px;
-    font-weight:600;
-    color:#FFFFFF;
-    background:var(--brand-green);
-    padding:10px 18px;
-    border-radius:8px;
-    min-height:44px;
-    line-height:24px
-  }
-  .alert a:hover{background:var(--brand-green-dark)}
 
   /* Footer */
   footer{background:#F2F8F4;border-top:1px solid var(--border);padding:76px 0 32px}
@@ -719,7 +697,7 @@
     </div>
     <div class="form">
       <div id="formInner">
-        <form id="leadForm" action="/api/contact" method="POST">
+        <form id="leadForm">
           <div style="position:absolute;left:-9999px" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off" /></div>
           <div class="two">
             <div class="field"><label for="fn">First name *</label><input id="fn" name="first_name" required /></div>
@@ -743,11 +721,11 @@
           <div class="fnote">Your details stay private — we never share your data. <a href="/privacy.html" style="color:var(--text2);text-decoration:underline">Privacy Policy</a>.</div>
         </form>
       </div>
-      <div class="ok" id="ok"><div class="big">Thank you — enquiry received.</div><p class="sub" style="margin:0 auto">A senior consultant will get back to you within 1 business day.</p></div>
-      <div class="alert" id="err" role="alert">
-        <strong>We couldn't send that automatically.</strong>
-        <p>Your details are still filled in below — nothing is lost. Click here and your email app will open with this enquiry ready to send:</p>
-        <a id="errMailto" href="mailto:admin@exommerce.online">Email this enquiry instead →</a>
+      <div class="ok" id="ok">
+        <div class="big">Almost there — just hit send.</div>
+        <p class="sub" style="margin:0 auto 18px">Your email app should have opened with this enquiry ready to go. Send it and we'll reply within 1 business day.</p>
+        <a id="okMailto" class="btn btn-primary btn-sm" href="mailto:admin@exommerce.online">Open it again →</a>
+        <p class="sub" style="margin:16px auto 0;font-size:13px">Nothing opened? Email us at <a href="mailto:admin@exommerce.online" style="color:var(--brand-green);text-decoration:underline">admin@exommerce.online</a>.</p>
       </div>
     </div>
   </div>
@@ -806,60 +784,45 @@
     mb.setAttribute('aria-expanded', String(!open));
   });
 
-  // contact form — posts to the Apps Script lead handler (see apps-script.gs)
+  // contact form — composes the enquiry as an email in the visitor's own mail
+  // client. No backend, so there is nothing that can silently drop a lead.
   document.getElementById('leadForm').addEventListener('submit', function(e){
     e.preventDefault();
     var f = e.target;
     if (!f.checkValidity()) { f.reportValidity(); return; }
 
-    var btn = f.querySelector('button[type="submit"]');
-    var btnText = btn.textContent;
-    btn.disabled = true;
-    btn.textContent = 'Sending…';
+    // Honeypot — bots fill hidden fields, people don't.
+    if (f.website.value) return;
 
-    var payload = {
-      fname:   f.first_name.value.trim(),
-      lname:   f.last_name.value.trim(),
-      email:   f.email.value.trim(),
-      company: f.company.value.trim(),
-      need:    f.need.value,
-      message: f.message.value.trim(),
-      website: f.website.value,
-      source:  'exommerce.online'
-    };
+    var fname   = f.first_name.value.trim();
+    var lname   = f.last_name.value.trim();
+    var email   = f.email.value.trim();
+    var company = f.company.value.trim();
+    var need    = f.need.value;
+    var message = f.message.value.trim();
 
-    // Same-origin, so this is a plain request with no CORS involved. The handler
-    // returns a real status code, which means a failure is a genuine failure —
-    // never a success screen shown over a lost lead.
-    fetch(f.action, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(payload)
-    }).then(function(res){
-      if (!res.ok) { throw new Error('bad status ' + res.status); }
-      document.getElementById('formInner').style.display = 'none';
-      document.getElementById('ok').style.display = 'block';
-    }).catch(function(){
-      // Keep the form filled in — the visitor should never have to retype.
-      // The mailto is pre-composed so the enquiry still reaches us.
-      btn.disabled = false;
-      btn.textContent = btnText;
-      var lines = [
-        'Name: '    + payload.fname + ' ' + payload.lname,
-        'Email: '   + payload.email,
-        'Company: ' + payload.company,
-        'Need: '    + (payload.need || '—'),
-        '',
-        payload.message || ''
-      ].join('\n');
-      document.getElementById('errMailto').href =
-        'mailto:admin@exommerce.online'
-        + '?subject=' + encodeURIComponent('Enquiry from ' + (payload.company || payload.fname || 'the website'))
-        + '&body='    + encodeURIComponent(lines);
-      var alertBox = document.getElementById('err');
-      alertBox.style.display = 'block';
-      alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
+    var body = [
+      'Name:    ' + (fname + ' ' + lname).trim(),
+      'Email:   ' + email,
+      'Company: ' + company,
+      'Need:    ' + (need || '—'),
+      '',
+      'Enquiry:',
+      (message || '—')
+    ].join('\n');
+
+    var href = 'mailto:admin@exommerce.online'
+      + '?subject=' + encodeURIComponent('Enquiry from ' + (company || fname || 'the website'))
+      + '&body='    + encodeURIComponent(body);
+
+    // Give the visitor a link too — mailto: silently does nothing when no mail
+    // client is configured, so the address must stay reachable either way.
+    document.getElementById('okMailto').href = href;
+    document.getElementById('formInner').style.display = 'none';
+    document.getElementById('ok').style.display = 'block';
+    document.getElementById('ok').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    window.location.href = href;
   });
 
   // ================= HERO CANVAS — dotted particle wave =================
