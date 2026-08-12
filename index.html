@@ -212,9 +212,18 @@
     border-radius:8px;
     cursor:pointer
   }
+  .nav-cta-mobile{display:none}
   @media(max-width:920px){
     .nav-links{display:none}
     .menu-btn{display:block}
+    .nav-cta-mobile{display:block;font-weight:600;color:var(--brand-green)}
+  }
+  @media(max-width:480px){
+    .wrap{padding:0 18px}
+    .nav-in{height:64px}
+    .logo{font-size:16px;gap:6px}
+    .nav-cta{gap:8px}
+    .nav-cta .btn-sm{display:none}
   }
 
   /* Hero */
@@ -469,6 +478,7 @@
       <a href="#industries">Industries</a>
       <a href="#about">About</a>
       <a href="#resources">Resources</a>
+      <a href="#contact" class="nav-cta-mobile">Contact us →</a>
     </nav>
     <div class="nav-cta">
       <a href="#contact" class="btn btn-primary btn-sm">Contact us</a>
