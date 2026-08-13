@@ -1,4 +1,4 @@
-// Contact form handler — receives the enquiry and emails it to admin@exommerce.online.
+// Contact form handler — receives the enquiry and emails it to contact@exommerce.online.
 //
 // Runs on the site's own domain, so the browser makes a same-origin request and
 // CORS never enters the picture. Requires one environment variable in Vercel:
@@ -10,11 +10,11 @@
 //                      resend.com/domains, set this to
 //                      "eXommerce <noreply@exommerce.online>" and enquiries can
 //                      go to any recipient.
-//   CONTACT_TO       — optional; defaults to admin@exommerce.online. Until the
+//   CONTACT_TO       — optional; defaults to contact@exommerce.online. Until the
 //                      domain is verified this must be the Resend account's own
 //                      address, or Resend rejects the send with a 403.
 
-const TO = process.env.CONTACT_TO || 'admin@exommerce.online';
+const TO = process.env.CONTACT_TO || 'contact@exommerce.online';
 const FROM = process.env.CONTACT_FROM || 'eXommerce <onboarding@resend.dev>';
 
 function esc(s) {

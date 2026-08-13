@@ -482,7 +482,7 @@ function CTA() {
               Start a Project
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
             </PrimaryButton>
-            <PrimaryButton size="lg" secondary>hello@exommerce.in</PrimaryButton>
+            <PrimaryButton size="lg" secondary>contact@exommerce.online</PrimaryButton>
           </motion.div>
         </AnimatedSection>
       </div>
@@ -501,7 +501,7 @@ function Footer() {
         </div>
         <p className="text-white/25 text-sm">© {new Date().getFullYear()} Exommerce LLP. Est. 2019. All rights reserved.</p>
         <div className="flex gap-5">
-          {["Privacy", "Terms", "hello@exommerce.in"].map((l) => (
+          {["Privacy", "Terms", "contact@exommerce.online"].map((l) => (
             <a key={l} href="#" className="text-sm text-white/30 hover:text-white/60 transition-colors">{l}</a>
           ))}
         </div>
