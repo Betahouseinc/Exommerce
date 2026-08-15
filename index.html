@@ -639,6 +639,7 @@
   @media(max-width:520px){.fg{grid-template-columns:1fr}}
 
   /* Accessibility / motion */
+  [hidden]{display:none !important}
   :focus-visible{outline:3px solid var(--brand-green);outline-offset:3px;border-radius:4px}
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
@@ -955,8 +956,9 @@
   </div>
 </section>
 
-<!-- ===== RESOURCES ===== -->
-<section id="resources" class="sec-alt">
+<!-- ===== RESOURCES — removed for now. The three articles are still published
+     at /blog-*.html; restore this section when they're finished. ===== -->
+<section id="resources" class="sec-alt" hidden>
   <div class="wrap">
     <div class="shead">
       <span class="eyebrow">Resources</span>
@@ -1059,7 +1061,6 @@
       </ul></div>
       <div><h4>Company</h4><ul>
         <li><a href="#about">About</a></li>
-        <li><a href="#resources">Resources</a></li>
         <li><a href="#contact">Contact</a></li>
         <li><a href="mailto:contact@exommerce.online">contact@exommerce.online</a></li>
         <li><a href="https://www.linkedin.com/company/exommerce" target="_blank" rel="noopener">LinkedIn</a></li>
