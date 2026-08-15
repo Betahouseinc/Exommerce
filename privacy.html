@@ -32,6 +32,8 @@ a{text-decoration:none;color:inherit}
 #nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
 .nav-inner{max-width:1200px;margin:0 auto;padding:0 28px;height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .logo{display:inline-flex;align-items:center;font-family:var(--ff-display);font-size:20px;font-weight:700;letter-spacing:-.045em;color:var(--text)}
+.logo img{height:30px;width:auto;display:block}
+@media(max-width:480px){.logo img{height:24px}}
 .logo .brand-x{color:var(--brand-green)}
 .logo .brand-dot{color:var(--brand-green)}
 .logo .brand-online{color:var(--brand-green);font-weight:500}
@@ -41,6 +43,8 @@ a{text-decoration:none;color:inherit}
 .nav-cta{background:var(--brand-green);color:#fff;padding:11px 22px;border-radius:8px;font-size:14px;font-weight:600;transition:background .15s;min-height:44px;display:inline-flex;align-items:center}
 .nav-cta:hover{background:var(--brand-green-dark)}
 @media(max-width:860px){.nav-links{display:none}}
+.cta-short{display:none}
+@media(max-width:560px){.cta-long{display:none}.cta-short{display:inline}}
 
 footer{background:var(--bg2);padding:56px 0 32px;border-top:1px solid var(--border)}
 .ft-bottom{padding-top:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
@@ -68,15 +72,15 @@ footer{background:var(--bg2);padding:56px 0 32px;border-top:1px solid var(--bord
 <body>
 <nav id="nav">
   <div class="nav-inner">
-    <a href="index.html" class="logo" aria-label="eXommerce home"><span>e<span class="brand-x">X</span>ommerce<span class="brand-dot">.</span><span class="brand-online">online</span></span></a>
+    <a href="index.html" class="logo" aria-label="eXommerce home"><img src="logo.png" alt="eXommerce.online" width="420" height="74" /></a>
     <nav class="nav-links" aria-label="Primary">
       <a href="index.html#solutions">Solutions</a>
       <a href="index.html#products">Products</a>
       <a href="index.html#industries">Industries</a>
       <a href="index.html#about">About</a>
-      <a href="index.html#resources">Resources</a>
+      <a href="index.html#contact">Contact</a>
     </nav>
-    <a href="index.html#contact" class="nav-cta">Contact us</a>
+    <a href="index.html#contact" class="nav-cta" aria-label="Book a Discovery Call"><span class="cta-long">Book a Discovery Call</span><span class="cta-short">Book a Call</span></a>
   </div>
 </nav>
 

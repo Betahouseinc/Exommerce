@@ -37,7 +37,7 @@
 }
 </script>
 <meta name="theme-color" content="#FFFFFF" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23109840'/%3E%3Ctext x='32' y='44' font-family='Sora,sans-serif' font-weight='700' font-size='34' fill='%23FFFFFF' text-anchor='middle'%3Ee%3C/text%3E%3C/svg%3E' />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23109840'/%3E%3Ctext x='32' y='44' font-family='Sora,sans-serif' font-weight='700' font-size='34' fill='%23FFFFFF' text-anchor='middle'%3Ee%3C/text%3E%3C/svg%3E" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -115,12 +115,15 @@
   }
   .sub{color:var(--text2);font-size:16px;max-width:58ch}
   section{padding:112px 0}
+  @media(max-width:860px){section{padding:88px 0}}
+  @media(max-width:560px){section{padding:64px 0}}
   .sec-alt{background:var(--bg2);position:relative;overflow:hidden}
   .sec-alt::before{content:'';position:absolute;top:-120px;right:-120px;width:420px;height:420px;border-radius:50%;
     background:radial-gradient(circle, rgba(123,207,22,.16), rgba(16,152,64,.05) 60%, transparent 72%);pointer-events:none;z-index:0}
   .sec-alt .wrap{position:relative;z-index:1}
   .shead{max-width:680px;margin-bottom:52px}
   .shead h2{font-size:clamp(30px,4vw,46px);margin-bottom:16px}
+  .sec-cta{margin-top:36px}
 
   /* Brand logo */
   .logo{
@@ -136,6 +139,9 @@
   .logo .brand-x{color:var(--brand-green)}
   .logo .brand-online{color:var(--brand-green);font-weight:500}
   .logo .brand-dot{color:var(--brand-green)}
+  .logo img{height:30px;width:auto;display:block}
+  .logo.logo-lockup img{height:auto;width:230px;max-width:100%}
+  @media(max-width:480px){.logo img{height:24px}}
 
   /* Buttons */
   .btn{
@@ -151,7 +157,15 @@
     border:1px solid transparent;
     cursor:pointer;
     transition:transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease;
-    white-space:nowrap
+    white-space:nowrap;
+    min-height:46px;
+    line-height:1.2
+  }
+  /* Nav CTA shortens on narrow screens so the header never overflows */
+  .cta-short{display:none}
+  @media(max-width:560px){
+    .cta-long{display:none}
+    .cta-short{display:inline}
   }
   .btn-primary{
     background:var(--brand-green);
@@ -223,7 +237,7 @@
     .nav-in{height:64px}
     .logo{font-size:16px;gap:6px}
     .nav-cta{gap:8px}
-    .nav-cta .btn-sm{display:none}
+    .nav-cta .btn-sm{padding:9px 13px}
   }
 
   /* Hero */
@@ -238,11 +252,30 @@
   #wave-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.72}
   .hero-in{position:relative;z-index:1;text-align:center;max-width:900px;margin:0 auto}
   .hero h1{
-    font-size:clamp(40px,6vw,72px);
+    font-size:clamp(40px,5.4vw,66px);
     letter-spacing:-.045em;
     margin-bottom:22px
   }
-  .hero h1 span{color:var(--brand-green)}
+  .hero h1 .accent{color:var(--brand-green)}
+  /* Rotating headline — the messages stack in one grid cell, so the hero never
+     reflows as they cross-fade. Held static under prefers-reduced-motion. */
+  .rotator{display:grid}
+  .rot-item{
+    grid-area:1/1;
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(12px);
+    /* Leaving: clear out quickly and completely… */
+    transition:opacity .32s ease,transform .32s ease,visibility 0s linear .32s
+  }
+  .rot-item.is-active{
+    opacity:1;
+    visibility:visible;
+    transform:none;
+    /* …so the incoming message waits for the outgoing one to go before it
+       fades in. Overlapping the two would superimpose both headlines. */
+    transition:opacity .45s ease .36s,transform .45s ease .36s,visibility 0s
+  }
   .hero .sub{font-size:18px;margin:0 auto 38px;max-width:57ch;text-align:center}
   .hero-ctas{display:flex;gap:13px;justify-content:center;flex-wrap:wrap;margin-bottom:50px}
   .hero-stats{
@@ -267,6 +300,50 @@
     color:var(--text)
   }
   .hero-stats span{font-size:12px;color:var(--text3)}
+  @media(max-width:560px){
+    .hero{padding:124px 0 72px}
+    .hero .sub{font-size:16.5px;margin-bottom:32px}
+    .hero-ctas{margin-bottom:40px}
+    .hero-ctas .btn{width:100%}
+    .hero-stats div{min-width:132px;padding:0 14px;margin-bottom:16px}
+  }
+
+  /* Capability strip — what we do, at a glance */
+  .capstrip{padding:26px 0;border-bottom:1px solid var(--border);background:var(--bg2)}
+  .capstrip-in{display:flex;align-items:center;gap:14px 28px;flex-wrap:wrap;justify-content:center}
+  .capstrip-label{
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--text3);
+    font-weight:700
+  }
+  .capstrip ul{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:10px 26px
+  }
+  .capstrip li{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-family:var(--ff-display);
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--text2)
+  }
+  .capstrip li::before{
+    content:'';
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--brand-green);
+    flex-shrink:0
+  }
 
   /* Solutions */
   .sol-grid{
@@ -303,8 +380,52 @@
   @media(max-width:860px){.sol-grid{grid-template-columns:1fr 1fr}}
   @media(max-width:560px){.sol-grid{grid-template-columns:1fr}}
 
+  /* Products — featured product block */
+  .feature{
+    display:grid;
+    grid-template-columns:1.05fr .95fr;
+    gap:56px;
+    align-items:center;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:46px;
+    box-shadow:var(--shadow)
+  }
+  .feature h3{font-size:clamp(26px,3.2vw,36px);margin:12px 0 16px}
+  .feature-lede{font-size:16.5px;color:var(--text2);line-height:1.65;max-width:52ch}
+  .feature-pts{list-style:none;margin:28px 0 32px;padding:0;display:flex;flex-direction:column;gap:15px}
+  .feature-pts li{
+    position:relative;
+    padding-left:21px;
+    font-size:14.5px;
+    color:var(--text2);
+    line-height:1.6
+  }
+  .feature-pts li::before{
+    content:'';
+    position:absolute;
+    left:0;
+    top:8px;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--brand-green)
+  }
+  .feature-pts b{color:var(--text)}
+  .feature-ctas{display:flex;gap:12px;flex-wrap:wrap}
+  .feature-visual{justify-self:center;width:100%;max-width:420px}
+  @media(max-width:920px){
+    .feature{grid-template-columns:1fr;gap:34px;padding:34px}
+    .feature-visual{order:-1;max-width:360px}
+  }
+  @media(max-width:480px){
+    .feature{padding:26px}
+    .feature-ctas .btn{width:100%}
+  }
+
   /* Products */
-  .prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  .prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:20px}
   .prod-card{
     background:var(--surface);
     border:1px solid var(--border);
@@ -341,14 +462,80 @@
   .prod-cta{margin-top:auto}
   @media(max-width:860px){.prod-grid{grid-template-columns:1fr}}
 
+  /* Technology strip */
+  .techstrip{padding:52px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .techstrip-label{
+    text-align:center;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--text3);
+    font-weight:700;
+    margin-bottom:28px
+  }
+  .techlogos{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
+    gap:20px 32px
+  }
+  .techlogos li{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--text3);
+    transition:color .2s
+  }
+  .techlogos li:hover{color:var(--brand-green)}
+  .techlogos svg{width:24px;height:24px;fill:currentColor;flex-shrink:0}
+  /* Entries whose brand marks can't be redistributed sit as wordmarks, with a
+     neutral dot so the rhythm of the strip holds. */
+  .techlogos li.wordmark::before{
+    content:'';
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:currentColor;
+    opacity:.45;
+    flex-shrink:0
+  }
+  .techlogos span{
+    font-family:var(--ff-display);
+    font-size:14.5px;
+    font-weight:600;
+    letter-spacing:-.01em
+  }
+  @media(max-width:560px){
+    .techstrip{padding:40px 0}
+    .techlogos{gap:16px 28px}
+    .techlogos svg{width:20px;height:20px}
+    .techlogos span{font-size:13px}
+  }
+
   /* Industries */
   .ind-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
   .ind-card{
     background:var(--bg-green);
     border:1px solid #D8EBDD;
     border-radius:var(--radius);
-    padding:27px
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    transition:border-color .2s,transform .2s,box-shadow .2s
   }
+  .ind-card:hover{border-color:#BBD7C4;transform:translateY(-3px);box-shadow:var(--shadow)}
+  .ind-card img{
+    width:100%;
+    height:152px;
+    object-fit:cover;
+    border-bottom:1px solid #D8EBDD;
+    background:var(--bg2)
+  }
+  .ind-body{padding:22px 24px 26px}
   .ind-card h3{font-size:16px;margin-bottom:10px}
   .ind-card p{font-size:13.5px;color:var(--text2);line-height:1.6}
   @media(max-width:860px){.ind-grid{grid-template-columns:1fr 1fr}}
@@ -470,18 +657,18 @@
 <header class="nav" id="nav">
   <div class="wrap nav-in">
     <a href="#top" class="logo" aria-label="eXommerce home">
-<span>e<span class="brand-x">X</span>ommerce<span class="brand-dot">.</span><span class="brand-online">online</span></span>
+      <img src="logo.png" alt="eXommerce.online" width="420" height="74" />
     </a>
-    <nav class="nav-links">
+    <nav class="nav-links" aria-label="Primary">
       <a href="#solutions">Solutions</a>
       <a href="#products">Products</a>
       <a href="#industries">Industries</a>
       <a href="#about">About</a>
-      <a href="#resources">Resources</a>
-      <a href="#contact" class="nav-cta-mobile">Contact us →</a>
+      <a href="#contact">Contact</a>
+      <a href="#contact" class="nav-cta-mobile">Book a Discovery Call →</a>
     </nav>
     <div class="nav-cta">
-      <a href="#contact" class="btn btn-primary btn-sm">Contact us</a>
+      <a href="#contact" class="btn btn-primary btn-sm" aria-label="Book a Discovery Call"><span class="cta-long">Book a Discovery Call</span><span class="cta-short">Book a Call</span></a>
       <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false">☰</button>
     </div>
   </div>
@@ -491,19 +678,35 @@
 <section class="hero" id="top">
   <canvas id="wave-canvas" aria-hidden="true"></canvas>
   <div class="wrap hero-in">
-    <span class="eyebrow">Business Transformation</span>
-    <h1>Business Transformation<br>with <span>Technology, Data &amp; AI.</span></h1>
-    <p class="sub">We help businesses innovate, integrate, automate, and grow through practical technology, data, and AI solutions.</p>
+    <span class="eyebrow">AI · Data · Automation</span>
+    <h1 class="rotator" aria-label="Turn AI, data, and automation into business outcomes — business transformation with technology, data and AI.">
+      <span class="rot-item is-active" aria-hidden="true">Turn AI, data, and automation into <span class="accent">business outcomes.</span></span>
+      <span class="rot-item" aria-hidden="true">Business Transformation with <span class="accent">Technology, Data &amp; AI.</span></span>
+    </h1>
+    <p class="sub">Disconnected systems, manual re-keying, and reports nobody trusts quietly slow a business down. We connect your systems, make your data usable, and automate the work in between — then build and run what comes next.</p>
     <div class="hero-ctas">
-      <a href="#contact" class="btn btn-primary">Talk to Our Experts →</a>
-      <a href="#products" class="btn btn-outline">Explore Solutions</a>
+      <a href="#contact" class="btn btn-primary">Book a Discovery Call →</a>
+      <a href="#solutions" class="btn btn-outline">See what we do</a>
     </div>
     <div class="hero-stats">
       <div><b>15+</b><span>Industries served</span></div>
       <div><b>2019</b><span>Building since</span></div>
-      <div><b>3</b><span>AI products in production</span></div>
       <div><b>Global</b><span>US · UK · EU · APAC</span></div>
     </div>
+  </div>
+</section>
+
+<!-- ===== CAPABILITY STRIP ===== -->
+<section class="capstrip" aria-label="Core capabilities">
+  <div class="wrap capstrip-in">
+    <p class="capstrip-label">Capabilities</p>
+    <ul>
+      <li>AI solutions</li>
+      <li>Data engineering &amp; integration</li>
+      <li>Business automation</li>
+      <li>Technology consulting</li>
+      <li>Enterprise transformation</li>
+    </ul>
   </div>
 </section>
 
@@ -513,7 +716,7 @@
     <div class="shead">
       <span class="eyebrow">What we do</span>
       <h2>Consulting &amp; transformation, end to end</h2>
-      <p class="sub">One partner across the whole journey — from assessing where you are today, to modernising your data and systems, to building and running what comes next.</p>
+      <p class="sub">If your systems don't talk to each other, your reporting is stitched together by hand, or your team is working around the software instead of with it — this is where we start. One partner across the whole journey.</p>
     </div>
     <div class="sol-grid">
       <a href="#contact" class="sol-card"><span class="n">01</span><h3>Review &amp; redesign</h3><p>Audit current systems, processes, and architecture, then design a stronger target state with a prioritised, costed roadmap.</p></a>
@@ -524,6 +727,7 @@
       <a href="#contact" class="sol-card"><span class="n">06</span><h3>Infrastructure management</h3><p>Cloud setup, DevOps, monitoring, security, and ongoing managed support so everything stays fast and reliable.</p></a>
     </div>
     <p class="sol-also"><b>Also:</b> cybersecurity &amp; compliance · cloud migration · fractional CIO / CTO · support &amp; maintenance.</p>
+    <div class="sec-cta"><a href="#contact" class="btn btn-primary">Book a Discovery Call →</a></div>
   </div>
 </section>
 
@@ -533,28 +737,27 @@
     <div class="shead">
       <span class="eyebrow">Our products</span>
       <h2>We build our own software, too</h2>
-      <p class="sub">We don't just advise. We design, build, and run our own AI products in production — so every client engagement gets battle-tested engineering, not theory.</p>
+      <p class="sub">We don't just advise. We design, build, and run our own AI products — so every client engagement gets battle-tested engineering, not theory.</p>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center">
-      <div style="display:grid;gap:20px">
-        <div class="prod-card">
-          <div class="prod-top"><h3>LeadgenAI</h3><span class="st"><span class="d"></span>Live</span></div>
-          <div class="prod-tl">AI lead generation engine</div>
-          <p>Finds AI-scored business leads from Google Maps in 60 seconds — built for Indian markets.</p>
-          <div class="prod-meta">AI / ML · Data · Sales tech</div>
-          <a href="https://leadgenai.exommerce.online" target="_blank" rel="noopener" class="btn btn-primary btn-sm prod-cta">Try LeadgenAI →</a>
-        </div>
 
-        <div class="prod-card">
-          <div class="prod-top"><h3>RentAI</h3><span class="st beta"><span class="d"></span>Beta</span></div>
-          <div class="prod-tl">Rental intelligence, built in-house</div>
-          <p>Rent health scoring, listing intelligence and tenant matching for the Bengaluru rental market.</p>
-          <div class="prod-meta">PropTech · AI / ML · Consumer</div>
-          <a href="#contact" class="btn btn-outline btn-sm prod-cta">Ask about RentAI →</a>
+    <!-- Featured product — LeadGenAI -->
+    <div class="feature" id="leadgenai">
+      <div class="feature-copy">
+        <span class="st"><span class="d"></span>Live product</span>
+        <h3>LeadGenAI</h3>
+        <p class="feature-lede">An AI lead generation engine for sales teams. LeadGenAI finds local businesses on Google Maps, scores them with AI so the best-fit prospects rise to the top, and exports a clean list to CSV or Excel — in about 60 seconds.</p>
+        <ul class="feature-pts">
+          <li><b>Who it's for —</b> sales and growth teams running local B2B outbound, built first for Indian markets.</li>
+          <li><b>The problem it solves —</b> prospect lists are built by hand, so reps lose hours to copy-paste research and still work leads that were never a fit.</li>
+          <li><b>The benefit —</b> reps open the day with a scored, exportable list instead of a blank sheet, and spend their selling time on conversations.</li>
+        </ul>
+        <div class="feature-ctas">
+          <a href="#contact" class="btn btn-primary" data-need="LeadGenAI demo">Request a LeadGenAI Demo →</a>
+          <a href="https://leadgenai.exommerce.online" target="_blank" rel="noopener" class="btn btn-outline">Try it live</a>
         </div>
       </div>
 
-      <svg viewBox="0 0 400 300" style="width:100%;max-width:420px;justify-self:center" aria-hidden="true">
+      <svg class="feature-visual" viewBox="0 0 400 300" aria-hidden="true">
         <rect x="20" y="20" width="360" height="260" rx="16" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="1.5"/>
         <rect x="20" y="20" width="360" height="40" rx="16" fill="var(--bg2)"/>
         <circle cx="42" cy="40" r="5" fill="var(--brand-lime)"/>
@@ -581,7 +784,64 @@
         <text x="280" y="243" font-family="Sora,sans-serif" font-size="13" font-weight="700" fill="var(--ink)" text-anchor="middle">AI-scored</text>
       </svg>
     </div>
-    <p class="sol-also" style="margin-top:32px">More products in active development — <a href="#contact" style="color:var(--brand-green);text-decoration:underline">talk to us</a> about what we're building next.</p>
+
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-top"><h3>RentAI</h3><span class="st beta"><span class="d"></span>Beta</span></div>
+        <div class="prod-tl">Rental intelligence, built in-house</div>
+        <p>Rent health scoring, listing intelligence and tenant matching for the Bengaluru rental market.</p>
+        <div class="prod-meta">PropTech · AI / ML · Consumer</div>
+        <a href="#contact" class="btn btn-outline btn-sm prod-cta">Ask about RentAI →</a>
+      </div>
+
+      <div class="prod-card">
+        <div class="prod-top"><h3>What's next</h3><span class="st dev"><span class="d"></span>In development</span></div>
+        <div class="prod-tl">More products in active development</div>
+        <p>We're building the next set of AI products in-house. If one of them overlaps with a problem you have, we'd rather hear it early.</p>
+        <div class="prod-meta">AI / ML · Data · Automation</div>
+        <a href="#contact" class="btn btn-outline btn-sm prod-cta">Book a Discovery Call →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TECHNOLOGY STRIP =====
+     Marks are limited to technologies this codebase actually uses. -->
+<section class="techstrip" aria-label="Technologies we build with">
+  <div class="wrap">
+    <p class="techstrip-label">Technologies we build with</p>
+    <ul class="techlogos">
+      <li class="wordmark"><span>AWS</span></li>
+      <li class="wordmark"><span>Microsoft Azure</span></li>
+      <li>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.19 2.38a9.344 9.344 0 0 0-9.234 6.893c.053-.02-.055.013 0 0-3.875 2.551-3.922 8.11-.247 10.941l.006-.007-.007.03a6.717 6.717 0 0 0 4.077 1.356h5.173l.03.03h5.192c6.687.053 9.376-8.605 3.835-12.35a9.365 9.365 0 0 0-2.821-4.552l-.043.043.006-.05A9.344 9.344 0 0 0 12.19 2.38zm-.358 4.146c1.244-.04 2.518.368 3.486 1.15a5.186 5.186 0 0 1 1.862 4.078v.518c3.53-.07 3.53 5.262 0 5.193h-5.193l-.008.009v-.04H6.785a2.59 2.59 0 0 1-1.067-.23h.001a2.597 2.597 0 1 1 3.437-3.437l3.013-3.012A6.747 6.747 0 0 0 8.11 8.24c.018-.01.04-.026.054-.023a5.186 5.186 0 0 1 3.67-1.69z"/></svg>
+        <span>Google Cloud</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.41 0-.783.093-1.106.278-1.375.793-1.683 3.264-.973 6.365C1.98 8.917 0 10.42 0 12.004c0 1.59 1.99 3.097 5.043 4.03-.704 3.113-.39 5.588.988 6.38.32.187.69.275 1.102.275 1.345 0 3.107-.96 4.888-2.624 1.78 1.654 3.542 2.603 4.887 2.603.41 0 .783-.09 1.106-.275 1.374-.792 1.683-3.263.973-6.365C22.02 15.096 24 13.59 24 12.004c0-1.59-1.99-3.097-5.043-4.032.704-3.11.39-5.587-.988-6.38-.318-.184-.688-.277-1.092-.278zm-.005 1.09v.006c.225 0 .406.044.558.127.666.382.955 1.835.73 3.704-.054.46-.142.945-.25 1.44-.96-.236-2.006-.417-3.107-.534-.66-.905-1.345-1.727-2.035-2.447 1.592-1.48 3.087-2.292 4.105-2.295zm-9.77.02c1.012 0 2.514.808 4.11 2.28-.686.72-1.37 1.537-2.02 2.442-1.107.117-2.154.298-3.113.538-.112-.49-.195-.964-.254-1.42-.23-1.868.054-3.32.714-3.707.19-.09.4-.127.563-.132zm4.882 3.05c.455.468.91.992 1.36 1.564-.44-.02-.89-.034-1.345-.034-.46 0-.915.01-1.36.034.44-.572.895-1.096 1.345-1.565zM12 8.1c.74 0 1.477.034 2.202.093.406.582.802 1.203 1.183 1.86.372.64.71 1.29 1.018 1.946-.308.655-.646 1.31-1.013 1.95-.38.66-.773 1.288-1.18 1.87-.728.063-1.466.098-2.21.098-.74 0-1.477-.035-2.202-.093-.406-.582-.802-1.204-1.183-1.86-.372-.64-.71-1.29-1.018-1.946.303-.657.646-1.313 1.013-1.954.38-.66.773-1.286 1.18-1.868.728-.064 1.466-.098 2.21-.098zm-3.635.254c-.24.377-.48.763-.704 1.16-.225.39-.435.782-.635 1.174-.265-.656-.49-1.31-.676-1.947.64-.15 1.315-.283 2.015-.386zm7.26 0c.695.103 1.365.23 2.006.387-.18.632-.405 1.282-.66 1.933-.2-.39-.41-.783-.64-1.174-.225-.392-.465-.774-.705-1.146zm3.063.675c.484.15.944.317 1.375.498 1.732.74 2.852 1.708 2.852 2.476-.005.768-1.125 1.74-2.857 2.475-.42.18-.88.342-1.355.493-.28-.958-.646-1.956-1.1-2.98.45-1.017.81-2.01 1.085-2.964zm-13.395.004c.278.96.645 1.957 1.1 2.98-.45 1.017-.812 2.01-1.086 2.964-.484-.15-.944-.318-1.37-.5-1.732-.737-2.852-1.706-2.852-2.474 0-.768 1.12-1.742 2.852-2.476.42-.18.88-.342 1.356-.494zm11.678 4.28c.265.657.49 1.312.676 1.948-.64.157-1.316.29-2.016.39.24-.375.48-.762.705-1.158.225-.39.435-.788.636-1.18zm-9.945.02c.2.392.41.783.64 1.175.23.39.465.772.705 1.143-.695-.102-1.365-.23-2.006-.386.18-.63.406-1.282.66-1.933zM17.92 16.32c.112.493.2.968.254 1.423.23 1.868-.054 3.32-.714 3.708-.147.09-.338.128-.563.128-1.012 0-2.514-.807-4.11-2.28.686-.72 1.37-1.536 2.02-2.44 1.107-.118 2.154-.3 3.113-.54zm-11.83.01c.96.234 2.006.415 3.107.532.66.905 1.345 1.727 2.035 2.446-1.595 1.483-3.092 2.295-4.11 2.295-.22-.005-.406-.05-.553-.132-.666-.38-.955-1.834-.73-3.703.054-.46.142-.944.25-1.438zm4.56.64c.44.02.89.034 1.345.034.46 0 .915-.01 1.36-.034-.44.572-.895 1.095-1.345 1.565-.455-.47-.91-.993-1.36-1.565z"/></svg>
+        <span>React</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 1.608 12 20.784H0Z"/></svg>
+        <span>Vercel</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.9 1.036c-.015-.986-1.26-1.41-1.874-.637L.764 12.05C-.33 13.427.65 15.455 2.409 15.455h9.579l.113 7.51c.014.985 1.259 1.408 1.873.636l9.262-11.653c1.093-1.375.113-3.403-1.645-3.403h-9.642z"/></svg>
+        <span>Supabase</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81"/></svg>
+        <span>Google Gemini</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.4737 5.6842c-1.1772 0-2.1663.8051-2.4468 1.8947h-2.8955c-1.235 0-2.289.893-2.492 2.111l-.1038.623a1.263 1.263 0 0 1-1.246 1.0555H11.289c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947s-2.1663.8051-2.4467 1.8947H4.973c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947C1.1311 9.4737 0 10.6047 0 12s1.131 2.5263 2.5263 2.5263c1.1772 0 2.1663-.8051 2.4468-1.8947h1.4223c.2804 1.0896 1.2696 1.8947 2.4467 1.8947 1.1772 0 2.1663-.8051 2.4468-1.8947h1.0008a1.263 1.263 0 0 1 1.2459 1.0555l.1038.623c.203 1.218 1.257 2.111 2.492 2.111h.3692c.2804 1.0895 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263c-1.1772 0-2.1664.805-2.4468 1.8947h-.3692a1.263 1.263 0 0 1-1.246-1.0555l-.1037-.623A2.52 2.52 0 0 0 13.9607 12a2.52 2.52 0 0 0 .821-1.4794l.1038-.623a1.263 1.263 0 0 1 1.2459-1.0555h2.8955c.2805 1.0896 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263m0 1.2632a1.263 1.263 0 0 1 1.2631 1.2631 1.263 1.263 0 0 1-1.2631 1.2632 1.263 1.263 0 0 1-1.2632-1.2632 1.263 1.263 0 0 1 1.2632-1.2631M2.5263 10.7368A1.263 1.263 0 0 1 3.7895 12a1.263 1.263 0 0 1-1.2632 1.2632A1.263 1.263 0 0 1 1.2632 12a1.263 1.263 0 0 1 1.2631-1.2632m6.3158 0A1.263 1.263 0 0 1 10.1053 12a1.263 1.263 0 0 1-1.2632 1.2632A1.263 1.263 0 0 1 7.579 12a1.263 1.263 0 0 1 1.2632-1.2632m10.1053 3.7895a1.263 1.263 0 0 1 1.2631 1.2632 1.263 1.263 0 0 1-1.2631 1.2631 1.263 1.263 0 0 1-1.2632-1.2631 1.263 1.263 0 0 1 1.2632-1.2632"/></svg>
+        <span>n8n</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 00.184-.186V6.29a.185.185 0 00-.185-.185H8.1a.185.185 0 00-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.185.185 0 00-.185-.185H5.136a.186.186 0 00-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 00.185-.185V9.006a.185.185 0 00-.184-.186h-2.12a.186.186 0 00-.186.186v1.887c0 .102.084.185.186.185m-2.92 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 00-.75.748 11.376 11.376 0 00.692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 003.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288Z"/></svg>
+        <span>Docker</span>
+      </li>
+    </ul>
   </div>
 </section>
 
@@ -594,12 +854,42 @@
       <p class="sub">Domain knowledge means we understand your business — not only your tech stack.</p>
     </div>
     <div class="ind-grid">
-      <div class="ind-card"><h3>Manufacturing</h3><p>Smart-factory automation, supply-chain intelligence, predictive maintenance.</p></div>
-      <div class="ind-card"><h3>Healthcare</h3><p>Digital health platforms, clinical data management, patient experience.</p></div>
-      <div class="ind-card"><h3>Retail &amp; e-commerce</h3><p>Omnichannel commerce, personalisation engines, retail analytics.</p></div>
-      <div class="ind-card"><h3>Financial services</h3><p>Fintech builds, compliance automation, risk &amp; fraud analytics.</p></div>
-      <div class="ind-card"><h3>Logistics</h3><p>Route optimisation, predictive logistics, end-to-end visibility.</p></div>
-      <div class="ind-card"><h3>Real estate</h3><p>PropTech platforms, property analytics, digital sales tooling.</p></div>
+      <div class="ind-card">
+        <img src="https://images.pexels.com/photos/19233057/pexels-photo-19233057/free-photo-of-assembling-machines-in-factory.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=600&amp;h=340&amp;fit=crop"
+             alt="Robotic arms assembling a vehicle on a modern factory line"
+             width="600" height="340" loading="lazy" decoding="async" />
+        <div class="ind-body"><h3>Manufacturing</h3><p>Smart-factory automation, supply-chain intelligence, predictive maintenance.</p></div>
+      </div>
+      <div class="ind-card">
+        <img src="https://images.pexels.com/photos/15277956/pexels-photo-15277956/free-photo-of-body-images-on-computer-screen-in-hospital.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=600&amp;h=340&amp;fit=crop"
+             alt="Medical imaging scans displayed across hospital monitors"
+             width="600" height="340" loading="lazy" decoding="async" />
+        <div class="ind-body"><h3>Healthcare</h3><p>Digital health platforms, clinical data management, patient experience.</p></div>
+      </div>
+      <div class="ind-card">
+        <img src="https://images.pexels.com/photos/5242822/pexels-photo-5242822.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=600&amp;h=340&amp;fit=crop"
+             alt="Customer completing a card payment at a retail counter"
+             width="600" height="340" loading="lazy" decoding="async" />
+        <div class="ind-body"><h3>Retail &amp; e-commerce</h3><p>Omnichannel commerce, personalisation engines, retail analytics.</p></div>
+      </div>
+      <div class="ind-card">
+        <img src="https://images.pexels.com/photos/6770610/pexels-photo-6770610.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=600&amp;h=340&amp;fit=crop"
+             alt="Financial market data and charts on a trading screen"
+             width="600" height="340" loading="lazy" decoding="async" />
+        <div class="ind-body"><h3>Financial services</h3><p>Fintech builds, compliance automation, risk &amp; fraud analytics.</p></div>
+      </div>
+      <div class="ind-card">
+        <img src="https://images.pexels.com/photos/1427541/pexels-photo-1427541.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=600&amp;h=340&amp;fit=crop"
+             alt="Shipping containers stacked at a busy freight port"
+             width="600" height="340" loading="lazy" decoding="async" />
+        <div class="ind-body"><h3>Logistics</h3><p>Route optimisation, predictive logistics, end-to-end visibility.</p></div>
+      </div>
+      <div class="ind-card">
+        <img src="https://images.pexels.com/photos/18153132/pexels-photo-18153132/free-photo-of-apartments-with-balconies.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=600&amp;h=340&amp;fit=crop"
+             alt="Contemporary apartment buildings with balconies"
+             width="600" height="340" loading="lazy" decoding="async" />
+        <div class="ind-body"><h3>Real estate</h3><p>PropTech platforms, property analytics, digital sales tooling.</p></div>
+      </div>
     </div>
   </div>
 </section>
@@ -617,6 +907,7 @@
         <li><span class="mk">03</span><span><b>Vendor-agnostic.</b> We recommend what's right for you, not what we're paid to sell.</span></li>
         <li><span class="mk">04</span><span><b>Time-zone friendly.</b> Overlapping hours with US, UK, EU, and APAC teams.</span></li>
       </ul>
+      <div class="sec-cta"><a href="#contact" class="btn btn-primary">Book a Discovery Call →</a></div>
     </div>
     <div>
       <img src="https://images.unsplash.com/photo-1758873268705-bb756c95f26a?w=1040&h=440&q=70&auto=format&fit=crop"
@@ -657,7 +948,7 @@
          loading="lazy" decoding="async"
          style="width:100%;height:100%;object-fit:cover" />
     <div style="position:absolute;inset:0;background:linear-gradient(135deg, rgba(11,20,13,.82), rgba(16,152,64,.55))"></div>
-    <div class="wrap" style="position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;color:#FFFFFF">
+    <div class="wrap" style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;color:#FFFFFF">
       <span class="eyebrow" style="color:var(--brand-lime)">Global delivery</span>
       <h2 style="color:#FFFFFF;font-size:clamp(26px,3.4vw,36px);max-width:22ch">Built like an enterprise partner, wherever you're based.</h2>
     </div>
@@ -697,8 +988,8 @@
   <div class="wrap contact-grid">
     <div class="contact-info">
       <span class="eyebrow">Get in touch</span>
-      <h2>Ready to build something that moves the business?</h2>
-      <p class="sub">Whether you have a project in mind or want to partner with us, we'd like to hear from you. We respond within 1 business day.</p>
+      <h2>Book a discovery call</h2>
+      <p class="sub">A short, no-obligation call: you walk us through where the business is today, we tell you plainly what we'd do about it and what it would take. Tell us a little below and we'll come back within 1 business day.</p>
       <ul class="cinfo-list">
         <li><b>Email —</b> <a href="mailto:hello@exommerce.online" style="color:var(--accent)">hello@exommerce.online</a></li>
         <li><b>Based in —</b> Bengaluru, India · delivering worldwide</li>
@@ -723,11 +1014,12 @@
               <option>AI &amp; automation</option>
               <option>Custom software</option>
               <option>Infrastructure management</option>
+              <option>LeadGenAI demo</option>
               <option>Not sure yet</option>
             </select>
           </div>
           <div class="field"><label for="ms">Tell us about your enquiry</label><textarea id="ms" name="message" placeholder="What are you trying to do?"></textarea></div>
-          <button type="submit" class="btn btn-primary" style="width:100%">Send enquiry →</button>
+          <button type="submit" class="btn btn-primary" style="width:100%">Book a Discovery Call →</button>
           <div class="fnote">Your details stay private — we never share your data. <a href="/privacy.html" style="color:var(--text2);text-decoration:underline">Privacy Policy</a>.</div>
         </form>
       </div>
@@ -746,8 +1038,9 @@
   <div class="wrap">
     <div class="fg">
       <div class="fbrand">
-        <a href="#top" class="logo">
-          <span>e<span class="brand-x">X</span>ommerce<span class="brand-dot">.</span><span class="brand-online">online</span></span>
+        <a href="#top" class="logo logo-lockup" aria-label="eXommerce home">
+          <img src="logo-full.png" alt="eXommerce.online — business transformation with technology, data &amp; AI"
+               width="560" height="123" loading="lazy" decoding="async" />
         </a>
         <p>Transforming Businesses. Delivering Outcomes. A global software, data, and AI transformation partner.</p>
       </div>
@@ -759,7 +1052,8 @@
         <li><a href="#solutions">Infrastructure</a></li>
       </ul></div>
       <div><h4>Products</h4><ul>
-        <li><a href="https://leadgenai.exommerce.online" target="_blank" rel="noopener">LeadgenAI</a></li>
+        <li><a href="#leadgenai">LeadGenAI</a></li>
+        <li><a href="https://leadgenai.exommerce.online" target="_blank" rel="noopener">Try LeadGenAI</a></li>
         <li><a href="#products">RentAI</a></li>
         <li><a href="#products">In development</a></li>
       </ul></div>
@@ -792,6 +1086,40 @@
     var open = links.style.display === 'flex';
     links.style.cssText = open ? '' : 'display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:var(--bg);padding:20px 28px;border-bottom:1px solid var(--border);gap:18px';
     mb.setAttribute('aria-expanded', String(!open));
+  });
+
+  // Hero headline — cross-fades between the two core messages. Visitors who ask
+  // for reduced motion keep the first one, static.
+  (function(){
+    var items = document.querySelectorAll('.hero .rot-item');
+    if (items.length < 2) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var i = 0, timer = null;
+    function advance(){
+      items[i].classList.remove('is-active');
+      i = (i + 1) % items.length;
+      items[i].classList.add('is-active');
+    }
+    function play(){ if (!timer) timer = setInterval(advance, 4200); }
+    function pause(){ clearInterval(timer); timer = null; }
+
+    play();
+    document.addEventListener('visibilitychange', function(){
+      if (document.hidden) pause(); else play();
+    });
+  })();
+
+  // CTAs that name a specific need (the LeadGenAI demo button) preselect it in
+  // the contact form, so the enquiry arrives already labelled.
+  Array.prototype.forEach.call(document.querySelectorAll('[data-need]'), function(el){
+    el.addEventListener('click', function(){
+      var sel = document.getElementById('need');
+      var want = el.getAttribute('data-need');
+      for (var i = 0; i < sel.options.length; i++){
+        if (sel.options[i].text === want){ sel.selectedIndex = i; break; }
+      }
+    });
   });
 
   // contact form — composes the enquiry as an email in the visitor's own mail
