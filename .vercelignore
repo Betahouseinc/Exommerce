@@ -9,3 +9,7 @@ supabase service role key.txt
 # Source / dev files
 App.jsx
 .claude/
+
+# Backend / infra source — never web-served
+apps-script.gs
+automation/
