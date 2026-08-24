@@ -117,6 +117,9 @@
   section{padding:112px 0}
   @media(max-width:860px){section{padding:88px 0}}
   @media(max-width:560px){section{padding:64px 0}}
+  /* Sits between two light sections, so it needs a rule to read as its own
+     section — same hairline the technology strip uses. */
+  #approach{border-top:1px solid var(--border)}
   .sec-alt{background:var(--bg2);position:relative;overflow:hidden}
   .sec-alt::before{content:'';position:absolute;top:-120px;right:-120px;width:420px;height:420px;border-radius:50%;
     background:radial-gradient(circle, rgba(123,207,22,.16), rgba(16,152,64,.05) 60%, transparent 72%);pointer-events:none;z-index:0}
@@ -367,12 +370,31 @@
   }
   .sol-card .n{
     font-family:var(--ff-display);
-    font-size:12px;
+    font-size:12.5px;
     color:var(--brand-green);
     font-weight:700;
-    margin-bottom:22px;
-    display:block
+    margin-bottom:20px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    background:var(--bg-green);
+    border:1px solid #D8EBDD
   }
+  .sol-card::after{
+    content:'';
+    position:absolute;
+    left:0;
+    top:0;
+    height:3px;
+    width:0;
+    background:linear-gradient(90deg,var(--brand-green),var(--brand-lime));
+    border-radius:var(--radius) var(--radius) 0 0;
+    transition:width .28s ease
+  }
+  .sol-card:hover::after{width:100%}
   .sol-card h3{font-size:17px;margin-bottom:10px}
   .sol-card p{font-size:14px;color:var(--text2);line-height:1.65}
   .sol-also{margin-top:24px;font-size:13.5px;color:var(--text3)}
@@ -684,14 +706,14 @@
       <span class="rot-item is-active" aria-hidden="true">Turn AI, data, and automation into <span class="accent">business outcomes.</span></span>
       <span class="rot-item" aria-hidden="true">Business Transformation with <span class="accent">Technology, Data &amp; AI.</span></span>
     </h1>
-    <p class="sub">Disconnected systems, manual re-keying, and reports nobody trusts quietly slow a business down. We connect your systems, make your data usable, and automate the work in between — then build and run what comes next.</p>
+    <p class="sub">Let's explore the possibilities of addressing your business technology challenges with AI and business transformation.</p>
     <div class="hero-ctas">
       <a href="#contact" class="btn btn-primary">Book a Discovery Call →</a>
       <a href="#solutions" class="btn btn-outline">See what we do</a>
     </div>
     <div class="hero-stats">
-      <div><b>15+</b><span>Industries served</span></div>
-      <div><b>2019</b><span>Building since</span></div>
+      <div><b>Strategy</b><span>Decisions, not just delivery</span></div>
+      <div><b>Build &amp; run</b><span>We own it end to end</span></div>
       <div><b>Global</b><span>US · UK · EU · APAC</span></div>
     </div>
   </div>
@@ -717,7 +739,7 @@
     <div class="shead">
       <span class="eyebrow">What we do</span>
       <h2>Consulting &amp; transformation, end to end</h2>
-      <p class="sub">If your systems don't talk to each other, your reporting is stitched together by hand, or your team is working around the software instead of with it — this is where we start. One partner across the whole journey.</p>
+      <p class="sub">Six capabilities, one partner, across the whole journey — assessing where you are, modernising your data and systems, and building and running what comes next.</p>
     </div>
     <div class="sol-grid">
       <a href="#contact" class="sol-card"><span class="n">01</span><h3>Review &amp; redesign</h3><p>Audit current systems, processes, and architecture, then design a stronger target state with a prioritised, costed roadmap.</p></a>
@@ -732,13 +754,31 @@
   </div>
 </section>
 
+<!-- ===== APPROACH — the strategic horizon ===== -->
+<section id="approach">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">How we work</span>
+      <h2>Hired for the decisions that outlast the project</h2>
+      <p class="sub">Anyone can ship a dashboard or wire up a chatbot. The value is in choosing what to build, what to connect, what to retire, and what to leave alone — decisions that are expensive to reverse and that compound for years.</p>
+    </div>
+    <ul class="feature-pts" style="max-width:820px;margin:0">
+      <li><b>We start with the decision, not the tool.</b> What the business needs to be able to do in three years determines the architecture. The stack follows from that, not the other way round.</li>
+      <li><b>AI where it earns its place.</b> We put it where it changes an outcome you can measure — and we'll tell you plainly where it doesn't, which is more often than the market admits.</li>
+      <li><b>We build it to be handed over.</b> Documented, tested, and yours. No dependency on us by design — we'd rather be kept because we're useful.</li>
+      <li><b>We stay to run it.</b> Cloud, DevOps, monitoring, and support, so the thing that goes live is still fast and reliable a year later.</li>
+    </ul>
+    <div class="sec-cta"><a href="#contact" class="btn btn-primary">Book a Discovery Call →</a></div>
+  </div>
+</section>
+
 <!-- ===== PRODUCTS ===== -->
 <section id="products" class="sec-alt">
   <div class="wrap">
     <div class="shead">
       <span class="eyebrow">Our products</span>
       <h2>We build our own software, too</h2>
-      <p class="sub">We don't just advise. We design, build, and run our own AI products — so every client engagement gets battle-tested engineering, not theory.</p>
+      <p class="sub">We design, build, and run our own AI products — so every client engagement gets battle-tested engineering, not theory. Where one of them fits your business, you get a head start instead of a blank page.</p>
     </div>
 
     <!-- Featured product — LeadGenAI -->
@@ -1194,7 +1234,7 @@
 
     function drawStatic(){
       ctx.clearRect(0,0,W,H);
-      ctx.fillStyle = 'rgba(168,255,0,0.14)';
+      ctx.fillStyle = 'rgba(16,152,64,0.20)';
       var step = Math.max(1, Math.round(1/qualityScale));
       for (var i=0;i<cols;i+=step){
         for (var j=0;j<rows;j+=step){
@@ -1225,10 +1265,12 @@
           var fx = x + (dist>0 ? (dx/ (dist||1)) * push : 0);
           var fy = py + (dist>0 ? (dy/ (dist||1)) * push : 0);
 
-          var alpha = 0.05 + (Math.sin((i*0.2)+(j*0.2)+t*0.6)+1)/2 * 0.16;
+          // Brand green, not the acid yellow-green this used to paint — at these
+          // alphas that was invisible against the white hero.
+          var alpha = 0.10 + (Math.sin((i*0.2)+(j*0.2)+t*0.6)+1)/2 * 0.26;
           ctx.beginPath();
-          ctx.fillStyle = 'rgba(168,255,0,' + alpha.toFixed(3) + ')';
-          ctx.arc(fx, fy, 1.15, 0, Math.PI*2);
+          ctx.fillStyle = 'rgba(16,152,64,' + alpha.toFixed(3) + ')';
+          ctx.arc(fx, fy, 1.35, 0, Math.PI*2);
           ctx.fill();
         }
       }
