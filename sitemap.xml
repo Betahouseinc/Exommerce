@@ -21,6 +21,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://exommerce.online/team.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://exommerce.online/privacy.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

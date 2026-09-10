@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Meet the Team — eXommerce.online</title>
+<meta name="description" content="Meet the team behind eXommerce — a founder-led core backed by senior independent consultants in business strategy, cybersecurity, operations, and technology consulting." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://exommerce.online/team.html" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="eXommerce.online" />
+<meta property="og:url" content="https://exommerce.online/team.html" />
+<meta property="og:title" content="Meet the Team — eXommerce.online" />
+<meta property="og:description" content="A founder-led core backed by senior independent consultants in business strategy, cybersecurity, operations, and technology consulting." />
+<meta property="og:image" content="https://exommerce.online/og-image.png" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Meet the Team — eXommerce.online" />
+<meta name="twitter:description" content="A founder-led core backed by senior independent consultants in business strategy, cybersecurity, operations, and technology consulting." />
+<meta name="twitter:image" content="https://exommerce.online/og-image.png" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23109840'/%3E%3Ctext x='32' y='44' font-family='Sora,sans-serif' font-weight='700' font-size='34' fill='%23FFFFFF' text-anchor='middle'%3Ee%3C/text%3E%3C/svg%3E" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --bg2:#F7FBF8;
+    --bg-green:#EFF8F1;
+    --surface:#FFFFFF;
+    --surface-hover:#F3FAF5;
+
+    --brand-green:#109840;
+    --brand-green-dark:#087A32;
+    --brand-lime:#7BCF16;
+    --accent:#109840;
+
+    --ink:#0B0D0C;
+    --text:#0B0D0C;
+    --text2:#4B5560;
+    --text3:#6B7280;
+
+    --border:#DDE8E0;
+    --border-strong:#C9D9CE;
+
+    --ff-display:'Sora',system-ui,sans-serif;
+    --ff-body:'Inter',system-ui,sans-serif;
+    --maxw:1200px;
+    --radius:12px;
+    --shadow:0 10px 30px rgba(11,13,12,.06);
+    --shadow-hover:0 16px 40px rgba(16,152,64,.10);
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--ff-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden
+  }
+  a{color:inherit;text-decoration:none}
+  img,svg{max-width:100%;display:block}
+  h1,h2,h3,h4{
+    font-family:var(--ff-display);
+    margin:0;
+    font-weight:600;
+    letter-spacing:-.025em;
+    line-height:1.1
+  }
+  p{margin:0}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--brand-green);
+    font-weight:700;
+    margin-bottom:16px
+  }
+  .eyebrow::before{
+    content:'';
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--brand-green)
+  }
+  .sub{color:var(--text2);font-size:16px;max-width:58ch}
+  section{padding:112px 0}
+  @media(max-width:860px){section{padding:88px 0}}
+  @media(max-width:560px){section{padding:64px 0}}
+  .sec-alt{background:var(--bg2);position:relative;overflow:hidden}
+  .sec-alt::before{content:'';position:absolute;top:-120px;right:-120px;width:420px;height:420px;border-radius:50%;
+    background:radial-gradient(circle, rgba(123,207,22,.16), rgba(16,152,64,.05) 60%, transparent 72%);pointer-events:none;z-index:0}
+  .sec-alt .wrap{position:relative;z-index:1}
+  .shead{max-width:680px;margin-bottom:52px}
+  .shead h2{font-size:clamp(30px,4vw,46px);margin-bottom:16px}
+  .shead .sub{margin-top:0}
+
+  /* Brand logo */
+  .logo{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    font-family:var(--ff-display);
+    font-size:20px;
+    font-weight:700;
+    letter-spacing:-.045em;
+    color:var(--text)
+  }
+  .logo img{height:30px;width:auto;display:block}
+  .logo.logo-lockup img{height:auto;width:230px;max-width:100%}
+  @media(max-width:480px){.logo img{height:24px}}
+
+  /* Buttons */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    font-family:var(--ff-body);
+    font-weight:600;
+    font-size:14px;
+    padding:13px 23px;
+    border-radius:9px;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease;
+    white-space:nowrap;
+    min-height:46px;
+    line-height:1.2
+  }
+  .cta-short{display:none}
+  @media(max-width:560px){
+    .cta-long{display:none}
+    .cta-short{display:inline}
+  }
+  .btn-primary{
+    background:var(--brand-green);
+    color:#FFFFFF;
+    box-shadow:0 5px 16px rgba(16,152,64,.14)
+  }
+  .btn-primary:hover{
+    background:var(--brand-green-dark);
+    transform:translateY(-1px);
+    box-shadow:0 9px 22px rgba(16,152,64,.18)
+  }
+  .btn-outline{
+    background:#FFFFFF;
+    color:var(--text);
+    border-color:var(--border-strong)
+  }
+  .btn-outline:hover{
+    border-color:var(--brand-green);
+    color:var(--brand-green-dark);
+    transform:translateY(-1px)
+  }
+  .btn-sm{padding:9px 17px;font-size:13px;min-height:44px}
+
+  /* Navigation */
+  header.nav{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:100;
+    background:rgba(255,255,255,.84);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid transparent;
+    transition:border-color .2s,background .2s,box-shadow .2s
+  }
+  header.nav.scrolled{
+    border-color:var(--border);
+    background:rgba(255,255,255,.94);
+    box-shadow:0 4px 20px rgba(11,13,12,.04)
+  }
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:76px}
+  .nav-links{display:flex;gap:27px;align-items:center}
+  .nav-links a{
+    font-size:13.5px;
+    color:var(--text2);
+    transition:color .15s
+  }
+  .nav-links a:hover{color:var(--brand-green)}
+  .nav-links .current{
+    font-size:13.5px;
+    color:var(--brand-green);
+    font-weight:600
+  }
+  .nav-cta{display:flex;align-items:center;gap:14px}
+  .menu-btn{
+    display:none;
+    background:#FFFFFF;
+    border:1px solid var(--border);
+    color:var(--text);
+    width:44px;
+    height:44px;
+    border-radius:8px;
+    cursor:pointer
+  }
+  @media(max-width:920px){
+    .nav-links{display:none}
+    .menu-btn{display:block}
+  }
+
+  /* Hero */
+  .hero{
+    position:relative;
+    padding:172px 0 96px;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 78% 26%,rgba(123,207,22,.09),transparent 27%),
+      linear-gradient(180deg,#FFFFFF 0%,#FBFEFC 100%)
+  }
+  .hero-in{position:relative;z-index:1;text-align:center;max-width:900px;margin:0 auto}
+  .hero h1{
+    font-size:clamp(36px,5vw,58px);
+    letter-spacing:-.045em;
+    margin-bottom:22px
+  }
+  .hero h1 .accent{color:var(--brand-green)}
+  .hero .sub{font-size:18px;margin:0 auto 38px;max-width:57ch;text-align:center}
+  .hero-ctas{display:flex;gap:13px;justify-content:center;flex-wrap:wrap;margin-bottom:50px}
+  .hero-stats{
+    display:flex;
+    gap:0;
+    justify-content:center;
+    flex-wrap:wrap;
+    padding-top:30px;
+    border-top:1px solid var(--border)
+  }
+  .hero-stats div{
+    text-align:center;
+    min-width:150px;
+    padding:0 22px;
+    border-right:1px solid var(--border)
+  }
+  .hero-stats div:last-child{border-right:0}
+  .hero-stats b{
+    display:block;
+    font-family:var(--ff-display);
+    font-size:25px;
+    color:var(--text)
+  }
+  .hero-stats span{font-size:12px;color:var(--text3)}
+  @media(max-width:560px){
+    .hero{padding:124px 0 72px}
+    .hero .sub{font-size:16.5px;margin-bottom:32px}
+    .hero-ctas{margin-bottom:40px}
+    .hero-ctas .btn{width:100%}
+  }
+
+  /* Team grid */
+  .team-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+  }
+  @media(max-width:700px){.team-grid{grid-template-columns:1fr}}
+
+  .team-card{
+    position:relative;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:30px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    transition:background .2s,border-color .2s,transform .2s,box-shadow .2s;
+    overflow:hidden;
+  }
+  .team-card:hover{
+    background:var(--surface-hover);
+    border-color:#BBD7C4;
+    transform:translateY(-3px);
+    box-shadow:var(--shadow-hover)
+  }
+  .team-card::after{
+    content:'';
+    position:absolute;
+    left:0;
+    top:0;
+    height:3px;
+    width:0;
+    background:linear-gradient(90deg,var(--brand-green),var(--brand-lime));
+    border-radius:var(--radius) var(--radius) 0 0;
+    transition:width .28s ease
+  }
+  .team-card:hover::after{width:100%}
+
+  .card-top{display:flex;align-items:center;gap:18px}
+  .avatar{
+    flex:none;
+    width:84px;
+    height:84px;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:inset 0 0 0 1px var(--border-strong);
+  }
+  .avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform .25s ease;
+  }
+  .team-card:hover .avatar img{transform:scale(1.05)}
+
+  .card-id h3{font-size:17px;margin-bottom:3px}
+  .role{font-size:0.92rem;font-weight:500;color:var(--brand-green);margin:0}
+  .location{font-size:0.8rem;color:var(--text3);margin-top:4px}
+
+  .blurb{font-size:14px;line-height:1.65;color:var(--text2);margin:0}
+
+  .card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:4px}
+  .tag{
+    font-size:.72rem;
+    font-weight:600;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    color:var(--brand-green);
+    background:var(--bg-green);
+    padding:5px 10px;
+    border-radius:6px;
+    border:1px solid #D8EBDD;
+  }
+  .li-link{
+    font-size:.84rem;
+    font-weight:600;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    border-bottom:1px solid transparent;
+  }
+  .li-link:hover,.li-link:focus-visible{color:var(--brand-green);border-color:currentColor}
+
+  /* Work culture */
+  .culture-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+  }
+  @media(max-width:900px){.culture-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.culture-grid{grid-template-columns:1fr}}
+  .culture-card{
+    background:#FFFFFF;
+    border:1px solid var(--border);
+    border-top:3px solid var(--brand-green);
+    border-radius:var(--radius);
+    padding:24px 20px;
+  }
+  .culture-card b{
+    display:block;
+    font-family:var(--ff-display);
+    font-weight:600;
+    font-size:1.02rem;
+    color:var(--text);
+    margin-bottom:8px;
+  }
+  .culture-card p{
+    font-size:.88rem;
+    line-height:1.5;
+    color:var(--text2);
+    margin:0;
+  }
+
+  /* Footer */
+  footer{background:#F2F8F4;border-top:1px solid var(--border);padding:76px 0 32px}
+  .fg{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:56px}
+  .fbrand p{font-size:13.5px;color:var(--text3);margin-top:14px;max-width:34ch;line-height:1.6}
+  .fg h4{font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:18px}
+  .fg ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+  .fg a{font-size:13.5px;color:var(--text3);transition:color .15s}
+  .fg a:hover{color:var(--brand-green)}
+  .fbottom{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid var(--border);font-size:12.5px;color:var(--text3);flex-wrap:wrap;gap:12px}
+  .fbottom a{color:var(--text3)}
+  .fbottom a:hover{color:var(--brand-green)}
+  @media(max-width:860px){.fg{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.fg{grid-template-columns:1fr}}
+
+  [hidden]{display:none !important}
+  :focus-visible{outline:3px solid var(--brand-green);outline-offset:3px;border-radius:4px}
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+      scroll-behavior:auto !important
+    }
+  }
+</style>
+<!-- Analytics: GA4 loads only after cookie consent -->
+<script defer src="/analytics.js"></script>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a href="index.html" class="logo" aria-label="eXommerce home">
+      <img src="logo.png" alt="eXommerce.online" width="420" height="74" />
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="index.html#solutions">Solutions</a>
+      <a href="index.html#products">Products</a>
+      <a href="index.html#industries">Industries</a>
+      <a href="index.html#about">About</a>
+      <span class="current">Team</span>
+      <a href="index.html#contact" class="nav-cta-mobile">Book a Discovery Call →</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="index.html#contact" class="btn btn-primary btn-sm" aria-label="Book a Discovery Call"><span class="cta-long">Book a Discovery Call</span><span class="cta-short">Book a Call</span></a>
+      <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="top">
+  <div class="wrap hero-in">
+    <span class="eyebrow">Our Team</span>
+    <h1>A small core, backed&nbsp;by&nbsp;<span class="accent">senior consultants.</span></h1>
+    <p class="sub">
+      Exommerce is run by a founder-led core that engages independent technology consultants
+      for each engagement — pairing clients with senior expertise in business strategy, project
+      delivery, operations, and technology consulting, without the overhead of a full-time bench.
+    </p>
+    <div class="hero-ctas">
+      <a href="index.html#contact" class="btn btn-primary">Book a Discovery Call →</a>
+      <a href="index.html" class="btn btn-outline">Back to eXommerce</a>
+    </div>
+    <div class="hero-stats">
+      <div><b>4</b><span>People in the network</span></div>
+      <div><b>1</b><span>Founder-led core</span></div>
+      <div><b>2</b><span>Cities — Bengaluru &amp; Hyderabad</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TEAM GRID ===== -->
+<section id="experts">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">Who We Are</span>
+      <h2>Meet the Experts</h2>
+      <p class="sub">Leadership · Cybersecurity · Operations · Consulting</p>
+    </div>
+
+    <div class="team-grid">
+
+      <article class="team-card">
+        <div class="card-top">
+          <div class="avatar"><img src="team/bhavin.jpg" alt="Bhavin Chawla" width="84" height="84" loading="lazy" decoding="async" /></div>
+          <div class="card-id">
+            <h3>Bhavin Chawla</h3>
+            <p class="role">Founder &amp; CEO / Principal Consultant</p>
+            <p class="location">Bengaluru, Karnataka</p>
+          </div>
+        </div>
+        <p class="blurb">
+          With 15+ years in technology and business transformation, Bhavin founded Exommerce to help
+          startups, SMEs, and enterprises harness AI, automation, and modern technology to solve complex
+          business challenges. Previously a Solutions Engineer in technical pre-sales at CData Software
+          India, architecting enterprise data pipelines into cloud platforms like Snowflake, Databricks,
+          and Azure. PMP &amp; ITIL certified.
+        </p>
+        <div class="card-foot">
+          <span class="tag">Leadership</span>
+          <a class="li-link" href="https://www.linkedin.com/in/bhavinchawla/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+
+      <article class="team-card">
+        <div class="card-top">
+          <div class="avatar"><img src="team/joseph.jpg" alt="Joseph Charles Arockiaraj" width="84" height="84" loading="lazy" decoding="async" /></div>
+          <div class="card-id">
+            <h3>Joseph Charles Arockiaraj</h3>
+            <p class="role">Technology &amp; Business Consultant</p>
+            <p class="location">Bangalore Rural, Karnataka</p>
+          </div>
+        </div>
+        <p class="blurb">
+          With about 15 years spanning cloud operations, IT recruitment, and business consulting,
+          Joseph brings hands-on expertise across AWS, Azure, and GCP environments, Microsoft
+          Partner Center management, and end-to-end IT talent acquisition, built over a decade at
+          Jamcracker before joining Exommerce.
+        </p>
+        <div class="card-foot">
+          <span class="tag">Consulting</span>
+          <a class="li-link" href="https://www.linkedin.com/in/joseph-charles-arockiaraj-5360362b7/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+
+      <article class="team-card">
+        <div class="card-top">
+          <div class="avatar"><img src="team/manoj.jpg" alt="ManojKumar Munnuswamy" width="84" height="84" loading="lazy" decoding="async" /></div>
+          <div class="card-id">
+            <h3>ManojKumar Munnuswamy</h3>
+            <p class="role">Senior Cybersecurity Consultant</p>
+            <p class="location">Hyderabad, Telangana</p>
+          </div>
+        </div>
+        <p class="blurb">
+          With over 20 years in the US IT industry, Manoj is Exommerce's Senior Cybersecurity
+          Consultant — bringing deep expertise in technical project leadership, 24x7 production
+          support, and secure systems delivery, built over years leading project delivery at
+          Coforge onsite in the United States.
+        </p>
+        <div class="card-foot">
+          <span class="tag">Cybersecurity</span>
+          <a class="li-link" href="https://www.linkedin.com/in/manojkumar-munnuswamy-b0382a3a/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+
+      <article class="team-card">
+        <div class="card-top">
+          <div class="avatar"><img src="team/arun.jpg" alt="Arun Raj" width="84" height="84" loading="lazy" decoding="async" /></div>
+          <div class="card-id">
+            <h3>Arun Raj</h3>
+            <p class="role">Technology Operations Head</p>
+            <p class="location">Bangalore Urban, Karnataka</p>
+          </div>
+        </div>
+        <p class="blurb">
+          Arun leads technology operations at Exommerce, bringing over 15 years of experience in
+          IT and operations, specializing in client relationship management, process coordination,
+          and people management.
+        </p>
+        <div class="card-foot">
+          <span class="tag">Operations</span>
+          <a class="li-link" href="https://www.linkedin.com/in/arun-raj-01b4b922a/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== WORK CULTURE ===== -->
+<section class="sec-alt" id="culture">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">How We Work</span>
+      <h2>Work Culture</h2>
+      <p class="sub">Remote-first · Bengaluru-based · Global delivery</p>
+    </div>
+
+    <div class="culture-grid">
+      <div class="culture-card">
+        <b>Remote-first</b>
+        <p>A distributed team that works async across engagements — senior expertise on demand, without full-time bench overhead.</p>
+      </div>
+      <div class="culture-card">
+        <b>Bengaluru-based</b>
+        <p>Headquartered in Bengaluru, with team members based across Karnataka and Telangana.</p>
+      </div>
+      <div class="culture-card">
+        <b>International experience</b>
+        <p>Delivery experience across US, EU, and APAC markets — spanning cloud, cybersecurity, and enterprise data engagements.</p>
+      </div>
+      <div class="culture-card">
+        <b>50+ years, combined</b>
+        <p>Over 50 years of combined industry experience across the team — senior expertise from day one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="wrap">
+    <div class="fg">
+      <div class="fbrand">
+        <a href="index.html" class="logo logo-lockup" aria-label="eXommerce home">
+          <img src="logo-full.png" alt="eXommerce.online — business transformation with technology, data &amp; AI"
+               width="560" height="123" loading="lazy" decoding="async" />
+        </a>
+        <p>Transforming Businesses. Delivering Outcomes. A global software, data, and AI transformation partner.</p>
+      </div>
+      <div><h4>Solutions</h4><ul>
+        <li><a href="index.html#solutions">Review &amp; redesign</a></li>
+        <li><a href="index.html#solutions">Data &amp; BI</a></li>
+        <li><a href="index.html#solutions">AI &amp; automation</a></li>
+        <li><a href="index.html#solutions">Custom software</a></li>
+        <li><a href="index.html#solutions">Infrastructure</a></li>
+      </ul></div>
+      <div><h4>Products</h4><ul>
+        <li><a href="index.html#leadgenai">LeadGenAI</a></li>
+        <li><a href="https://leadgenai.exommerce.online" target="_blank" rel="noopener">Try LeadGenAI</a></li>
+        <li><a href="index.html#products">RentAI</a></li>
+        <li><a href="index.html#products">In development</a></li>
+      </ul></div>
+      <div><h4>Company</h4><ul>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="mailto:contact@exommerce.online">contact@exommerce.online</a></li>
+        <li><a href="https://www.linkedin.com/company/exommerce" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul></div>
+    </div>
+    <div class="fbottom">
+      <span>© <span id="yr"></span> eXommerce LLP · Bengaluru, India</span>
+      <span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // nav scroll state
+  var navEl = document.getElementById('nav');
+  window.addEventListener('scroll', function(){ navEl.classList.toggle('scrolled', window.scrollY > 8); }, {passive:true});
+
+  // mobile menu (simple toggle of inline links list)
+  var mb = document.getElementById('menuBtn');
+  mb.addEventListener('click', function(){
+    var links = document.querySelector('.nav-links');
+    var open = links.style.display === 'flex';
+    links.style.cssText = open ? '' : 'display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:var(--bg);padding:20px 28px;border-bottom:1px solid var(--border);gap:18px';
+    mb.setAttribute('aria-expanded', String(!open));
+  });
+</script>
+</body>
+</html>
