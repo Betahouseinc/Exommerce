@@ -56,6 +56,16 @@
     --brand-lime:#7BCF16;
     --accent:#109840;
 
+    /* Accent hues for the DevOps sections — one per practice, so cards read
+       apart at a glance while the brand green stays the primary colour. */
+    --c-blue:#2563EB;
+    --c-violet:#7C3AED;
+    --c-pink:#DB2777;
+    --c-orange:#EA580C;
+    --c-rose:#E11D48;
+    --c-sky:#0284C7;
+    --c-teal:#0D9488;
+
     --ink:#0B0D0C;
     --text:#0B0D0C;
     --text2:#4B5560;
@@ -121,7 +131,9 @@
   /* Sits between two light sections, so it needs a rule to read as its own
      section — same hairline the technology strip uses. */
   #approach{border-top:1px solid var(--border)}
-  .sec-alt{background:var(--bg2);position:relative;overflow:hidden}
+  /* clip, not hidden: hidden would make this a scroll container and stop the
+     fit finder's sticky card from sticking. */
+  .sec-alt{background:var(--bg2);position:relative;overflow:hidden;overflow:clip}
   .sec-alt::before{content:'';position:absolute;top:-120px;right:-120px;width:420px;height:420px;border-radius:50%;
     background:radial-gradient(circle, rgba(123,207,22,.16), rgba(16,152,64,.05) 60%, transparent 72%);pointer-events:none;z-index:0}
   .sec-alt .wrap{position:relative;z-index:1}
@@ -306,25 +318,20 @@
   }
   .hero .sub{font-size:18px;margin:0 0 32px;max-width:52ch;text-align:left}
   .hero-ctas{display:flex;gap:13px;justify-content:flex-start;flex-wrap:wrap;margin-bottom:44px}
+  /* Three equal columns, so the stats always share one row instead of wrapping. */
   .hero-stats{
-    display:flex;
-    gap:0;
-    justify-content:flex-start;
-    flex-wrap:wrap;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
     padding-top:30px;
     border-top:1px solid var(--border)
   }
-  .hero-stats div{text-align:left}
   @media(max-width:920px){
     .hero .sub{margin:0 auto 32px;text-align:center}
     .hero-ctas{justify-content:center}
-    .hero-stats{justify-content:center}
-    .hero-stats div{text-align:center}
   }
   .hero-stats div{
     text-align:center;
-    min-width:150px;
-    padding:0 22px;
+    padding:0 16px;
     border-right:1px solid var(--border)
   }
   .hero-stats div:last-child{border-right:0}
@@ -334,13 +341,14 @@
     font-size:25px;
     color:var(--text)
   }
-  .hero-stats span{font-size:12px;color:var(--text3)}
+  .hero-stats span{display:block;font-size:12px;line-height:1.5;margin-top:4px;color:var(--text3)}
   @media(max-width:560px){
     .hero{padding:124px 0 72px}
     .hero .sub{font-size:16.5px;margin-bottom:32px}
     .hero-ctas{margin-bottom:40px}
     .hero-ctas .btn{width:100%}
-    .hero-stats div{min-width:132px;padding:0 14px;margin-bottom:16px}
+    .hero-stats div{padding:0 8px}
+    .hero-stats b{font-size:20px}
   }
 
 
@@ -529,8 +537,7 @@
   .prod-cta{margin-top:auto}
   @media(max-width:860px){.prod-grid{grid-template-columns:1fr}}
 
-  /* Technology strip */
-  .techstrip{padding:52px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  /* Logo wall label */
   .techstrip-label{
     text-align:center;
     font-size:11px;
@@ -540,47 +547,318 @@
     font-weight:700;
     margin-bottom:28px
   }
-  .techlogos{
+  /* Logo wall — without JS it's a centred, wrapping set of chips; the script
+     duplicates the list and adds .is-moving to turn it into a marquee. */
+  .logowall{padding:44px 0 48px;border-bottom:1px solid var(--border)}
+  .logowall .techstrip-label{margin-bottom:24px}
+  .marquee-track{
     list-style:none;
-    margin:0;
-    padding:0;
+    margin:0 auto;
+    padding:6px 28px;
     display:flex;
     flex-wrap:wrap;
     justify-content:center;
-    align-items:center;
-    gap:20px 32px
+    gap:14px;
+    max-width:var(--maxw)
   }
-  .techlogos li{
+  .marquee.is-moving{
+    overflow:hidden;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)
+  }
+  .marquee.is-moving .marquee-track{
+    flex-wrap:nowrap;
+    width:max-content;
+    max-width:none;
+    padding:6px 0;
+    animation:marquee 55s linear infinite
+  }
+  .marquee.is-moving:hover .marquee-track{animation-play-state:paused}
+  /* Two identical copies sit in the track, so shifting by half (plus half a
+     gap) lands the second copy exactly where the first began. */
+  @keyframes marquee{to{transform:translateX(calc(-50% - 7px))}}
+  .marquee-track li{
     display:flex;
     align-items:center;
     gap:10px;
-    color:var(--text3);
-    transition:color .2s
-  }
-  .techlogos li:hover{color:var(--brand-green)}
-  .techlogos svg{width:24px;height:24px;fill:currentColor;flex-shrink:0}
-  /* Entries whose brand marks can't be redistributed sit as wordmarks, with a
-     neutral dot so the rhythm of the strip holds. */
-  .techlogos li.wordmark::before{
-    content:'';
-    width:7px;
-    height:7px;
-    border-radius:50%;
-    background:currentColor;
-    opacity:.45;
-    flex-shrink:0
-  }
-  .techlogos span{
+    padding:9px 18px 9px 11px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:999px;
+    box-shadow:0 2px 8px rgba(11,13,12,.04);
     font-family:var(--ff-display);
-    font-size:14.5px;
+    font-size:14px;
     font-weight:600;
-    letter-spacing:-.01em
+    color:var(--text2);
+    white-space:nowrap;
+    transition:transform .2s,border-color .2s,box-shadow .2s
   }
+  .marquee-track li:hover{transform:translateY(-2px);border-color:#BBD7C4;box-shadow:var(--shadow)}
+  .marquee-track img{width:28px;height:28px;flex-shrink:0}
   @media(max-width:560px){
-    .techstrip{padding:40px 0}
-    .techlogos{gap:16px 28px}
-    .techlogos svg{width:20px;height:20px}
-    .techlogos span{font-size:13px}
+    .marquee-track li{font-size:13px;padding:7px 14px 7px 9px}
+    .marquee-track img{width:22px;height:22px}
+  }
+
+  /* Fit finder — three questions on the left, a live plan on the right */
+  .fit{display:grid;grid-template-columns:1fr 1.05fr;gap:40px;align-items:start}
+  .fit-q{border:0;margin:0 0 28px;padding:0;min-width:0}
+  .fit-q legend{
+    font-family:var(--ff-display);
+    font-weight:600;
+    font-size:16px;
+    margin-bottom:14px;
+    padding:0
+  }
+  .fit-step{font-family:var(--ff-mono);font-size:12px;color:var(--brand-green);margin-right:8px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{position:relative}
+  .chip input{position:absolute;opacity:0;pointer-events:none}
+  .chip span{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    min-height:42px;
+    padding:8px 15px;
+    border:1px solid var(--border-strong);
+    border-radius:999px;
+    background:#FFFFFF;
+    font-size:13.5px;
+    color:var(--text2);
+    cursor:pointer;
+    transition:background .18s,border-color .18s,color .18s,box-shadow .18s,transform .18s
+  }
+  .chip span:hover{border-color:var(--brand-green);color:var(--text);transform:translateY(-1px)}
+  .chip span img{width:20px;height:20px;padding:2px;border-radius:5px;background:#FFFFFF}
+  .chip input:checked + span{
+    background:var(--brand-green);
+    border-color:var(--brand-green);
+    color:#FFFFFF;
+    box-shadow:0 6px 16px rgba(16,152,64,.22)
+  }
+  .chip input:focus-visible + span{outline:3px solid var(--brand-green);outline-offset:2px}
+  .fit-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    position:sticky;
+    top:100px
+  }
+  .fit-head{
+    position:relative;
+    padding:26px 28px 24px;
+    color:#FFFFFF;
+    background:linear-gradient(135deg,var(--fit-a,#109840),var(--fit-b,#7BCF16));
+    overflow:hidden
+  }
+  .fit-head::after{
+    content:'';
+    position:absolute;
+    right:-50px;
+    top:-60px;
+    width:200px;
+    height:200px;
+    border-radius:50%;
+    background:rgba(255,255,255,.12)
+  }
+  .fit-kicker{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;opacity:.85}
+  .fit-head h3{font-size:23px;margin:8px 0 10px;position:relative;z-index:1}
+  .fit-model{font-size:14px;line-height:1.55;opacity:.95;position:relative;z-index:1;max-width:46ch}
+  .fit-body{padding:24px 28px 28px}
+  .fit-phases{list-style:none;margin:0 0 22px;padding:0;display:flex;flex-direction:column;gap:16px}
+  .fit-phases li{position:relative;padding-left:24px}
+  .fit-phases li::before{
+    content:'';
+    position:absolute;
+    left:0;
+    top:6px;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:var(--fit-a,#109840);
+    box-shadow:0 0 0 4px rgba(16,152,64,.08)
+  }
+  .fit-phases li:not(:last-child)::after{
+    content:'';
+    position:absolute;
+    left:4.5px;
+    top:20px;
+    bottom:-14px;
+    width:1px;
+    background:var(--border-strong)
+  }
+  .fit-phases .when{display:block;font-family:var(--ff-mono);font-size:12px;color:var(--text3);margin-bottom:2px}
+  .fit-phases p{font-size:14px;color:var(--text2);line-height:1.6}
+  .fit-meta{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    border-top:1px solid var(--border);
+    padding-top:20px;
+    margin-bottom:24px
+  }
+  .fit-meta h4{
+    font-family:var(--ff-body);
+    font-size:11px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--text3);
+    margin-bottom:10px
+  }
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tags span{
+    font-size:12px;
+    padding:4px 10px;
+    border-radius:999px;
+    background:var(--bg-green);
+    color:var(--brand-green-dark);
+    font-weight:600
+  }
+  .fit-measure{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:var(--text2)}
+  .fit-measure li::before{content:'↗ ';color:var(--brand-green);font-weight:700}
+  .fit-note{margin-top:12px;font-size:12px;color:var(--text3);text-align:center}
+  .fit-swap{animation:fitIn .45s ease}
+  @keyframes fitIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @media(max-width:920px){
+    .fit{grid-template-columns:1fr;gap:28px}
+    .fit-card{position:static}
+  }
+  @media(max-width:480px){
+    .fit-meta{grid-template-columns:1fr}
+    .fit-head,.fit-body{padding-left:22px;padding-right:22px}
+  }
+
+  /* Playbooks — representative engagements, each with an animated header */
+  .pb-intro{text-align:center;font-size:13px;color:var(--text3);margin:-28px auto 40px;max-width:62ch}
+  .pb-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+  .pb-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    transition:transform .2s,box-shadow .2s,border-color .2s
+  }
+  .pb-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:#BBD7C4}
+  /* The gradient lives here, not in the SVG, so the drawing can scale to fit
+     narrow cards without cropping while the colour still fills the header. */
+  .pb-art{height:180px;overflow:hidden;background:linear-gradient(135deg,var(--g1),var(--g2))}
+  .pb-art svg{width:100%;height:100%}
+  .pb-body{padding:24px 26px 26px;display:flex;flex-direction:column;gap:14px;flex:1}
+  .pb-kicker{font-size:11px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;color:var(--pb)}
+  .pb-card h3{font-size:19px;line-height:1.3}
+  .pb-rows{margin:0;display:flex;flex-direction:column;gap:10px}
+  .pb-rows dt{font-size:11.5px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.08em}
+  .pb-rows dd{margin:2px 0 0;font-size:14px;color:var(--text2);line-height:1.6}
+  .pb-bench{
+    margin-top:auto;
+    padding:14px 16px;
+    border-radius:10px;
+    background:var(--pb-bg);
+    border-left:3px solid var(--pb);
+    font-size:13px;
+    color:var(--text2);
+    line-height:1.55
+  }
+  .pb-bench b{display:block;font-family:var(--ff-display);font-size:12px;color:var(--pb);letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px}
+  /* Header animations. Transforms on SVG shapes need fill-box so they scale
+     from the shape itself, not the whole drawing. */
+  .pb-art .flow{animation:pbFlow 3.6s cubic-bezier(.6,0,.4,1) infinite}
+  @keyframes pbFlow{0%{transform:translateX(0);opacity:0}8%,92%{opacity:1}100%{transform:translateX(384px);opacity:0}}
+  .pb-art .lit{animation:pbLit 3.6s ease infinite}
+  @keyframes pbLit{0%,100%{fill-opacity:.16}50%{fill-opacity:.32}}
+  .pb-art .grow{transform-box:fill-box;transform-origin:50% 100%;animation:pbGrow 2.8s ease-in-out infinite alternate}
+  @keyframes pbGrow{from{transform:scaleY(.4)}to{transform:scaleY(1)}}
+  .pb-art .draw{stroke-dasharray:640;stroke-dashoffset:640;animation:pbDraw 5s ease-in-out infinite}
+  @keyframes pbDraw{0%{stroke-dashoffset:640}50%,90%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+  .pb-art .pulse{transform-box:fill-box;transform-origin:center;animation:pbPulse 2.4s ease-out infinite}
+  @keyframes pbPulse{0%{transform:scale(.6);opacity:.8}100%{transform:scale(2.4);opacity:0}}
+  .pb-art .bob{animation:pbBob 4s ease-in-out infinite}
+  @keyframes pbBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @media(max-width:860px){.pb-grid{grid-template-columns:1fr}}
+
+  /* Standards — the three cloud frameworks, then the practices */
+  .clouds{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:18px}
+  .cloud-card{
+    position:relative;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:26px 26px 28px;
+    overflow:hidden;
+    transition:transform .2s,box-shadow .2s
+  }
+  .cloud-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+  .cloud-card::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:var(--cc-bar)}
+  .cloud-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+  .cloud-logo{width:58px;height:58px;border-radius:14px;background:var(--cc-bg);display:grid;place-items:center;flex-shrink:0}
+  .cloud-logo img{width:38px;height:38px}
+  .cloud-card h3{font-size:16.5px;line-height:1.25}
+  .cloud-card .fw{font-size:12.5px;color:var(--text3);margin-top:3px}
+  .cloud-card p{font-size:14px;color:var(--text2);line-height:1.6}
+  .pillars{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+  .pillars span{font-size:11.5px;padding:4px 9px;border-radius:999px;background:var(--cc-bg);color:var(--cc-ink);font-weight:600}
+  .prac-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .prac{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:26px;
+    transition:transform .2s,box-shadow .2s,border-color .2s
+  }
+  .prac:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#BBD7C4}
+  .prac-ic{
+    width:48px;
+    height:48px;
+    border-radius:13px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,var(--a),var(--b));
+    box-shadow:0 10px 20px -8px var(--a);
+    margin-bottom:18px;
+    transition:transform .3s
+  }
+  .prac:hover .prac-ic{transform:rotate(-6deg) scale(1.06)}
+  .prac-ic svg{width:23px;height:23px;fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .prac h3{font-size:16.5px;margin-bottom:8px}
+  .prac p{font-size:14px;color:var(--text2);line-height:1.6}
+  .prac .tools{margin-top:14px;font-size:12px;color:var(--text3);font-family:var(--ff-mono)}
+  .dora{
+    margin-top:22px;
+    display:grid;
+    grid-template-columns:.9fr 1.1fr;
+    gap:40px;
+    align-items:center;
+    padding:40px 44px;
+    border-radius:18px;
+    color:#FFFFFF;
+    background:
+      radial-gradient(circle at 92% 10%,rgba(123,207,22,.30),transparent 40%),
+      linear-gradient(135deg,#0B2A17,#0E4D26 55%,#109840)
+  }
+  .dora h3{font-size:clamp(24px,2.6vw,30px);color:#FFFFFF;margin-bottom:12px}
+  .dora p{font-size:14.5px;line-height:1.65;color:rgba(255,255,255,.82)}
+  .dora .dora-src{margin-top:14px;font-size:12px;color:rgba(255,255,255,.6)}
+  .dora-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .dora-grid li{
+    padding:18px 20px;
+    border-radius:12px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.14);
+    backdrop-filter:blur(4px)
+  }
+  .dora-grid .lbl{display:block;font-size:12px;color:rgba(255,255,255,.72);margin-bottom:6px}
+  .dora-grid b{font-family:var(--ff-display);font-size:24px;color:var(--brand-lime);letter-spacing:-.02em}
+  @media(max-width:920px){
+    .clouds,.prac-grid{grid-template-columns:1fr 1fr}
+    .dora{grid-template-columns:1fr;padding:32px 28px;gap:26px}
+  }
+  @media(max-width:620px){
+    .clouds,.prac-grid{grid-template-columns:1fr}
+    .dora-grid b{font-size:20px}
   }
 
   /* Industries */
@@ -709,6 +987,16 @@
      disabled (or IntersectionObserver unsupported) is never hidden. */
   .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
   .reveal.is-visible{opacity:1;transform:none}
+  /* Grids whose cards arrive one after another. An animation (not a
+     transition) so it never delays the cards' own hover effects. */
+  .stagger.reveal:not(.is-visible) > *{opacity:0}
+  .stagger.reveal.is-visible > *{animation:rise .6s ease both}
+  .stagger.reveal.is-visible > :nth-child(2){animation-delay:.08s}
+  .stagger.reveal.is-visible > :nth-child(3){animation-delay:.16s}
+  .stagger.reveal.is-visible > :nth-child(4){animation-delay:.24s}
+  .stagger.reveal.is-visible > :nth-child(5){animation-delay:.32s}
+  .stagger.reveal.is-visible > :nth-child(6){animation-delay:.40s}
+  @keyframes rise{from{opacity:0;translate:0 18px}to{opacity:1;translate:none}}
 
   /* Accessibility / motion */
   [hidden]{display:none !important}
@@ -721,6 +1009,10 @@
       transition-duration:.01ms !important;
       scroll-behavior:auto !important
     }
+    /* Looping illustrations hold their finished frame instead. */
+    .pb-art *{animation:none !important}
+    .pb-art .draw{stroke-dashoffset:0}
+    .pb-art .flow{opacity:0}
   }
 </style>
 <!-- Analytics: GA4 loads only after cookie consent -->
@@ -736,6 +1028,7 @@
     </a>
     <nav class="nav-links" aria-label="Primary">
       <a href="#solutions">Solutions</a>
+      <a href="#playbooks">Playbooks</a>
       <a href="#products">Products</a>
       <a href="#industries">Industries</a>
       <a href="#about">About</a>
@@ -821,6 +1114,38 @@
   </div>
 </section>
 
+<!-- ===== LOGO WALL — clouds and tooling =====
+     Colour marks from devicon (MIT), pinned to one version on jsDelivr. The
+     names are the accessible text, so the images are decorative. -->
+<section class="logowall" aria-label="Clouds and tooling we work with">
+  <div class="wrap"><p class="techstrip-label">Clouds, platforms and tooling we run in production</p></div>
+  <div class="marquee">
+    <ul class="marquee-track">
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="" width="28" height="28" loading="lazy" />AWS</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/azure/azure-original.svg" alt="" width="28" height="28" loading="lazy" />Microsoft Azure</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/googlecloud/googlecloud-original.svg" alt="" width="28" height="28" loading="lazy" />Google Cloud</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/kubernetes/kubernetes-original.svg" alt="" width="28" height="28" loading="lazy" />Kubernetes</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/docker/docker-original.svg" alt="" width="28" height="28" loading="lazy" />Docker</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/terraform/terraform-original.svg" alt="" width="28" height="28" loading="lazy" />Terraform</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/githubactions/githubactions-original.svg" alt="" width="28" height="28" loading="lazy" />GitHub Actions</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/gitlab/gitlab-original.svg" alt="" width="28" height="28" loading="lazy" />GitLab CI</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/jenkins/jenkins-original.svg" alt="" width="28" height="28" loading="lazy" />Jenkins</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/argocd/argocd-original.svg" alt="" width="28" height="28" loading="lazy" />Argo CD</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/helm/helm-original.svg" alt="" width="28" height="28" loading="lazy" />Helm</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/ansible/ansible-original.svg" alt="" width="28" height="28" loading="lazy" />Ansible</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/prometheus/prometheus-original.svg" alt="" width="28" height="28" loading="lazy" />Prometheus</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/grafana/grafana-original.svg" alt="" width="28" height="28" loading="lazy" />Grafana</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/linux/linux-original.svg" alt="" width="28" height="28" loading="lazy" />Linux</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/nginx/nginx-original.svg" alt="" width="28" height="28" loading="lazy" />NGINX</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/cloudflare/cloudflare-original.svg" alt="" width="28" height="28" loading="lazy" />Cloudflare</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/postgresql/postgresql-original.svg" alt="" width="28" height="28" loading="lazy" />PostgreSQL</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/redis/redis-original.svg" alt="" width="28" height="28" loading="lazy" />Redis</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/vercel/vercel-original.svg" alt="" width="28" height="28" loading="lazy" />Vercel</li>
+      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/supabase/supabase-original.svg" alt="" width="28" height="28" loading="lazy" />Supabase</li>
+    </ul>
+  </div>
+</section>
+
 <!-- ===== SOLUTIONS ===== -->
 <section id="solutions">
   <div class="wrap">
@@ -839,6 +1164,307 @@
     </div>
     <p class="sol-also"><b>Also:</b> custom software development · cybersecurity &amp; compliance · cloud migration · fractional CIO / CTO.</p>
     <div class="sec-cta"><a href="#contact" class="btn btn-primary">Book a Discovery Call →</a></div>
+  </div>
+</section>
+
+<!-- ===== FIT FINDER — the visitor's answers pick the engagement ===== -->
+<section id="fit" class="sec-alt">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">Find your fit</span>
+      <h2>Tell us where it hurts. See where we'd start.</h2>
+      <p class="sub" style="margin:0 auto">Three quick questions. You'll see the engagement we'd most likely propose, a typical plan, and the standards we'd hold it to.</p>
+    </div>
+    <div class="fit">
+      <form class="fit-form" id="fitForm">
+        <fieldset class="fit-q">
+          <legend><span class="fit-step">01</span>What's hurting most right now?</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="pain" value="deploy" checked /><span>Releases are slow or manual</span></label>
+            <label class="chip"><input type="radio" name="pain" value="outage" /><span>We hear about outages from customers</span></label>
+            <label class="chip"><input type="radio" name="pain" value="cost" /><span>The cloud bill keeps climbing</span></label>
+            <label class="chip"><input type="radio" name="pain" value="migrate" /><span>We're moving to (or between) clouds</span></label>
+            <label class="chip"><input type="radio" name="pain" value="comply" /><span>An audit or security review is coming</span></label>
+            <label class="chip"><input type="radio" name="pain" value="scale" /><span>We're outgrowing our setup</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="fit-q">
+          <legend><span class="fit-step">02</span>Where do you run today?</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="cloud" value="aws" checked /><span><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="" width="20" height="20" loading="lazy" />AWS</span></label>
+            <label class="chip"><input type="radio" name="cloud" value="azure" /><span><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/azure/azure-original.svg" alt="" width="20" height="20" loading="lazy" />Azure</span></label>
+            <label class="chip"><input type="radio" name="cloud" value="gcp" /><span><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/googlecloud/googlecloud-original.svg" alt="" width="20" height="20" loading="lazy" />Google Cloud</span></label>
+            <label class="chip"><input type="radio" name="cloud" value="multi" /><span>Multi-cloud / hybrid</span></label>
+            <label class="chip"><input type="radio" name="cloud" value="none" /><span>Not on cloud yet</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="fit-q">
+          <legend><span class="fit-step">03</span>Who looks after it today?</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="team" value="none" /><span>Nobody full-time</span></label>
+            <label class="chip"><input type="radio" name="team" value="small" checked /><span>One or two engineers</span></label>
+            <label class="chip"><input type="radio" name="team" value="platform" /><span>A platform or DevOps team</span></label>
+          </div>
+        </fieldset>
+      </form>
+
+      <div class="fit-card" id="fitCard">
+        <div class="fit-head" aria-live="polite">
+          <div class="fit-kicker">Where we'd start</div>
+          <h3 id="fitTitle">CI/CD &amp; release automation</h3>
+          <p class="fit-model" id="fitModel">Embedded engineers: we pair with your team, build it together and hand it over documented.</p>
+        </div>
+        <div class="fit-body">
+          <ol class="fit-phases" id="fitPhases"></ol>
+          <div class="fit-meta">
+            <div><h4>Standards we apply</h4><div class="tags" id="fitStd"></div></div>
+            <div><h4>What we'll measure</h4><ul class="fit-measure" id="fitMeasure"></ul></div>
+          </div>
+          <a href="#contact" class="btn btn-primary" id="fitCta" style="width:100%">Talk through this plan →</a>
+          <p class="fit-note">A typical plan. We tailor it to you on the call.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PLAYBOOKS — representative engagements, no client claims =====
+     Benchmarks are public industry figures, not results we're claiming. Swap
+     in named client stories with real numbers once they're cleared to share. -->
+<section id="playbooks">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">Playbooks</span>
+      <h2>What a typical engagement looks like</h2>
+      <p class="sub" style="margin:0 auto">The four problems we're called in for most often: what we usually find, what we change, and the public benchmark we hold the work to.</p>
+    </div>
+    <div class="pb-grid">
+
+      <article class="pb-card" style="--pb:var(--c-blue);--pb-bg:#EEF3FF">
+        <div class="pb-art" style="--g1:#2563EB;--g2:#7C3AED">
+          <svg viewBox="0 0 560 180" aria-hidden="true">
+            <circle cx="500" cy="10" r="90" fill="#FFFFFF" opacity=".08"/>
+            <circle cx="40" cy="190" r="70" fill="#FFFFFF" opacity=".06"/>
+            <text x="40" y="38" font-family="Consolas,monospace" font-size="12" fill="#FFFFFF" opacity=".75">git push → production</text>
+            <g stroke="#FFFFFF" stroke-opacity=".5" stroke-width="2" stroke-dasharray="4 5">
+              <line x1="136" y1="94" x2="168" y2="94"/><line x1="264" y1="94" x2="296" y2="94"/><line x1="392" y1="94" x2="424" y2="94"/>
+            </g>
+            <g fill="#FFFFFF">
+              <rect class="lit" x="40" y="68" width="96" height="52" rx="12" fill-opacity=".16"/>
+              <rect class="lit" x="168" y="68" width="96" height="52" rx="12" fill-opacity=".16" style="animation-delay:.9s"/>
+              <rect class="lit" x="296" y="68" width="96" height="52" rx="12" fill-opacity=".16" style="animation-delay:1.8s"/>
+              <rect class="lit" x="424" y="68" width="96" height="52" rx="12" fill-opacity=".16" style="animation-delay:2.7s"/>
+            </g>
+            <g font-family="Sora,sans-serif" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">
+              <text x="88" y="99">Commit</text><text x="216" y="99">Build</text><text x="344" y="99">Test</text><text x="472" y="99">Deploy</text>
+            </g>
+            <g font-family="Sora,sans-serif" font-size="11" fill="#FFFFFF" opacity=".8" text-anchor="middle">
+              <text x="88" y="146">✓ reviewed</text><text x="216" y="146">✓ 2m 10s</text><text x="344" y="146">✓ 412 passed</text><text x="472" y="146">✓ live</text>
+            </g>
+            <g class="flow"><circle cx="88" cy="60" r="9" fill="#7BCF16" opacity=".35"/><circle cx="88" cy="60" r="5" fill="#B9F36A"/></g>
+          </svg>
+        </div>
+        <div class="pb-body">
+          <span class="pb-kicker">SaaS &amp; product teams</span>
+          <h3>From nervous release days to push-button deploys</h3>
+          <dl class="pb-rows">
+            <div><dt>The situation</dt><dd>Releases are batched into a monthly big bang, run by the one person who knows the steps. Every deploy is a risk, so the team ships less.</dd></div>
+            <div><dt>What we do</dt><dd>Version-controlled pipelines with automated tests and security scans, infrastructure as code, and small releases with instant rollback.</dd></div>
+          </dl>
+          <p class="pb-bench"><b>Industry benchmark</b>DORA's elite teams deploy on demand, and changes reach production in under a day.</p>
+        </div>
+      </article>
+
+      <article class="pb-card" style="--pb:var(--c-orange);--pb-bg:#FFF3EC">
+        <div class="pb-art" style="--g1:#F97316;--g2:#E11D48">
+          <svg viewBox="0 0 560 180" aria-hidden="true">
+            <circle cx="520" cy="170" r="90" fill="#FFFFFF" opacity=".08"/>
+            <text x="40" y="38" font-family="Consolas,monospace" font-size="12" fill="#FFFFFF" opacity=".75">requests / min · sale day</text>
+            <g fill="#FFFFFF" fill-opacity=".85">
+              <rect class="grow" x="40"  y="104" width="20" height="46" rx="4"/>
+              <rect class="grow" x="70"  y="92"  width="20" height="58" rx="4" style="animation-delay:.15s"/>
+              <rect class="grow" x="100" y="80"  width="20" height="70" rx="4" style="animation-delay:.3s"/>
+              <rect class="grow" x="130" y="64"  width="20" height="86" rx="4" style="animation-delay:.45s"/>
+              <rect class="grow" x="160" y="56"  width="20" height="94" rx="4" style="animation-delay:.6s"/>
+              <rect class="grow" x="190" y="70"  width="20" height="80" rx="4" style="animation-delay:.75s"/>
+              <rect class="grow" x="220" y="60"  width="20" height="90" rx="4" style="animation-delay:.9s"/>
+              <rect class="grow" x="250" y="84"  width="20" height="66" rx="4" style="animation-delay:1.05s"/>
+              <rect class="grow" x="280" y="96"  width="20" height="54" rx="4" style="animation-delay:1.2s"/>
+            </g>
+            <g class="bob">
+              <rect x="350" y="52" width="170" height="98" rx="14" fill="#FFFFFF" fill-opacity=".16"/>
+              <text x="372" y="80" font-family="Sora,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" opacity=".85" letter-spacing="1.5">CHECKOUT SLO</text>
+              <text x="372" y="118" font-family="Sora,sans-serif" font-size="30" font-weight="700" fill="#FFFFFF">99.9%</text>
+              <circle class="pulse" cx="494" cy="76" r="6" fill="#B9F36A"/>
+              <circle cx="494" cy="76" r="5" fill="#B9F36A"/>
+              <text x="372" y="138" font-family="Sora,sans-serif" font-size="11" fill="#FFFFFF" opacity=".8">autoscaling · 4 → 12 pods</text>
+            </g>
+          </svg>
+        </div>
+        <div class="pb-body">
+          <span class="pb-kicker">Retail &amp; e-commerce</span>
+          <h3>Peak season without the war room</h3>
+          <dl class="pb-rows">
+            <div><dt>The situation</dt><dd>Traffic spikes on sale days. Capacity is guessed, alerts are noisy, and the team hears about slow checkouts from customers.</dd></div>
+            <div><dt>What we do</dt><dd>Load-tested autoscaling, a CDN and caching in front of the store, and SLO-based alerts that page on real customer impact.</dd></div>
+          </dl>
+          <p class="pb-bench"><b>Industry benchmark</b>A 99.9% availability target allows about 43 minutes of downtime a month. Plan how you spend it instead of discovering it.</p>
+        </div>
+      </article>
+
+      <article class="pb-card" style="--pb:var(--c-teal);--pb-bg:#E9F7F5">
+        <div class="pb-art" style="--g1:#0D9488;--g2:#0284C7">
+          <svg viewBox="0 0 560 180" aria-hidden="true">
+            <circle cx="120" cy="92" r="84" fill="#FFFFFF" opacity=".07"/>
+            <g class="bob">
+              <path d="M120 34l52 18v38c0 32-22 52-52 60-30-8-52-28-52-60V52z" fill="#FFFFFF" fill-opacity=".2" stroke="#FFFFFF" stroke-width="3"/>
+              <path class="draw" d="M96 92l17 17 33-35" fill="none" stroke="#B9F36A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <g font-family="Sora,sans-serif" font-size="13.5" font-weight="600" fill="#FFFFFF">
+              <rect class="lit" x="232" y="38"  width="288" height="34" rx="17" fill="#FFFFFF" fill-opacity=".16"/>
+              <rect class="lit" x="232" y="80"  width="288" height="34" rx="17" fill="#FFFFFF" fill-opacity=".16" style="animation-delay:1.2s"/>
+              <rect class="lit" x="232" y="122" width="288" height="34" rx="17" fill="#FFFFFF" fill-opacity=".16" style="animation-delay:2.4s"/>
+              <circle cx="252" cy="55" r="7" fill="#B9F36A"/><text x="270" y="60">CIS-hardened baselines</text>
+              <circle cx="252" cy="97" r="7" fill="#B9F36A"/><text x="270" y="102">Secrets out of code</text>
+              <circle cx="252" cy="139" r="7" fill="#B9F36A"/><text x="270" y="144">Evidence captured per change</text>
+            </g>
+          </svg>
+        </div>
+        <div class="pb-body">
+          <span class="pb-kicker">Fintech &amp; regulated</span>
+          <h3>Audit-ready by default, not by scramble</h3>
+          <dl class="pb-rows">
+            <div><dt>The situation</dt><dd>An audit or enterprise security questionnaire is coming. Evidence lives in screenshots and spreadsheets, and access has grown without review.</dd></div>
+            <div><dt>What we do</dt><dd>Hardened baselines, managed secrets, least-privilege access, and a pipeline that records the evidence automatically: scans, approvals and change history.</dd></div>
+          </dl>
+          <p class="pb-bench"><b>Industry benchmark</b>CIS Benchmarks for hardening, with controls mapped to SOC 2 or ISO 27001, whichever you're assessed against.</p>
+        </div>
+      </article>
+
+      <article class="pb-card" style="--pb:var(--c-violet);--pb-bg:#F3EEFE">
+        <div class="pb-art" style="--g1:#7C3AED;--g2:#DB2777">
+          <svg viewBox="0 0 560 180" aria-hidden="true">
+            <text x="40" y="38" font-family="Consolas,monospace" font-size="12" fill="#FFFFFF" opacity=".75">monthly cloud spend</text>
+            <g stroke="#FFFFFF" stroke-opacity=".16" stroke-width="1">
+              <line x1="40" y1="64" x2="400" y2="64"/><line x1="40" y1="100" x2="400" y2="100"/><line x1="40" y1="136" x2="400" y2="136"/>
+            </g>
+            <path d="M40 58 L100 54 L160 70 L220 92 L280 112 L340 122 L400 126 L400 150 L40 150Z" fill="#FFFFFF" fill-opacity=".1"/>
+            <path class="draw" d="M40 58 L100 54 L160 70 L220 92 L280 112 L340 122 L400 126" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle class="pulse" cx="400" cy="126" r="7" fill="#B9F36A"/>
+            <circle cx="400" cy="126" r="6" fill="#B9F36A"/>
+            <g class="bob">
+              <rect x="420" y="56" width="120" height="70" rx="14" fill="#FFFFFF" fill-opacity=".16"/>
+              <text x="438" y="82" font-family="Sora,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" opacity=".85" letter-spacing="1.2">BUDGET</text>
+              <text x="438" y="110" font-family="Sora,sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">On track</text>
+            </g>
+          </svg>
+        </div>
+        <div class="pb-body">
+          <span class="pb-kicker">Scale-ups on AWS, Azure or GCP</span>
+          <h3>A cloud bill that finally makes sense</h3>
+          <dl class="pb-rows">
+            <div><dt>The situation</dt><dd>Spend grows faster than revenue, and nobody can say which team, product or customer is driving it.</dd></div>
+            <div><dt>What we do</dt><dd>Tagging and cost allocation, right-sizing, scheduling for non-production, commitment planning, and anomaly alerts sent to the team that owns the spend.</dd></div>
+          </dl>
+          <p class="pb-bench"><b>Industry benchmark</b>The FinOps Framework's Inform → Optimize → Operate cycle, run every month rather than once.</p>
+        </div>
+      </article>
+
+    </div>
+    <div class="sec-cta" style="text-align:center"><a href="#fit" class="btn btn-outline">Find the one that fits you →</a></div>
+  </div>
+</section>
+
+<!-- ===== STANDARDS — best practices we build to ===== -->
+<section id="standards" class="sec-alt">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">Best practices</span>
+      <h2>Built to the standard your cloud publishes</h2>
+      <p class="sub" style="margin:0 auto">No house rulebook. Every build is reviewed against your provider's own well-architected guidance and the measures the industry holds itself to.</p>
+    </div>
+
+    <div class="clouds">
+      <div class="cloud-card" style="--cc-bar:#FF9900;--cc-bg:#FFF4E0;--cc-ink:#8A4B00">
+        <div class="cloud-top">
+          <div class="cloud-logo"><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="" width="38" height="38" loading="lazy" /></div>
+          <div><h3>Amazon Web Services</h3><div class="fw">AWS Well-Architected Framework</div></div>
+        </div>
+        <p>Workloads reviewed against all six pillars, with findings tracked to closure, not filed in a one-off report.</p>
+        <div class="pillars"><span>Operational excellence</span><span>Security</span><span>Reliability</span><span>Performance efficiency</span><span>Cost optimization</span><span>Sustainability</span></div>
+      </div>
+      <div class="cloud-card" style="--cc-bar:#0078D4;--cc-bg:#E7F1FB;--cc-ink:#005A9E">
+        <div class="cloud-top">
+          <div class="cloud-logo"><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/azure/azure-original.svg" alt="" width="38" height="38" loading="lazy" /></div>
+          <div><h3>Microsoft Azure</h3><div class="fw">Azure Well-Architected Framework</div></div>
+        </div>
+        <p>Landing zones aligned to the Cloud Adoption Framework, then each workload assessed pillar by pillar.</p>
+        <div class="pillars"><span>Reliability</span><span>Security</span><span>Cost optimization</span><span>Operational excellence</span><span>Performance efficiency</span></div>
+      </div>
+      <div class="cloud-card" style="--cc-bar:linear-gradient(90deg,#4285F4 25%,#EA4335 25% 50%,#FBBC05 50% 75%,#34A853 75%);--cc-bg:#EEF3FE;--cc-ink:#1A56C4">
+        <div class="cloud-top">
+          <div class="cloud-logo"><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/googlecloud/googlecloud-original.svg" alt="" width="38" height="38" loading="lazy" /></div>
+          <div><h3>Google Cloud</h3><div class="fw">Google Cloud Well-Architected Framework</div></div>
+        </div>
+        <p>Architecture checked against Google's framework and the SRE practices Google publishes from running its own production.</p>
+        <div class="pillars"><span>Operational excellence</span><span>Security</span><span>Reliability</span><span>Cost optimization</span><span>Performance optimization</span></div>
+      </div>
+    </div>
+
+    <div class="prac-grid">
+      <div class="prac">
+        <div class="prac-ic" style="--a:#2563EB;--b:#0EA5E9"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6M14 4l-4 16"/></svg></div>
+        <h3>Infrastructure as code</h3>
+        <p>Every server, network and permission lives in version control, reviewed like application code and reproducible on demand.</p>
+        <p class="tools">Terraform · OpenTofu · Ansible</p>
+      </div>
+      <div class="prac">
+        <div class="prac-ic" style="--a:#7C3AED;--b:#DB2777"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="5" r="2.5"/><circle cx="6" cy="19" r="2.5"/><circle cx="18" cy="8" r="2.5"/><path d="M6 7.5v9M18 10.5c0 4-4 5-10 6.5"/></svg></div>
+        <h3>CI/CD &amp; GitOps</h3>
+        <p>Small, frequent, reversible releases. Git is the source of truth, and pipelines test, scan and deploy what's in it.</p>
+        <p class="tools">GitHub Actions · GitLab CI · Argo CD</p>
+      </div>
+      <div class="prac">
+        <div class="prac-ic" style="--a:#EA580C;--b:#E11D48"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12h4l3-7 5 14 3-7h5"/></svg></div>
+        <h3>SLOs &amp; error budgets</h3>
+        <p>Reliability targets agreed with the business, alerts on customer impact, and a blameless review after every incident.</p>
+        <p class="tools">Prometheus · Grafana · OpenTelemetry</p>
+      </div>
+      <div class="prac">
+        <div class="prac-ic" style="--a:#0D9488;--b:#16A34A"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3>Security built in</h3>
+        <p>Scanning in the pipeline, hardened baselines, secrets kept out of code, and least-privilege access from day one.</p>
+        <p class="tools">CIS Benchmarks · OWASP · Vault</p>
+      </div>
+      <div class="prac">
+        <div class="prac-ic" style="--a:#0284C7;--b:#6366F1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/></svg></div>
+        <h3>Containers &amp; platforms</h3>
+        <p>Twelve-factor services on Kubernetes when the scale needs it, and something simpler when it doesn't.</p>
+        <p class="tools">Docker · Kubernetes · Helm</p>
+      </div>
+      <div class="prac">
+        <div class="prac-ic" style="--a:#D97706;--b:#EA580C"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7l6 6 4-4 8 8"/><path d="M21 12v5h-5"/></svg></div>
+        <h3>FinOps</h3>
+        <p>Spend allocated to the teams that create it, reviewed monthly, with commitments bought only where usage is steady.</p>
+        <p class="tools">FinOps Framework · native cost tools</p>
+      </div>
+    </div>
+
+    <div class="dora">
+      <div>
+        <span class="eyebrow" style="color:var(--brand-lime)">The benchmark we report against</span>
+        <h3>DORA's four keys</h3>
+        <p>Google's DORA research programme has surveyed tens of thousands of engineering professionals on what separates high-performing delivery teams. We baseline your four keys in the first weeks and report progress against the elite tier.</p>
+        <p class="dora-src">Elite tier, Accelerate State of DevOps Report 2023 (DORA)</p>
+      </div>
+      <ul class="dora-grid">
+        <li><span class="lbl">Deployment frequency</span><b>On demand</b></li>
+        <li><span class="lbl">Lead time for changes</span><b>&lt; 1 day</b></li>
+        <li><span class="lbl">Change failure rate</span><b>~5%</b></li>
+        <li><span class="lbl">Failed deployment recovery</span><b>&lt; 1 hour</b></li>
+      </ul>
+    </div>
+    <div class="sec-cta" style="text-align:center"><a href="#contact" class="btn btn-primary">Book a Discovery Call →</a></div>
   </div>
 </section>
 
@@ -931,46 +1557,6 @@
         <a href="#contact" class="btn btn-outline btn-sm prod-cta">Book a Discovery Call →</a>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ===== TECHNOLOGY STRIP =====
-     Marks are limited to technologies this codebase actually uses. -->
-<section class="techstrip" aria-label="Technologies we build with">
-  <div class="wrap">
-    <p class="techstrip-label">Technologies we build with</p>
-    <ul class="techlogos">
-      <li class="wordmark"><span>AWS</span></li>
-      <li class="wordmark"><span>Microsoft Azure</span></li>
-      <li>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.19 2.38a9.344 9.344 0 0 0-9.234 6.893c.053-.02-.055.013 0 0-3.875 2.551-3.922 8.11-.247 10.941l.006-.007-.007.03a6.717 6.717 0 0 0 4.077 1.356h5.173l.03.03h5.192c6.687.053 9.376-8.605 3.835-12.35a9.365 9.365 0 0 0-2.821-4.552l-.043.043.006-.05A9.344 9.344 0 0 0 12.19 2.38zm-.358 4.146c1.244-.04 2.518.368 3.486 1.15a5.186 5.186 0 0 1 1.862 4.078v.518c3.53-.07 3.53 5.262 0 5.193h-5.193l-.008.009v-.04H6.785a2.59 2.59 0 0 1-1.067-.23h.001a2.597 2.597 0 1 1 3.437-3.437l3.013-3.012A6.747 6.747 0 0 0 8.11 8.24c.018-.01.04-.026.054-.023a5.186 5.186 0 0 1 3.67-1.69z"/></svg>
-        <span>Google Cloud</span>
-      </li>
-      <li>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.41 0-.783.093-1.106.278-1.375.793-1.683 3.264-.973 6.365C1.98 8.917 0 10.42 0 12.004c0 1.59 1.99 3.097 5.043 4.03-.704 3.113-.39 5.588.988 6.38.32.187.69.275 1.102.275 1.345 0 3.107-.96 4.888-2.624 1.78 1.654 3.542 2.603 4.887 2.603.41 0 .783-.09 1.106-.275 1.374-.792 1.683-3.263.973-6.365C22.02 15.096 24 13.59 24 12.004c0-1.59-1.99-3.097-5.043-4.032.704-3.11.39-5.587-.988-6.38-.318-.184-.688-.277-1.092-.278zm-.005 1.09v.006c.225 0 .406.044.558.127.666.382.955 1.835.73 3.704-.054.46-.142.945-.25 1.44-.96-.236-2.006-.417-3.107-.534-.66-.905-1.345-1.727-2.035-2.447 1.592-1.48 3.087-2.292 4.105-2.295zm-9.77.02c1.012 0 2.514.808 4.11 2.28-.686.72-1.37 1.537-2.02 2.442-1.107.117-2.154.298-3.113.538-.112-.49-.195-.964-.254-1.42-.23-1.868.054-3.32.714-3.707.19-.09.4-.127.563-.132zm4.882 3.05c.455.468.91.992 1.36 1.564-.44-.02-.89-.034-1.345-.034-.46 0-.915.01-1.36.034.44-.572.895-1.096 1.345-1.565zM12 8.1c.74 0 1.477.034 2.202.093.406.582.802 1.203 1.183 1.86.372.64.71 1.29 1.018 1.946-.308.655-.646 1.31-1.013 1.95-.38.66-.773 1.288-1.18 1.87-.728.063-1.466.098-2.21.098-.74 0-1.477-.035-2.202-.093-.406-.582-.802-1.204-1.183-1.86-.372-.64-.71-1.29-1.018-1.946.303-.657.646-1.313 1.013-1.954.38-.66.773-1.286 1.18-1.868.728-.064 1.466-.098 2.21-.098zm-3.635.254c-.24.377-.48.763-.704 1.16-.225.39-.435.782-.635 1.174-.265-.656-.49-1.31-.676-1.947.64-.15 1.315-.283 2.015-.386zm7.26 0c.695.103 1.365.23 2.006.387-.18.632-.405 1.282-.66 1.933-.2-.39-.41-.783-.64-1.174-.225-.392-.465-.774-.705-1.146zm3.063.675c.484.15.944.317 1.375.498 1.732.74 2.852 1.708 2.852 2.476-.005.768-1.125 1.74-2.857 2.475-.42.18-.88.342-1.355.493-.28-.958-.646-1.956-1.1-2.98.45-1.017.81-2.01 1.085-2.964zm-13.395.004c.278.96.645 1.957 1.1 2.98-.45 1.017-.812 2.01-1.086 2.964-.484-.15-.944-.318-1.37-.5-1.732-.737-2.852-1.706-2.852-2.474 0-.768 1.12-1.742 2.852-2.476.42-.18.88-.342 1.356-.494zm11.678 4.28c.265.657.49 1.312.676 1.948-.64.157-1.316.29-2.016.39.24-.375.48-.762.705-1.158.225-.39.435-.788.636-1.18zm-9.945.02c.2.392.41.783.64 1.175.23.39.465.772.705 1.143-.695-.102-1.365-.23-2.006-.386.18-.63.406-1.282.66-1.933zM17.92 16.32c.112.493.2.968.254 1.423.23 1.868-.054 3.32-.714 3.708-.147.09-.338.128-.563.128-1.012 0-2.514-.807-4.11-2.28.686-.72 1.37-1.536 2.02-2.44 1.107-.118 2.154-.3 3.113-.54zm-11.83.01c.96.234 2.006.415 3.107.532.66.905 1.345 1.727 2.035 2.446-1.595 1.483-3.092 2.295-4.11 2.295-.22-.005-.406-.05-.553-.132-.666-.38-.955-1.834-.73-3.703.054-.46.142-.944.25-1.438zm4.56.64c.44.02.89.034 1.345.034.46 0 .915-.01 1.36-.034-.44.572-.895 1.095-1.345 1.565-.455-.47-.91-.993-1.36-1.565z"/></svg>
-        <span>React</span>
-      </li>
-      <li>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 1.608 12 20.784H0Z"/></svg>
-        <span>Vercel</span>
-      </li>
-      <li>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.9 1.036c-.015-.986-1.26-1.41-1.874-.637L.764 12.05C-.33 13.427.65 15.455 2.409 15.455h9.579l.113 7.51c.014.985 1.259 1.408 1.873.636l9.262-11.653c1.093-1.375.113-3.403-1.645-3.403h-9.642z"/></svg>
-        <span>Supabase</span>
-      </li>
-      <li>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81"/></svg>
-        <span>Google Gemini</span>
-      </li>
-      <li>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.4737 5.6842c-1.1772 0-2.1663.8051-2.4468 1.8947h-2.8955c-1.235 0-2.289.893-2.492 2.111l-.1038.623a1.263 1.263 0 0 1-1.246 1.0555H11.289c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947s-2.1663.8051-2.4467 1.8947H4.973c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947C1.1311 9.4737 0 10.6047 0 12s1.131 2.5263 2.5263 2.5263c1.1772 0 2.1663-.8051 2.4468-1.8947h1.4223c.2804 1.0896 1.2696 1.8947 2.4467 1.8947 1.1772 0 2.1663-.8051 2.4468-1.8947h1.0008a1.263 1.263 0 0 1 1.2459 1.0555l.1038.623c.203 1.218 1.257 2.111 2.492 2.111h.3692c.2804 1.0895 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263c-1.1772 0-2.1664.805-2.4468 1.8947h-.3692a1.263 1.263 0 0 1-1.246-1.0555l-.1037-.623A2.52 2.52 0 0 0 13.9607 12a2.52 2.52 0 0 0 .821-1.4794l.1038-.623a1.263 1.263 0 0 1 1.2459-1.0555h2.8955c.2805 1.0896 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263m0 1.2632a1.263 1.263 0 0 1 1.2631 1.2631 1.263 1.263 0 0 1-1.2631 1.2632 1.263 1.263 0 0 1-1.2632-1.2632 1.263 1.263 0 0 1 1.2632-1.2631M2.5263 10.7368A1.263 1.263 0 0 1 3.7895 12a1.263 1.263 0 0 1-1.2632 1.2632A1.263 1.263 0 0 1 1.2632 12a1.263 1.263 0 0 1 1.2631-1.2632m6.3158 0A1.263 1.263 0 0 1 10.1053 12a1.263 1.263 0 0 1-1.2632 1.2632A1.263 1.263 0 0 1 7.579 12a1.263 1.263 0 0 1 1.2632-1.2632m10.1053 3.7895a1.263 1.263 0 0 1 1.2631 1.2632 1.263 1.263 0 0 1-1.2631 1.2631 1.263 1.263 0 0 1-1.2632-1.2631 1.263 1.263 0 0 1 1.2632-1.2632"/></svg>
-        <span>n8n</span>
-      </li>
-      <li>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 00.184-.186V6.29a.185.185 0 00-.185-.185H8.1a.185.185 0 00-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.185.185 0 00-.185-.185H5.136a.186.186 0 00-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 00.185-.185V9.006a.185.185 0 00-.184-.186h-2.12a.186.186 0 00-.186.186v1.887c0 .102.084.185.186.185m-2.92 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 00-.75.748 11.376 11.376 0 00.692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 003.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288Z"/></svg>
-        <span>Docker</span>
-      </li>
-    </ul>
   </div>
 </section>
 
@@ -1139,6 +1725,12 @@
           <div class="field"><label for="need">What do you need?</label>
             <select id="need" name="need">
               <option value="">Select…</option>
+              <option>DevOps &amp; CI/CD</option>
+              <option>Monitoring &amp; reliability</option>
+              <option>Cloud cost optimisation</option>
+              <option>Cloud migration</option>
+              <option>Security &amp; compliance</option>
+              <option>Containers &amp; Kubernetes</option>
               <option>Review &amp; redesign</option>
               <option>Data analysis &amp; BI</option>
               <option>AI &amp; automation</option>
@@ -1431,9 +2023,13 @@
     if (!('IntersectionObserver' in window)) return;
 
     var targets = document.querySelectorAll(
-      '.shead, .sol-grid, .feature, .prod-grid, .techlogos, .ind-grid, .about-grid, .contact-grid, .capstrip-in'
+      '.shead, .sol-grid, .feature, .prod-grid, .ind-grid, .about-grid, .contact-grid, .capstrip-in,' +
+      ' .logowall, .fit, .pb-grid, .clouds, .prac-grid, .dora, .dora-grid'
     );
     Array.prototype.forEach.call(targets, function(el){ el.classList.add('reveal'); });
+    Array.prototype.forEach.call(document.querySelectorAll('.pb-grid, .clouds, .prac-grid, .dora-grid'), function(el){
+      el.classList.add('stagger');
+    });
 
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
@@ -1445,6 +2041,160 @@
     }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
 
     Array.prototype.forEach.call(targets, function(el){ io.observe(el); });
+  })();
+
+  // ================= LOGO MARQUEE =================
+  // A second, hidden copy of the list makes the loop seamless. Reduced-motion
+  // visitors keep the static, wrapping layout.
+  (function(){
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var marquee = document.querySelector('.marquee');
+    var track = marquee.querySelector('.marquee-track');
+    Array.prototype.slice.call(track.children).forEach(function(li){
+      var copy = li.cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');
+      track.appendChild(copy);
+    });
+    marquee.classList.add('is-moving');
+  })();
+
+  // ================= FIT FINDER =================
+  // Maps the visitor's three answers to the engagement we'd most likely
+  // propose. Plans are typical, not quotes; the call is where they get real.
+  (function(){
+    var form = document.getElementById('fitForm');
+    if (!form) return;
+
+    var CLOUDS = {
+      aws:   { name:'AWS', label:'AWS', fw:'AWS Well-Architected', k8s:'EKS', obs:'CloudWatch', commit:'Savings Plans' },
+      azure: { name:'Azure', label:'Azure', fw:'Azure Well-Architected', k8s:'AKS', obs:'Azure Monitor', commit:'Azure reservations' },
+      gcp:   { name:'Google Cloud', label:'Google Cloud', fw:'Google Cloud Well-Architected', k8s:'GKE', obs:'Cloud Monitoring', commit:'committed use discounts' },
+      multi: { name:'each of your clouds', label:'Multi-cloud / hybrid', fw:'Provider-neutral Terraform', k8s:'Kubernetes', obs:'OpenTelemetry and Grafana', commit:'per-provider commitments' },
+      none:  { name:'your target cloud', label:'Not on cloud yet', fw:'Cloud Adoption Framework', k8s:'managed Kubernetes', obs:'a managed monitoring stack', commit:'commitments' }
+    };
+
+    var TEAMS = {
+      none:     { label:'Nobody full-time', model:'Managed DevOps: we build it, then run it for you, with monitoring, patching and on-call included.', last:'Ongoing · We run it' },
+      small:    { label:'One or two engineers', model:'Embedded engineers: we pair with your team, build it together and hand it over documented.', last:'Weeks 9–10 · Handover' },
+      platform: { label:'A platform or DevOps team', model:'Architecture review: a focused assessment and roadmap, and we build only the pieces your team wants help with.', last:'Then · Your team owns it' }
+    };
+
+    var PAINS = {
+      deploy: {
+        title:'CI/CD & release automation', need:'DevOps & CI/CD', a:'#2563EB', b:'#7C3AED',
+        assess:'Map how code reaches production today and baseline your four DORA metrics.',
+        build:function(c){ return 'Pipelines with automated tests, security scans and one-click rollback, plus infrastructure as code on ' + c.name + ' so every environment is reproducible.'; },
+        run:'Releases become routine; lead time and change failure rate are tracked monthly.',
+        std:['DORA metrics','GitOps','Infrastructure as code'],
+        measure:['Deployment frequency','Lead time for changes','Change failure rate']
+      },
+      outage: {
+        title:'Observability & on-call (SRE)', need:'Monitoring & reliability', a:'#EA580C', b:'#E11D48',
+        assess:'Agree SLOs for the customer journeys that matter most.',
+        build:function(c){ return 'Metrics, logs and traces in ' + c.obs + ', with alerts that page on customer impact, not noise.'; },
+        run:'On-call rota, runbooks and a blameless review after every incident.',
+        std:['SRE practices','SLOs & error budgets','OpenTelemetry'],
+        measure:['Failed deployment recovery time','SLO attainment','Alerts per on-call shift']
+      },
+      cost: {
+        title:'Cloud cost optimisation (FinOps)', need:'Cloud cost optimisation', a:'#7C3AED', b:'#DB2777',
+        assess:'Tag and allocate spend so every line of the bill has an owner.',
+        build:function(c){ return 'Right-size, schedule non-production, and buy ' + c.commit + ' only where usage is steady.'; },
+        run:'Budgets and anomaly alerts reviewed monthly, so surprises stop.',
+        std:['FinOps Framework','Cost optimization pillar'],
+        measure:['Monthly cloud spend','Cost per customer or transaction','Commitment coverage']
+      },
+      migrate: {
+        title:'Cloud migration & landing zone', need:'Cloud migration', a:'#0284C7', b:'#0D9488',
+        assess:'Inventory workloads and choose rehost, replatform or refactor for each one.',
+        build:function(c){ return 'A secure landing zone on ' + c.name + ', built as code, then migration in waves with a rollback plan for every cutover.'; },
+        run:'Cutovers are rehearsed, and the old infrastructure is retired on schedule.',
+        std:['Cloud Adoption Framework','Landing zone as code','7 Rs of migration'],
+        measure:['Workloads migrated on plan','Downtime per cutover','Run cost vs. baseline']
+      },
+      comply: {
+        title:'DevSecOps & audit readiness', need:'Security & compliance', a:'#0D9488', b:'#16A34A',
+        assess:'Gap assessment against the controls you\'re audited on: SOC 2, ISO 27001 or a customer\'s questionnaire.',
+        build:function(c){ return 'CIS-hardened baselines, managed secrets and least-privilege access on ' + c.name + ', with scanning in every pipeline.'; },
+        run:'Evidence is captured automatically with each change, so audits stop being a scramble.',
+        std:['CIS Benchmarks','OWASP','SOC 2 / ISO 27001 controls'],
+        measure:['Open critical findings','Time to patch','Controls with automated evidence']
+      },
+      scale: {
+        title:'Containers & platform engineering', need:'Containers & Kubernetes', a:'#109840', b:'#7BCF16',
+        assess:'Find the bottlenecks: builds, deploys, databases and single points of failure.',
+        build:function(c){ return 'Containerise services and run them on ' + c.k8s + ', or something simpler if that fits better.'; },
+        run:'Autoscaling, blue-green deploys and a paved road for every new service.',
+        std:['Twelve-Factor App','CNCF tooling','Platform engineering'],
+        measure:['Time to launch a new service','Deploys without incident','Cost per request']
+      }
+    };
+
+    var card = document.getElementById('fitCard');
+    var cta = document.getElementById('fitCta');
+    var current = null;
+
+    function fill(list, items, tag){
+      list.innerHTML = '';
+      items.forEach(function(text){
+        var el = document.createElement(tag);
+        el.textContent = text;
+        list.appendChild(el);
+      });
+    }
+
+    function render(animate){
+      var p = PAINS[form.pain.value], c = CLOUDS[form.cloud.value], t = TEAMS[form.team.value];
+      current = { p:p, c:c, t:t };
+
+      card.style.setProperty('--fit-a', p.a);
+      card.style.setProperty('--fit-b', p.b);
+      document.getElementById('fitTitle').textContent = p.title;
+      document.getElementById('fitModel').textContent = t.model;
+
+      var phases = document.getElementById('fitPhases');
+      phases.innerHTML = '';
+      [['Weeks 1–2 · Assess', p.assess], ['Weeks 3–8 · Build', p.build(c)], [t.last, p.run]].forEach(function(ph){
+        var li = document.createElement('li');
+        var when = document.createElement('span');
+        when.className = 'when';
+        when.textContent = ph[0];
+        var body = document.createElement('p');
+        body.textContent = ph[1];
+        li.appendChild(when);
+        li.appendChild(body);
+        phases.appendChild(li);
+      });
+
+      fill(document.getElementById('fitStd'), [c.fw].concat(p.std), 'span');
+      fill(document.getElementById('fitMeasure'), p.measure, 'li');
+
+      if (animate){
+        card.classList.remove('fit-swap');
+        void card.offsetWidth; // restart the animation
+        card.classList.add('fit-swap');
+      }
+    }
+
+    form.addEventListener('change', function(){ render(true); });
+    render(false);
+
+    // Carry the chosen plan into the contact form, so the enquiry arrives
+    // already describing the situation. Never overwrite what someone typed.
+    var msg = document.getElementById('ms');
+    var lastPrefill = '';
+    cta.addEventListener('click', function(){
+      var sel = document.getElementById('need');
+      for (var i = 0; i < sel.options.length; i++){
+        if (sel.options[i].text === current.p.need){ sel.selectedIndex = i; break; }
+      }
+      if (!msg.value.trim() || msg.value === lastPrefill){
+        lastPrefill = 'From the fit finder: ' + current.p.title + '\n'
+          + 'Platform: ' + current.c.label + '\n'
+          + 'Team today: ' + current.t.label + '\n\n';
+        msg.value = lastPrefill;
+      }
+    });
   })();
 
   // ================= CARD CURSOR GLOW =================
