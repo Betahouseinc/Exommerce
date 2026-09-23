@@ -321,53 +321,6 @@
     .hero-stats div{min-width:132px;padding:0 14px;margin-bottom:16px}
   }
 
-  /* Live-status pulse — a small, honest signal tied to the reliability claim,
-     not a fabricated uptime number. */
-  .live-status{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    font-size:12.5px;
-    font-weight:600;
-    color:var(--text2);
-    margin:0 0 28px;
-    padding:7px 14px 7px 11px;
-    border:1px solid var(--border);
-    border-radius:999px;
-    background:rgba(255,255,255,.7);
-    backdrop-filter:blur(6px);
-    -webkit-backdrop-filter:blur(6px)
-  }
-  .live-dot{
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    background:var(--brand-green);
-    animation:live-pulse 2.2s ease-out infinite
-  }
-  @keyframes live-pulse{
-    0%{box-shadow:0 0 0 0 rgba(16,152,64,.45)}
-    70%{box-shadow:0 0 0 9px rgba(16,152,64,0)}
-    100%{box-shadow:0 0 0 0 rgba(16,152,64,0)}
-  }
-
-  /* Hero pipeline visual — concrete proof next to the DevOps claim, not
-     decoration. Last node carries a soft ping to read as "live." */
-  .hero-pipeline{max-width:600px;margin:0 auto 44px}
-  .hero-pipeline svg{width:100%;height:auto;display:block}
-  .pipe-ring{
-    fill:none;
-    stroke:var(--brand-lime);
-    stroke-width:2;
-    transform-origin:540px 40px;
-    animation:pipe-ping 2.4s ease-out infinite
-  }
-  @keyframes pipe-ping{
-    0%{opacity:.6;transform:scale(1)}
-    70%{opacity:0;transform:scale(1.5)}
-    100%{opacity:0;transform:scale(1.5)}
-  }
-  @media(max-width:560px){ .hero-pipeline{margin-bottom:32px} }
 
   /* Capability strip — what we do, at a glance */
   .capstrip{padding:26px 0;border-bottom:1px solid var(--border);background:var(--bg2)}
@@ -785,38 +738,9 @@
       <span class="rot-item" aria-hidden="true">Get the infrastructure right, and <span class="accent">the rest gets easier.</span></span>
     </h1>
     <p class="sub">We run your cloud, your deploys, and your on-call — the parts that can't wait for a strategy deck. Once that's solid, we help you decide what IT investment and business change are actually worth making.</p>
-    <div class="live-status" role="status"><span class="live-dot" aria-hidden="true"></span>All systems operational</div>
     <div class="hero-ctas">
       <a href="#contact" class="btn btn-primary">Book a Discovery Call →</a>
       <a href="#solutions" class="btn btn-outline">See what we do</a>
-    </div>
-    <div class="hero-pipeline" aria-hidden="true">
-      <svg viewBox="0 0 640 88" role="img">
-        <line x1="78" y1="40" x2="202" y2="40" stroke="var(--border-strong)" stroke-width="2"/>
-        <line x1="238" y1="40" x2="362" y2="40" stroke="var(--border-strong)" stroke-width="2"/>
-        <line x1="398" y1="40" x2="522" y2="40" stroke="var(--border-strong)" stroke-width="2"/>
-        <circle class="pipe-ring" cx="540" cy="40" r="18"/>
-        <g>
-          <circle cx="60" cy="40" r="18" fill="var(--brand-green)"/>
-          <path d="M52 40l5 5 11-11" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-          <text x="60" y="78" text-anchor="middle" font-family="Sora,sans-serif" font-size="12" font-weight="600" fill="var(--text3)">Build</text>
-        </g>
-        <g>
-          <circle cx="220" cy="40" r="18" fill="var(--brand-green)"/>
-          <path d="M212 40l5 5 11-11" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-          <text x="220" y="78" text-anchor="middle" font-family="Sora,sans-serif" font-size="12" font-weight="600" fill="var(--text3)">Test</text>
-        </g>
-        <g>
-          <circle cx="380" cy="40" r="18" fill="var(--brand-green)"/>
-          <path d="M372 40l5 5 11-11" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-          <text x="380" y="78" text-anchor="middle" font-family="Sora,sans-serif" font-size="12" font-weight="600" fill="var(--text3)">Deploy</text>
-        </g>
-        <g>
-          <circle cx="540" cy="40" r="18" fill="var(--brand-lime)"/>
-          <path d="M532 40l5 5 11-11" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-          <text x="540" y="78" text-anchor="middle" font-family="Sora,sans-serif" font-size="12" font-weight="600" fill="var(--text)">Monitor</text>
-        </g>
-      </svg>
     </div>
     <div class="hero-stats">
       <div><b>Uptime</b><span>We own reliability, not just delivery</span></div>
@@ -1450,7 +1374,7 @@
     if (!('IntersectionObserver' in window)) return;
 
     var targets = document.querySelectorAll(
-      '.shead, .sol-grid, .feature, .prod-grid, .techlogos, .ind-grid, .about-grid, .contact-grid, .capstrip-in, .hero-pipeline'
+      '.shead, .sol-grid, .feature, .prod-grid, .techlogos, .ind-grid, .about-grid, .contact-grid, .capstrip-in'
     );
     Array.prototype.forEach.call(targets, function(el){ el.classList.add('reveal'); });
 
