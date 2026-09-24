@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>37signals: rethinking a $3.2M cloud bill. eXommerce case study</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>:root{--g1:#7C3AED;--g2:#DB2777;--accent:#7C3AED;--accent-bg:#F3EEFE}</style>
+</head><body>
+
+<div class="band">
+  <div class="band-top"><img src="../../logo.png" alt="eXommerce"><span>Case study · FinOps</span></div>
+  <div class="kicker">37signals · SaaS (Basecamp, HEY)</div>
+  <h1>Rethinking a $3.2M-a-year cloud bill</h1>
+  <p>How the company behind Basecamp and HEY questioned its cloud spend and moved steady workloads to its own hardware, and why most mid-size companies should apply the lesson inside the cloud instead.</p>
+</div>
+
+<div class="stats">
+  <div><b>$3.2M</b><span>yearly cloud bill (2022)</span></div>
+  <div><b>~$10M</b><span>projected savings over five years</span></div>
+  <div><b>0</b><span>people added to the ops team</span></div>
+</div>
+
+<dl class="glance">
+  <dt>Industry</dt><dd>B2B and consumer SaaS</dd>
+  <dt>Problem</dt><dd>Cloud spend growing without a matching benefit for steady, predictable workloads</dd>
+  <dt>Approach</dt><dd>Know the unit cost, then run steady workloads on owned hardware</dd>
+  <dt>Source</dt><dd>37signals, "Leaving the Cloud" [1]</dd>
+</dl>
+
+<h2><span class="n">01</span>The challenge</h2>
+<p>37signals' annual cloud bill had reached about $3.2 million [1]. Its products had mature, predictable traffic, so it was paying a premium for elasticity it rarely used, and the promised savings in operations effort hadn't materialised.</p>
+
+<h2><span class="n">02</span>What 37signals did</h2>
+<ul>
+  <li><b>Worked out the real unit cost</b> of running its steady workloads, and compared renting with owning.</li>
+  <li><b>Bought hardware for the predictable baseline</b> and moved its applications out of the cloud during 2023 [1].</li>
+  <li><b>Kept the same team.</b> The move was done without adding anyone to the operations team [1].</li>
+  <li><b>Finished the job.</b> It later moved its remaining storage off the cloud as its storage contract ended in 2025 [2].</li>
+</ul>
+
+<h2><span class="n">03</span>The results</h2>
+<p>37signals projects savings of about $10 million over five years [1], and reports the move was done without growing its operations team.</p>
+
+<div class="lesson"><b>The lesson:</b> the cloud is a pricing model, not a default. Know what each workload costs you, and pay for elasticity only where you actually use it.</div>
+
+<h2><span class="n">04</span>At your scale: a 90-day plan</h2>
+<p>Most mid-size companies shouldn't buy servers: 37signals had a steady, well-understood workload and an experienced ops team. Apply the same discipline inside the cloud first.</p>
+<table class="plan">
+  <tr><th>Days 1–30 · See the spend</th><th>Days 31–60 · Cut the waste</th><th>Days 61–90 · Commit and govern</th></tr>
+  <tr>
+    <td><ul><li>Tag every resource by team, product and environment</li><li>Attribute 90%+ of the bill to an owner</li><li>Work out cost per customer or per transaction</li></ul></td>
+    <td><ul><li>Right-size over-provisioned instances and databases</li><li>Schedule non-production to switch off out of hours</li><li>Delete idle volumes, snapshots and load balancers</li></ul></td>
+    <td><ul><li>Buy Savings Plans, reservations or committed-use discounts only for steady usage</li><li>Budgets and anomaly alerts routed to owners</li><li>A monthly FinOps review; revisit repatriation only for truly flat workloads</li></ul></td>
+  </tr>
+</table>
+
+<h2><span class="n">05</span>Readiness checklist</h2>
+<ul class="check">
+  <li>You know last month's bill by team</li>
+  <li>Every resource has an owner tag</li>
+  <li>You know your cost per customer</li>
+  <li>Non-production shuts down at night</li>
+  <li>Commitments cover only steady usage</li>
+  <li>Anomaly alerts reach the owning team</li>
+  <li>Spend is reviewed monthly</li>
+  <li>You know which workloads are truly flat</li>
+</ul>
+
+<div class="cta"><div><b>Want this plan for your team?</b><span>A 30-minute call: we'll look at your bill and tailor the 90 days.</span></div><a href="https://exommerce.online/#contact">Book a discovery call</a></div>
+
+<div class="sources"><b>Sources</b><ol>
+  <li>37signals, "Leaving the Cloud": basecamp.com/cloud-exit</li>
+  <li>The Register, "37signals is completing its on-prem move" (May 2025): theregister.com</li>
+</ol></div>
+<p class="disclaimer">Based on publicly available information. 37signals is not an eXommerce client, and this document is not endorsed by 37signals. The 90-day plan and checklist are eXommerce's recommendations. © eXommerce LLP · exommerce.online</p>
+</body></html>

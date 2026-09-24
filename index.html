@@ -266,6 +266,30 @@
       linear-gradient(180deg,#FFFFFF 0%,#FBFEFC 100%)
   }
   #wave-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.72}
+  /* Video sits under a white veil that's near-solid behind the headline and
+     thins out to the right, so copy stays readable and the footage shows
+     around the status card. */
+  .hero-video{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:0;
+    opacity:0;
+    transition:opacity 1.2s ease
+  }
+  .hero-video.is-ready{opacity:1}
+  .hero-veil{
+    display:none;
+    position:absolute;
+    inset:0;
+    z-index:0;
+    background:
+      linear-gradient(180deg,rgba(255,255,255,0) 72%,#FFFFFF 100%),
+      linear-gradient(90deg,rgba(255,255,255,.97) 0%,rgba(255,255,255,.94) 42%,rgba(255,255,255,.3) 60%,rgba(255,255,255,0) 80%)
+  }
+  .hero-video.is-ready + .hero-veil{display:block}
   .hero-in{
     position:relative;
     z-index:1;
@@ -283,8 +307,9 @@
     .hero-visual{order:-1;max-width:420px;margin:0 auto}
   }
   .hero h1{
-    font-size:clamp(32px,3.4vw,50px);
+    font-size:clamp(32px,3.2vw,48px);
     letter-spacing:-.045em;
+    text-wrap:balance;
     margin-bottom:22px
   }
   .hero h1 .accent{color:var(--brand-green)}
@@ -750,6 +775,66 @@
   .pb-body{padding:24px 26px 26px;display:flex;flex-direction:column;gap:14px;flex:1}
   .pb-kicker{font-size:11px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;color:var(--pb)}
   .pb-card h3{font-size:19px;line-height:1.3}
+  .pb-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .pb-stats div{padding:12px 14px;border-radius:10px;border:1px solid var(--border)}
+  .pb-stats b{display:block;font-family:var(--ff-display);font-size:20px;line-height:1.2;color:var(--pb);letter-spacing:-.02em}
+  .pb-stats span{font-size:12px;color:var(--text3)}
+  .pb-get{align-self:flex-start;border-color:var(--pb);color:var(--pb)}
+  .pb-get:hover{background:var(--pb);border-color:var(--pb);color:#FFFFFF}
+
+  /* Case-study request dialog */
+  .cs-dialog{
+    width:min(520px,calc(100vw - 32px));
+    max-height:calc(100vh - 32px);
+    overflow:auto;
+    border:0;
+    border-radius:16px;
+    padding:32px 32px 28px;
+    box-shadow:0 30px 80px rgba(11,13,12,.25);
+    color:var(--text)
+  }
+  .cs-dialog::backdrop{background:rgba(11,20,13,.55);backdrop-filter:blur(3px)}
+  .cs-dialog[open]{animation:csIn .3s ease}
+  @keyframes csIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+  .cs-dialog h3{font-size:22px;margin-bottom:8px;padding-right:28px}
+  .cs-lede{font-size:14px;color:var(--text2);margin-bottom:22px}
+  .cs-close{
+    position:absolute;
+    top:14px;
+    right:14px;
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:10px;
+    background:var(--bg2);
+    font-size:22px;
+    line-height:1;
+    color:var(--text2);
+    cursor:pointer
+  }
+  .cs-close:hover{background:var(--bg-green);color:var(--text)}
+  .cs-consent{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--text2);line-height:1.5;margin:4px 0 16px;cursor:pointer}
+  .cs-consent input{margin-top:3px;width:16px;height:16px;accent-color:var(--brand-green);flex-shrink:0}
+  .cs-consent a{text-decoration:underline}
+  .cs-error{color:#B42318;font-size:13px;margin-bottom:12px}
+  .cs-error:empty{display:none}
+  .cs-done{text-align:center;padding:12px 0 4px}
+  .cs-done p{font-size:14.5px;color:var(--text2);margin:10px 0 22px}
+  .cs-tick{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    margin:0 auto 16px;
+    display:grid;
+    place-items:center;
+    font-size:26px;
+    color:#FFFFFF;
+    background:linear-gradient(135deg,var(--brand-green),var(--brand-lime))
+  }
+  @media(max-width:480px){.cs-dialog{padding:26px 20px 22px}}
+  .pb-src{font-size:12px;color:var(--text3)}
+  .pb-src a{color:var(--text2);text-decoration:underline;text-underline-offset:2px}
+  .pb-src a:hover{color:var(--pb)}
   .pb-rows{margin:0;display:flex;flex-direction:column;gap:10px}
   .pb-rows dt{font-size:11.5px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.08em}
   .pb-rows dd{margin:2px 0 0;font-size:14px;color:var(--text2);line-height:1.6}
@@ -1028,7 +1113,7 @@
     </a>
     <nav class="nav-links" aria-label="Primary">
       <a href="#solutions">Solutions</a>
-      <a href="#playbooks">Playbooks</a>
+      <a href="#case-studies">Case studies</a>
       <a href="#products">Products</a>
       <a href="#industries">Industries</a>
       <a href="#about">About</a>
@@ -1045,12 +1130,19 @@
 
 <!-- ===== HERO ===== -->
 <section class="hero" id="top">
+  <!-- Background loop: "Ethernet cables connected to a router" by MrColo on
+       Pexels (free licence, no attribution required). The script sets the src
+       only on wide screens without reduced motion or data saver, so phones
+       never download it. -->
+  <video class="hero-video" data-src="https://videos.pexels.com/video-files/7140937/7140937-hd_1280_720_24fps.mp4"
+         muted loop playsinline preload="none" aria-hidden="true"></video>
+  <div class="hero-veil" aria-hidden="true"></div>
   <canvas id="wave-canvas" aria-hidden="true"></canvas>
   <div class="wrap hero-in">
     <div class="hero-copy">
       <span class="eyebrow">DevOps · IT Consulting · Business Transformation</span>
-      <h1 class="rotator" aria-label="Get the infrastructure right, and the rest gets easier.">
-        <span class="rot-item is-active" aria-hidden="true">Get the infrastructure right, and <span class="accent">the rest gets easier.</span></span>
+      <h1 class="rotator" aria-label="Bridging the gap between infrastructure and technology.">
+        <span class="rot-item is-active" aria-hidden="true">Bridging the gap between <span class="accent">infrastructure and technology.</span></span>
       </h1>
       <p class="sub">We run your cloud, your deploys, and your on-call today — then help you decide what IT investment and business change are actually worth making next.</p>
       <div class="hero-ctas">
@@ -1228,16 +1320,18 @@
   </div>
 </section>
 
-<!-- ===== PLAYBOOKS — representative engagements, no client claims =====
-     Benchmarks are public industry figures, not results we're claiming. Swap
-     in named client stories with real numbers once they're cleared to share. -->
-<section id="playbooks">
+<!-- ===== CASE STUDIES — public DevOps stories, right-sized =====
+     These are published case studies from other companies, cited on each card.
+     None of them are eXommerce clients, and the page says so. Swap in our own
+     client stories once they're cleared to share. -->
+<section id="case-studies">
   <div class="wrap">
     <div class="shead">
-      <span class="eyebrow">Playbooks</span>
-      <h2>What a typical engagement looks like</h2>
-      <p class="sub" style="margin:0 auto">The four problems we're called in for most often: what we usually find, what we change, and the public benchmark we hold the work to.</p>
+      <span class="eyebrow">Case studies</span>
+      <h2>Lessons from the teams that set the standard</h2>
+      <p class="sub" style="margin:0 auto">Four well-documented DevOps stories, what actually made them work, and how we get you the same result at your size and budget.</p>
     </div>
+    <p class="pb-intro">Public case studies, with sources on each card. These companies are not eXommerce clients.</p>
     <div class="pb-grid">
 
       <article class="pb-card" style="--pb:var(--c-blue);--pb-bg:#EEF3FF">
@@ -1245,7 +1339,7 @@
           <svg viewBox="0 0 560 180" aria-hidden="true">
             <circle cx="500" cy="10" r="90" fill="#FFFFFF" opacity=".08"/>
             <circle cx="40" cy="190" r="70" fill="#FFFFFF" opacity=".06"/>
-            <text x="40" y="38" font-family="Consolas,monospace" font-size="12" fill="#FFFFFF" opacity=".75">git push → production</text>
+            <text x="40" y="38" font-family="Consolas,monospace" font-size="12" fill="#FFFFFF" opacity=".75">small change → one click → live</text>
             <g stroke="#FFFFFF" stroke-opacity=".5" stroke-width="2" stroke-dasharray="4 5">
               <line x1="136" y1="94" x2="168" y2="94"/><line x1="264" y1="94" x2="296" y2="94"/><line x1="392" y1="94" x2="424" y2="94"/>
             </g>
@@ -1256,22 +1350,27 @@
               <rect class="lit" x="424" y="68" width="96" height="52" rx="12" fill-opacity=".16" style="animation-delay:2.7s"/>
             </g>
             <g font-family="Sora,sans-serif" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">
-              <text x="88" y="99">Commit</text><text x="216" y="99">Build</text><text x="344" y="99">Test</text><text x="472" y="99">Deploy</text>
+              <text x="88" y="99">Commit</text><text x="216" y="99">Test</text><text x="344" y="99">Flag</text><text x="472" y="99">Deploy</text>
             </g>
             <g font-family="Sora,sans-serif" font-size="11" fill="#FFFFFF" opacity=".8" text-anchor="middle">
-              <text x="88" y="146">✓ reviewed</text><text x="216" y="146">✓ 2m 10s</text><text x="344" y="146">✓ 412 passed</text><text x="472" y="146">✓ live</text>
+              <text x="88" y="146">✓ small diff</text><text x="216" y="146">✓ automated</text><text x="344" y="146">✓ dark launch</text><text x="472" y="146">✓ graphed</text>
             </g>
             <g class="flow"><circle cx="88" cy="60" r="9" fill="#7BCF16" opacity=".35"/><circle cx="88" cy="60" r="5" fill="#B9F36A"/></g>
           </svg>
         </div>
         <div class="pb-body">
-          <span class="pb-kicker">SaaS &amp; product teams</span>
-          <h3>From nervous release days to push-button deploys</h3>
+          <span class="pb-kicker">Etsy · online marketplace</span>
+          <h3>Deploying 50+ times a day without fear</h3>
+          <div class="pb-stats">
+            <div><b>50+</b><span>deploys a day</span></div>
+            <div><b>14,000+</b><span>test-suite runs a day</span></div>
+          </div>
           <dl class="pb-rows">
-            <div><dt>The situation</dt><dd>Releases are batched into a monthly big bang, run by the one person who knows the steps. Every deploy is a risk, so the team ships less.</dd></div>
-            <div><dt>What we do</dt><dd>Version-controlled pipelines with automated tests and security scans, infrastructure as code, and small releases with instant rollback.</dd></div>
+            <div><dt>What worked</dt><dd>Tiny changes shipped continuously, a one-click deploy tool, feature flags to launch code dark, and a rule that everything that can be graphed is graphed.</dd></div>
           </dl>
-          <p class="pb-bench"><b>Industry benchmark</b>DORA's elite teams deploy on demand, and changes reach production in under a day.</p>
+          <p class="pb-bench"><b>At your scale</b>You don't need Etsy's in-house tooling. Managed CI (GitHub Actions or GitLab), a feature-flag service and one shared dashboard give a 5–50 person team the same habit: small, boring, frequent releases.</p>
+          <button type="button" class="btn btn-outline btn-sm pb-get" data-study="etsy">Get the full case study (PDF) &rarr;</button>
+          <p class="pb-src">Source: <a href="https://www.infoq.com/news/2014/03/etsy-deploy-50-times-a-day" target="_blank" rel="noopener">InfoQ, Etsy at QCon London 2014</a></p>
         </div>
       </article>
 
@@ -1279,36 +1378,44 @@
         <div class="pb-art" style="--g1:#F97316;--g2:#E11D48">
           <svg viewBox="0 0 560 180" aria-hidden="true">
             <circle cx="520" cy="170" r="90" fill="#FFFFFF" opacity=".08"/>
-            <text x="40" y="38" font-family="Consolas,monospace" font-size="12" fill="#FFFFFF" opacity=".75">requests / min · sale day</text>
+            <text x="40" y="38" font-family="Consolas,monospace" font-size="12" fill="#FFFFFF" opacity=".75">traffic across availability zones</text>
             <g fill="#FFFFFF" fill-opacity=".85">
-              <rect class="grow" x="40"  y="104" width="20" height="46" rx="4"/>
-              <rect class="grow" x="70"  y="92"  width="20" height="58" rx="4" style="animation-delay:.15s"/>
+              <rect class="grow" x="40"  y="84"  width="20" height="66" rx="4"/>
+              <rect class="grow" x="70"  y="72"  width="20" height="78" rx="4" style="animation-delay:.15s"/>
               <rect class="grow" x="100" y="80"  width="20" height="70" rx="4" style="animation-delay:.3s"/>
-              <rect class="grow" x="130" y="64"  width="20" height="86" rx="4" style="animation-delay:.45s"/>
-              <rect class="grow" x="160" y="56"  width="20" height="94" rx="4" style="animation-delay:.6s"/>
-              <rect class="grow" x="190" y="70"  width="20" height="80" rx="4" style="animation-delay:.75s"/>
-              <rect class="grow" x="220" y="60"  width="20" height="90" rx="4" style="animation-delay:.9s"/>
-              <rect class="grow" x="250" y="84"  width="20" height="66" rx="4" style="animation-delay:1.05s"/>
-              <rect class="grow" x="280" y="96"  width="20" height="54" rx="4" style="animation-delay:1.2s"/>
+              <rect x="138" y="138" width="20" height="12" rx="4" fill-opacity=".3"/>
+              <rect x="168" y="138" width="20" height="12" rx="4" fill-opacity=".3"/>
+              <rect x="198" y="138" width="20" height="12" rx="4" fill-opacity=".3"/>
+              <rect class="grow" x="236" y="56"  width="20" height="94" rx="4" style="animation-delay:.6s"/>
+              <rect class="grow" x="266" y="60"  width="20" height="90" rx="4" style="animation-delay:.75s"/>
+              <rect class="grow" x="296" y="52"  width="20" height="98" rx="4" style="animation-delay:.9s"/>
+            </g>
+            <g font-family="Consolas,monospace" font-size="10" fill="#FFFFFF" opacity=".75" text-anchor="middle">
+              <text x="80" y="166">zone A</text><text x="178" y="166">zone B ✕</text><text x="276" y="166">zone C</text>
             </g>
             <g class="bob">
               <rect x="350" y="52" width="170" height="98" rx="14" fill="#FFFFFF" fill-opacity=".16"/>
-              <text x="372" y="80" font-family="Sora,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" opacity=".85" letter-spacing="1.5">CHECKOUT SLO</text>
-              <text x="372" y="118" font-family="Sora,sans-serif" font-size="30" font-weight="700" fill="#FFFFFF">99.9%</text>
+              <text x="372" y="80" font-family="Sora,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" opacity=".85" letter-spacing="1.5">ZONE DOWN</text>
+              <text x="372" y="118" font-family="Sora,sans-serif" font-size="28" font-weight="700" fill="#FFFFFF">Still up</text>
               <circle class="pulse" cx="494" cy="76" r="6" fill="#B9F36A"/>
               <circle cx="494" cy="76" r="5" fill="#B9F36A"/>
-              <text x="372" y="138" font-family="Sora,sans-serif" font-size="11" fill="#FFFFFF" opacity=".8">autoscaling · 4 → 12 pods</text>
+              <text x="372" y="138" font-family="Sora,sans-serif" font-size="11" fill="#FFFFFF" opacity=".8">traffic rerouted</text>
             </g>
           </svg>
         </div>
         <div class="pb-body">
-          <span class="pb-kicker">Retail &amp; e-commerce</span>
-          <h3>Peak season without the war room</h3>
+          <span class="pb-kicker">Netflix · streaming</span>
+          <h3>Staying up when the cloud went down</h3>
+          <div class="pb-stats">
+            <div><b>Apr 2011</b><span>major AWS US-East outage</span></div>
+            <div><b>Stayed up</b><span>Netflix kept streaming</span></div>
+          </div>
           <dl class="pb-rows">
-            <div><dt>The situation</dt><dd>Traffic spikes on sale days. Capacity is guessed, alerts are noisy, and the team hears about slow checkouts from customers.</dd></div>
-            <div><dt>What we do</dt><dd>Load-tested autoscaling, a CDN and caching in front of the store, and SLO-based alerts that page on real customer impact.</dd></div>
+            <div><dt>What worked</dt><dd>Assuming failure is normal: running across several availability zones, degrading gracefully, and Chaos Monkey switching off production servers on purpose so recovery was routine.</dd></div>
           </dl>
-          <p class="pb-bench"><b>Industry benchmark</b>A 99.9% availability target allows about 43 minutes of downtime a month. Plan how you spend it instead of discovering it.</p>
+          <p class="pb-bench"><b>At your scale</b>No need to build a chaos army. Run in two or more zones behind health checks and autoscaling, set an SLO for the journey that pays the bills, and hold a quarterly game day where we switch something off on purpose.</p>
+          <button type="button" class="btn btn-outline btn-sm pb-get" data-study="netflix">Get the full case study (PDF) &rarr;</button>
+          <p class="pb-src">Source: <a href="https://netflixtechblog.com/lessons-netflix-learned-from-the-aws-outage-deefe5fd0c04" target="_blank" rel="noopener">Netflix Technology Blog, April 2011</a></p>
         </div>
       </article>
 
@@ -1324,27 +1431,32 @@
               <rect class="lit" x="232" y="38"  width="288" height="34" rx="17" fill="#FFFFFF" fill-opacity=".16"/>
               <rect class="lit" x="232" y="80"  width="288" height="34" rx="17" fill="#FFFFFF" fill-opacity=".16" style="animation-delay:1.2s"/>
               <rect class="lit" x="232" y="122" width="288" height="34" rx="17" fill="#FFFFFF" fill-opacity=".16" style="animation-delay:2.4s"/>
-              <circle cx="252" cy="55" r="7" fill="#B9F36A"/><text x="270" y="60">CIS-hardened baselines</text>
-              <circle cx="252" cy="97" r="7" fill="#B9F36A"/><text x="270" y="102">Secrets out of code</text>
+              <circle cx="252" cy="55" r="7" fill="#B9F36A"/><text x="270" y="60">Guardrails as code</text>
+              <circle cx="252" cy="97" r="7" fill="#B9F36A"/><text x="270" y="102">Environments in minutes</text>
               <circle cx="252" cy="139" r="7" fill="#B9F36A"/><text x="270" y="144">Evidence captured per change</text>
             </g>
           </svg>
         </div>
         <div class="pb-body">
-          <span class="pb-kicker">Fintech &amp; regulated</span>
-          <h3>Audit-ready by default, not by scramble</h3>
+          <span class="pb-kicker">Capital One · banking</span>
+          <h3>A regulated bank that ships many times a day</h3>
+          <div class="pb-stats">
+            <div><b>3 months → minutes</b><span>to build a dev environment</span></div>
+            <div><b>−50%</b><span>critical incident resolution time</span></div>
+          </div>
           <dl class="pb-rows">
-            <div><dt>The situation</dt><dd>An audit or enterprise security questionnaire is coming. Evidence lives in screenshots and spreadsheets, and access has grown without review.</dd></div>
-            <div><dt>What we do</dt><dd>Hardened baselines, managed secrets, least-privilege access, and a pipeline that records the evidence automatically: scans, approvals and change history.</dd></div>
+            <div><dt>What worked</dt><dd>Treating automation as the control: security and compliance built into the platform, which took releases from monthly or quarterly to many times a day while it exited all eight data centres.</dd></div>
           </dl>
-          <p class="pb-bench"><b>Industry benchmark</b>CIS Benchmarks for hardening, with controls mapped to SOC 2 or ISO 27001, whichever you're assessed against.</p>
+          <p class="pb-bench"><b>At your scale</b>You aren't rebuilding 2,000 apps over eight years. A landing zone built as code, policy guardrails and a pipeline that records audit evidence give one product team the same pattern in weeks, not years.</p>
+          <button type="button" class="btn btn-outline btn-sm pb-get" data-study="capital-one">Get the full case study (PDF) &rarr;</button>
+          <p class="pb-src">Source: <a href="https://aws.amazon.com/solutions/case-studies/capital-one-all-in-on-aws/" target="_blank" rel="noopener">AWS case study: Capital One</a></p>
         </div>
       </article>
 
       <article class="pb-card" style="--pb:var(--c-violet);--pb-bg:#F3EEFE">
         <div class="pb-art" style="--g1:#7C3AED;--g2:#DB2777">
           <svg viewBox="0 0 560 180" aria-hidden="true">
-            <text x="40" y="38" font-family="Consolas,monospace" font-size="12" fill="#FFFFFF" opacity=".75">monthly cloud spend</text>
+            <text x="40" y="38" font-family="Consolas,monospace" font-size="12" fill="#FFFFFF" opacity=".75">annual infrastructure spend</text>
             <g stroke="#FFFFFF" stroke-opacity=".16" stroke-width="1">
               <line x1="40" y1="64" x2="400" y2="64"/><line x1="40" y1="100" x2="400" y2="100"/><line x1="40" y1="136" x2="400" y2="136"/>
             </g>
@@ -1354,26 +1466,71 @@
             <circle cx="400" cy="126" r="6" fill="#B9F36A"/>
             <g class="bob">
               <rect x="420" y="56" width="120" height="70" rx="14" fill="#FFFFFF" fill-opacity=".16"/>
-              <text x="438" y="82" font-family="Sora,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" opacity=".85" letter-spacing="1.2">BUDGET</text>
-              <text x="438" y="110" font-family="Sora,sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">On track</text>
+              <text x="438" y="82" font-family="Sora,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" opacity=".85" letter-spacing="1.2">UNIT COST</text>
+              <text x="438" y="110" font-family="Sora,sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">Known</text>
             </g>
           </svg>
         </div>
         <div class="pb-body">
-          <span class="pb-kicker">Scale-ups on AWS, Azure or GCP</span>
-          <h3>A cloud bill that finally makes sense</h3>
+          <span class="pb-kicker">37signals · SaaS (Basecamp, HEY)</span>
+          <h3>Rethinking a $3.2M-a-year cloud bill</h3>
+          <div class="pb-stats">
+            <div><b>$3.2M</b><span>yearly cloud bill before</span></div>
+            <div><b>~$10M</b><span>projected 5-year savings</span></div>
+          </div>
           <dl class="pb-rows">
-            <div><dt>The situation</dt><dd>Spend grows faster than revenue, and nobody can say which team, product or customer is driving it.</dd></div>
-            <div><dt>What we do</dt><dd>Tagging and cost allocation, right-sizing, scheduling for non-production, commitment planning, and anomaly alerts sent to the team that owns the spend.</dd></div>
+            <div><dt>What worked</dt><dd>Knowing the real unit cost of steady, predictable workloads, then moving them onto owned hardware without adding anyone to the operations team.</dd></div>
           </dl>
-          <p class="pb-bench"><b>Industry benchmark</b>The FinOps Framework's Inform → Optimize → Operate cycle, run every month rather than once.</p>
+          <p class="pb-bench"><b>At your scale</b>Most mid-size companies shouldn't buy servers. Apply the same discipline in the cloud: tag every cost, right-size, commit only on steady usage, and weigh leaving the cloud only for the workloads that are truly flat.</p>
+          <button type="button" class="btn btn-outline btn-sm pb-get" data-study="37signals">Get the full case study (PDF) &rarr;</button>
+          <p class="pb-src">Source: <a href="https://basecamp.com/cloud-exit" target="_blank" rel="noopener">37signals, Leaving the Cloud</a></p>
         </div>
       </article>
 
     </div>
-    <div class="sec-cta" style="text-align:center"><a href="#fit" class="btn btn-outline">Find the one that fits you →</a></div>
+    <div class="sec-cta" style="text-align:center"><a href="#fit" class="btn btn-outline">Find where you fit →</a></div>
   </div>
 </section>
+
+<!-- ===== CASE-STUDY REQUEST FORM =====
+     Posts to the Google Apps Script web app (case-study-mailer.gs), which logs
+     the request to a Google Sheet and emails the PDF. -->
+<dialog class="cs-dialog" id="csDialog" aria-labelledby="csTitle">
+  <button type="button" class="cs-close" id="csClose" aria-label="Close">×</button>
+  <div id="csFormWrap">
+    <span class="eyebrow">Free case study · PDF</span>
+    <h3 id="csTitle">Get the full case study</h3>
+    <p class="cs-lede">A two-page PDF: the full story, a 90-day plan for a team your size, and a readiness checklist. We'll email it to you.</p>
+    <form id="csForm" novalidate>
+      <input type="hidden" name="study" />
+      <div style="position:absolute;left:-9999px" aria-hidden="true"><label for="cs-website">Website</label><input id="cs-website" name="website" tabindex="-1" autocomplete="off" /></div>
+      <div class="two">
+        <div class="field"><label for="cs-fn">First name *</label><input id="cs-fn" name="first_name" autocomplete="given-name" required /></div>
+        <div class="field"><label for="cs-ln">Last name</label><input id="cs-ln" name="last_name" autocomplete="family-name" /></div>
+      </div>
+      <div class="field"><label for="cs-em">Work email *</label><input id="cs-em" type="email" name="email" autocomplete="email" required /></div>
+      <div class="two">
+        <div class="field"><label for="cs-co">Company *</label><input id="cs-co" name="company" autocomplete="organization" required /></div>
+        <div class="field"><label for="cs-role">Role</label><input id="cs-role" name="role" autocomplete="organization-title" placeholder="e.g. CTO" /></div>
+      </div>
+      <div class="field"><label for="cs-size">Company size</label>
+        <select id="cs-size" name="company_size">
+          <option value="">Select…</option>
+          <option>1–10</option><option>11–50</option><option>51–200</option><option>201–1,000</option><option>1,000+</option>
+        </select>
+      </div>
+      <label class="cs-consent"><input type="checkbox" name="consent" value="yes" required /><span>Email me this case study. eXommerce may follow up once about related services; you can opt out any time. See our <a href="/privacy.html" target="_blank">Privacy Policy</a>.</span></label>
+      <p class="cs-error" id="csError" role="alert"></p>
+      <button type="submit" class="btn btn-primary" id="csSubmit" style="width:100%">Email me the PDF →</button>
+    </form>
+  </div>
+  <div class="cs-done" id="csDone" hidden>
+    <div class="cs-tick" aria-hidden="true">✓</div>
+    <h3>Check your inbox</h3>
+    <p>We've sent the case study to <b id="csSentTo"></b>. It can take a minute or two; if you don't see it, check your spam folder.</p>
+    <button type="button" class="btn btn-outline btn-sm" id="csDoneClose">Close</button>
+  </div>
+</dialog>
 
 <!-- ===== STANDARDS — best practices we build to ===== -->
 <section id="standards" class="sec-alt">
@@ -1884,6 +2041,29 @@
     window.location.href = href;
   });
 
+  // ================= HERO VIDEO =================
+  // Desktop-only: skipped for reduced motion, data saver and narrow screens,
+  // where the src is never set so nothing downloads. Plays only while the
+  // hero is on screen.
+  (function(){
+    var video = document.querySelector('.hero-video');
+    if (!video) return;
+    var conn = navigator.connection || {};
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!window.matchMedia('(min-width: 921px)').matches || conn.saveData) return;
+
+    video.addEventListener('playing', function(){ video.classList.add('is-ready'); }, { once:true });
+    video.src = video.getAttribute('data-src');
+    var play = function(){ var p = video.play(); if (p && p.catch) p.catch(function(){}); };
+    play();
+
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(entries){
+        entries[0].isIntersecting ? play() : video.pause();
+      }, { threshold: 0.05 }).observe(video);
+    }
+  })();
+
   // ================= HERO CANVAS — dotted particle wave =================
   (function(){
     var canvas = document.getElementById('wave-canvas');
@@ -2194,6 +2374,108 @@
           + 'Team today: ' + current.t.label + '\n\n';
         msg.value = lastPrefill;
       }
+    });
+  })();
+
+  // ================= CASE-STUDY REQUESTS =================
+  // The Google Apps Script web app URL (ends in /exec) from case-study-mailer.gs.
+  // Until it's set, requests fall back to a pre-filled email to hello@, so the
+  // form still works and nothing is lost.
+  var CASE_STUDY_ENDPOINT = '';
+
+  (function(){
+    var dialog = document.getElementById('csDialog');
+    if (!dialog || typeof dialog.showModal !== 'function') return;
+    var form = document.getElementById('csForm');
+    var err = document.getElementById('csError');
+    var submit = document.getElementById('csSubmit');
+    var TITLES = {
+      'etsy': 'Etsy: deploying 50+ times a day',
+      'netflix': 'Netflix: staying up when the cloud went down',
+      'capital-one': 'Capital One: a bank that ships many times a day',
+      '37signals': '37signals: rethinking a $3.2M cloud bill'
+    };
+
+    var doneMsg = document.getElementById('csDone').querySelector('p');
+    var doneHtml = doneMsg.innerHTML;
+
+    function reset(){
+      doneMsg.innerHTML = doneHtml;
+      document.getElementById('csFormWrap').hidden = false;
+      document.getElementById('csDone').hidden = true;
+      err.textContent = '';
+      submit.disabled = false;
+      submit.textContent = 'Email me the PDF →';
+    }
+
+    Array.prototype.forEach.call(document.querySelectorAll('.pb-get'), function(btn){
+      btn.addEventListener('click', function(){
+        reset();
+        form.study.value = btn.getAttribute('data-study');
+        document.getElementById('csTitle').textContent = TITLES[form.study.value] || 'Get the full case study';
+        dialog.showModal();
+        form.first_name.focus();
+      });
+    });
+
+    function close(){ dialog.close(); }
+    document.getElementById('csClose').addEventListener('click', close);
+    document.getElementById('csDoneClose').addEventListener('click', close);
+    // Clicking the dimmed backdrop (the dialog element itself) closes it.
+    dialog.addEventListener('click', function(e){ if (e.target === dialog) close(); });
+
+    function done(email){
+      document.getElementById('csSentTo').textContent = email;
+      document.getElementById('csFormWrap').hidden = true;
+      document.getElementById('csDone').hidden = false;
+    }
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      err.textContent = '';
+      if (!form.checkValidity()){
+        err.textContent = !form.consent.checked && form.first_name.value && form.email.validity.valid && form.company.value
+          ? 'Please tick the box so we can email you the PDF.'
+          : 'Please fill in your first name, a valid work email and your company.';
+        return;
+      }
+      if (form.website.value) return;
+
+      var data = new URLSearchParams(new FormData(form));
+      data.set('page', location.href);
+      var email = form.email.value.trim();
+
+      if (!CASE_STUDY_ENDPOINT){
+        var body = ['Please send me the ' + (TITLES[form.study.value] || form.study.value) + ' case study.', '',
+          'Name:    ' + (form.first_name.value + ' ' + form.last_name.value).trim(),
+          'Email:   ' + email,
+          'Company: ' + form.company.value,
+          'Role:    ' + (form.role.value || '—'),
+          'Size:    ' + (form.company_size.value || '—')].join('\n');
+        window.location.href = 'mailto:hello@exommerce.online?subject='
+          + encodeURIComponent('Case study request: ' + (TITLES[form.study.value] || ''))
+          + '&body=' + encodeURIComponent(body);
+        doneMsg.textContent = 'Your email app should have opened with the request ready. Send it and we\'ll email you the PDF.';
+        done(email);
+        return;
+      }
+
+      submit.disabled = true;
+      submit.textContent = 'Sending…';
+      fetch(CASE_STUDY_ENDPOINT, { method:'POST', body:data })
+        .then(function(r){ return r.json(); })
+        .then(function(res){
+          if (res && res.ok) done(email);
+          else throw { server: res && res.error };
+        })
+        .catch(function(e2){
+          // Only messages written by the mailer script are shown; network and
+          // parsing errors get the generic fallback.
+          submit.disabled = false;
+          submit.textContent = 'Email me the PDF →';
+          err.textContent = (e2 && e2.server)
+            || 'We couldn\'t send it just now. Please try again, or email hello@exommerce.online.';
+        });
     });
   })();
 

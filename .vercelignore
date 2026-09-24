@@ -12,4 +12,6 @@ App.jsx
 
 # Backend / infra source — never web-served
 apps-script.gs
+case-study-mailer.gs
 automation/
+case-studies/_src/

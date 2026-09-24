@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Etsy: deploying 50+ times a day. eXommerce case study</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>:root{--g1:#2563EB;--g2:#7C3AED;--accent:#2563EB;--accent-bg:#EEF3FF}</style>
+</head><body>
+
+<div class="band">
+  <div class="band-top"><img src="../../logo.png" alt="eXommerce"><span>Case study · CI/CD</span></div>
+  <div class="kicker">Etsy · online marketplace</div>
+  <h1>Deploying 50+ times a day without fear</h1>
+  <p>How Etsy made releasing code so routine that any engineer could ship to production in minutes, and how a mid-size team can build the same habit without Etsy's in-house tooling.</p>
+</div>
+
+<div class="stats">
+  <div><b>50+</b><span>deploys to production a day</span></div>
+  <div><b>14,000+</b><span>test-suite runs a day</span></div>
+  <div><b>~150</b><span>engineers on the shared pipeline</span></div>
+</div>
+
+<dl class="glance">
+  <dt>Industry</dt><dd>E-commerce marketplace</dd>
+  <dt>Problem</dt><dd>Large, infrequent releases that were risky and slow to recover from</dd>
+  <dt>Approach</dt><dd>Small changes, one-click deploys, feature flags, and monitoring everything</dd>
+  <dt>Figures as of</dt><dd>Etsy's talk at QCon London, March 2014 [1]</dd>
+</dl>
+
+<h2><span class="n">01</span>The challenge</h2>
+<p>When every release bundles weeks of changes, each deploy carries weeks of risk. Failures are hard to trace to a single change, rollbacks are painful, and teams respond by releasing even less often, which makes the next release bigger and riskier still.</p>
+
+<h2><span class="n">02</span>What Etsy did</h2>
+<ul>
+  <li><b>Small changes, shipped continuously.</b> Engineers pushed small diffs many times a day instead of batching them into large releases.</li>
+  <li><b>A one-click deploy tool.</b> Deployinator, Etsy's in-house tool, turned a deploy into a button: build, run the automated tests, update staging, then push live.</li>
+  <li><b>Feature flags.</b> New code went to production switched off ("dark"), then was turned on gradually, so deploying and releasing became separate decisions.</li>
+  <li><b>Pre-commit testing and a staging mirror.</b> Changes could be tested against the full suite before commit, then checked on a staging environment that mirrored production.</li>
+  <li><b>Graph everything.</b> The rule was that anything that can be graphed is graphed, so the effect of every deploy showed up on a dashboard within minutes.</li>
+</ul>
+
+<h2><span class="n">03</span>The results</h2>
+<p>By 2014 Etsy was deploying to production more than 50 times a day, with a CI setup serving around 150 engineers and running more than 14,000 test-suite runs daily [1].</p>
+
+<div class="lesson"><b>The lesson:</b> deploy frequency is a result, not a goal. It follows from making each change small, each deploy boring, and each failure visible and reversible.</div>
+
+<h2><span class="n">04</span>At your scale: a 90-day plan</h2>
+<p>You don't need a custom deploy tool. Managed CI and an off-the-shelf flag service give a 5–50 person team the same habit.</p>
+<table class="plan">
+  <tr><th>Days 1–30 · Baseline</th><th>Days 31–60 · Automate</th><th>Days 61–90 · Make it routine</th></tr>
+  <tr>
+    <td><ul><li>Measure the four DORA metrics as they stand today</li><li>Map every manual step between merge and production</li><li>Put infrastructure under version control, starting with one environment</li></ul></td>
+    <td><ul><li>One pipeline in GitHub Actions or GitLab CI: build, test, scan, deploy</li><li>One-click (or on-merge) deploys to staging and production</li><li>Automated rollback to the previous version</li></ul></td>
+    <td><ul><li>Feature flags for anything user-facing</li><li>A single dashboard showing errors and latency per deploy</li><li>Aim to deploy daily; review DORA metrics monthly</li></ul></td>
+  </tr>
+</table>
+
+<h2><span class="n">05</span>Readiness checklist</h2>
+<ul class="check">
+  <li>Every change goes through a pull request and review</li>
+  <li>Tests run automatically on every push</li>
+  <li>A deploy takes one action, not a runbook</li>
+  <li>Any engineer can deploy, not one gatekeeper</li>
+  <li>Rolling back takes minutes</li>
+  <li>New features can ship switched off</li>
+  <li>You can see errors per deploy within minutes</li>
+  <li>You know your current lead time for changes</li>
+</ul>
+
+<div class="cta"><div><b>Want this plan for your team?</b><span>A 30-minute call: we'll baseline where you are and tailor the 90 days.</span></div><a href="https://exommerce.online/#contact">Book a discovery call</a></div>
+
+<div class="sources"><b>Sources</b><ol>
+  <li>InfoQ, "How Etsy Deploys More Than 50 Times a Day" (Daniel Schauenberg, QCon London 2014): infoq.com/news/2014/03/etsy-deploy-50-times-a-day</li>
+  <li>Etsy Code as Craft, "Re-Introducing Deployinator": etsy.com/codeascraft</li>
+</ol></div>
+<p class="disclaimer">Based on publicly available information. Etsy is not an eXommerce client, and this document is not endorsed by Etsy. The 90-day plan and checklist are eXommerce's recommendations. © eXommerce LLP · exommerce.online</p>
+</body></html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Netflix: staying up when the cloud went down. eXommerce case study</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>:root{--g1:#F97316;--g2:#E11D48;--accent:#EA580C;--accent-bg:#FFF3EC}</style>
+</head><body>
+
+<div class="band">
+  <div class="band-top"><img src="../../logo.png" alt="eXommerce"><span>Case study · Reliability</span></div>
+  <div class="kicker">Netflix · streaming</div>
+  <h1>Staying up when the cloud went down</h1>
+  <p>How Netflix designed for failure, and kept streaming through a major AWS outage that took many other sites down, plus how to get the same resilience without a chaos-engineering team.</p>
+</div>
+
+<div class="stats">
+  <div><b>Apr 2011</b><span>major AWS US-East outage</span></div>
+  <div><b>Stayed up</b><span>no major customer-facing outage</span></div>
+  <div><b>2012</b><span>Chaos Monkey open-sourced</span></div>
+</div>
+
+<dl class="glance">
+  <dt>Industry</dt><dd>Consumer streaming</dd>
+  <dt>Problem</dt><dd>Running a business-critical service on cloud infrastructure that can and does fail</dd>
+  <dt>Approach</dt><dd>Assume failure: redundancy across zones, graceful degradation, and failure injected on purpose</dd>
+  <dt>Source</dt><dd>Netflix Technology Blog, April 2011 [1]</dd>
+</dl>
+
+<h2><span class="n">01</span>The challenge</h2>
+<p>In April 2011 a major outage in Amazon Web Services' US-East region disrupted many well-known sites. Any company running there had to assume that parts of its infrastructure could disappear without warning, and that the question was not whether but when.</p>
+
+<h2><span class="n">02</span>What Netflix did</h2>
+<ul>
+  <li><b>Designed for failure.</b> Services were spread across several availability zones, so losing one did not take the product down.</li>
+  <li><b>Degraded gracefully.</b> When a dependency failed, the service fell back to a simpler experience instead of failing outright.</li>
+  <li><b>Broke things on purpose.</b> Chaos Monkey randomly switched off production servers during working hours, so engineers built services that recovered automatically and practised recovery routinely.</li>
+  <li><b>Learned from the outage.</b> Netflix's own write-up named the gaps the outage exposed, including handling the loss of a whole zone, and fed them back into tooling [1][2].</li>
+</ul>
+
+<h2><span class="n">03</span>The results</h2>
+<p>Netflix reported that it kept streaming through the April 2011 outage without a major customer-facing outage, while it acknowledged where its systems needed to improve [1]. Chaos Monkey was later open-sourced (2012), and the practice it started became known as chaos engineering.</p>
+
+<div class="lesson"><b>The lesson:</b> reliability comes from rehearsal. Systems that are regularly made to fail, on your schedule, recover when failure arrives on its own.</div>
+
+<h2><span class="n">04</span>At your scale: a 90-day plan</h2>
+<p>You don't need a chaos-engineering team. A handful of deliberate practices give a mid-size product most of the resilience.</p>
+<table class="plan">
+  <tr><th>Days 1–30 · Define "up"</th><th>Days 31–60 · Remove single points</th><th>Days 61–90 · Rehearse</th></tr>
+  <tr>
+    <td><ul><li>Pick the customer journey that pays the bills (sign-up, checkout, login)</li><li>Set an SLO for it, e.g. 99.9% successful requests</li><li>Alert on SLO burn, not on every CPU spike</li></ul></td>
+    <td><ul><li>Run across two or more availability zones behind a load balancer</li><li>Health checks and autoscaling on every service</li><li>Managed databases with automated failover and tested backups</li></ul></td>
+    <td><ul><li>First game day: switch off one component on purpose, in staging</li><li>Write runbooks for what you learned</li><li>Repeat quarterly, then carefully in production</li></ul></td>
+  </tr>
+</table>
+
+<h2><span class="n">05</span>Readiness checklist</h2>
+<ul class="check">
+  <li>You have a written SLO for your key journey</li>
+  <li>Losing one server doesn't page anyone</li>
+  <li>Losing one zone doesn't take you down</li>
+  <li>Backups have been restored, not just taken</li>
+  <li>Alerts fire on customer impact, not noise</li>
+  <li>There's an on-call rota and runbooks</li>
+  <li>Incidents get a blameless review</li>
+  <li>You've switched something off on purpose this quarter</li>
+</ul>
+
+<div class="cta"><div><b>Want this plan for your team?</b><span>A 30-minute call: we'll find your single points of failure and tailor the 90 days.</span></div><a href="https://exommerce.online/#contact">Book a discovery call</a></div>
+
+<div class="sources"><b>Sources</b><ol>
+  <li>Netflix Technology Blog, "Lessons Netflix Learned from the AWS Outage" (April 2011): netflixtechblog.com</li>
+  <li>Netflix Technology Blog, "The Netflix Simian Army" (July 2011): netflixtechblog.com</li>
+</ol></div>
+<p class="disclaimer">Based on publicly available information. Netflix is not an eXommerce client, and this document is not endorsed by Netflix. The 90-day plan and checklist are eXommerce's recommendations. © eXommerce LLP · exommerce.online</p>
+</body></html>

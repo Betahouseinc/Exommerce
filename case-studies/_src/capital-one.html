@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Capital One: a regulated bank that ships many times a day. eXommerce case study</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>:root{--g1:#0D9488;--g2:#0284C7;--accent:#0D9488;--accent-bg:#E9F7F5}</style>
+</head><body>
+
+<div class="band">
+  <div class="band-top"><img src="../../logo.png" alt="eXommerce"><span>Case study · DevSecOps</span></div>
+  <div class="kicker">Capital One · banking</div>
+  <h1>A regulated bank that ships many times a day</h1>
+  <p>How Capital One moved from monthly releases to many a day, and exited its data centres, by making automation the control. Plus how one product team can apply the same pattern in weeks.</p>
+</div>
+
+<div class="stats">
+  <div><b>3 mo → mins</b><span>to build a dev environment</span></div>
+  <div><b>−50%</b><span>critical incident resolution time</span></div>
+  <div><b>8</b><span>data centres exited</span></div>
+</div>
+
+<dl class="glance">
+  <dt>Industry</dt><dd>Banking and financial services (regulated)</dd>
+  <dt>Problem</dt><dd>Slow, manual release and provisioning in a heavily regulated environment</dd>
+  <dt>Approach</dt><dd>DevOps plus cloud, with security and compliance built into the platform</dd>
+  <dt>Source</dt><dd>AWS case study: Capital One [1]</dd>
+</dl>
+
+<h2><span class="n">01</span>The challenge</h2>
+<p>Regulated businesses often assume that control means slowness: manual approvals, change boards and long provisioning queues. At Capital One, application releases happened monthly or quarterly, and standing up a development environment could take months [1].</p>
+
+<h2><span class="n">02</span>What Capital One did</h2>
+<ul>
+  <li><b>Automation as the control.</b> Security and compliance checks were built into the platform and pipeline, so they ran on every change instead of in a review queue.</li>
+  <li><b>Rebuilt for the cloud.</b> Around 80% of its nearly 2,000 applications were rebuilt from the ground up to run natively in the cloud [1].</li>
+  <li><b>Self-service environments.</b> Engineers could provision a development environment in minutes rather than waiting months.</li>
+  <li><b>A long-term commitment.</b> The migration ran over eight years and ended with all eight on-premises data centres closed [1].</li>
+</ul>
+
+<h2><span class="n">03</span>The results</h2>
+<ul>
+  <li>Releases went from monthly or quarterly to multiple times a day [1].</li>
+  <li>Critical incident resolution time and transaction errors were both cut by 50% [1].</li>
+  <li>Development environments that took three months now take minutes [1].</li>
+  <li>Disaster recovery improved by 70% in testing exercises [1].</li>
+</ul>
+
+<div class="lesson"><b>The lesson:</b> in a regulated business, automation doesn't weaken control, it proves it. A pipeline that records every check is a better audit trail than a spreadsheet of approvals.</div>
+
+<h2><span class="n">04</span>At your scale: a 90-day plan</h2>
+<p>You aren't rebuilding 2,000 applications over eight years. One product team can adopt the same pattern in a quarter.</p>
+<table class="plan">
+  <tr><th>Days 1–30 · Gap assessment</th><th>Days 31–60 · Guardrails as code</th><th>Days 61–90 · Evidence by default</th></tr>
+  <tr>
+    <td><ul><li>Map the controls you're assessed on (SOC 2, ISO 27001 or a customer questionnaire)</li><li>Inventory access, secrets and environments</li><li>Rank gaps by audit risk</li></ul></td>
+    <td><ul><li>A landing zone built as code, with separate accounts per environment</li><li>Least-privilege access and single sign-on</li><li>Secrets moved into a managed vault; CIS-hardened baselines</li></ul></td>
+    <td><ul><li>Dependency, container and code scanning in every pipeline</li><li>Approvals and change history recorded automatically</li><li>An evidence pack you can hand to auditors</li></ul></td>
+  </tr>
+</table>
+
+<h2><span class="n">05</span>Readiness checklist</h2>
+<ul class="check">
+  <li>No secrets live in code or chat</li>
+  <li>Access is reviewed and least-privilege</li>
+  <li>Production changes only go through the pipeline</li>
+  <li>Every change has a recorded approval</li>
+  <li>Vulnerability scans run on every build</li>
+  <li>Environments can be rebuilt from code</li>
+  <li>Logs are centralised and retained</li>
+  <li>You can produce audit evidence in a day</li>
+</ul>
+
+<div class="cta"><div><b>Want this plan for your team?</b><span>A 30-minute call: we'll map your audit gaps and tailor the 90 days.</span></div><a href="https://exommerce.online/#contact">Book a discovery call</a></div>
+
+<div class="sources"><b>Sources</b><ol>
+  <li>AWS, "Capital One Completes Migration from Data Centers to AWS": aws.amazon.com/solutions/case-studies/capital-one-all-in-on-aws</li>
+  <li>SiliconANGLE, "Capital One closes all data centers" (December 2020): siliconangle.com</li>
+</ol></div>
+<p class="disclaimer">Based on publicly available information. Capital One is not an eXommerce client, and this document is not endorsed by Capital One or AWS. The 90-day plan and checklist are eXommerce's recommendations. © eXommerce LLP · exommerce.online</p>
+</body></html>
