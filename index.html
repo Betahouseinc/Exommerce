@@ -277,7 +277,12 @@
     object-fit:cover;
     z-index:0;
     opacity:0;
-    transition:opacity 1.2s ease
+    transition:opacity 1.2s ease;
+    /* The footage is green arrows on near-black. Inverting (then rotating the
+       hue back) turns the black to white and keeps the arrows green; multiply
+       then drops the white out, so only the arrows sit on the light hero. */
+    filter:invert(1) hue-rotate(180deg);
+    mix-blend-mode:multiply
   }
   .hero-video.is-ready{opacity:1}
   .hero-veil{
@@ -1130,11 +1135,11 @@
 
 <!-- ===== HERO ===== -->
 <section class="hero" id="top">
-  <!-- Background loop: "Ethernet cables connected to a router" by MrColo on
+  <!-- Background loop: "Dynamic Digital Arrows Animation" by Graham Thorne on
        Pexels (free licence, no attribution required). The script sets the src
        only on wide screens without reduced motion or data saver, so phones
        never download it. -->
-  <video class="hero-video" data-src="https://videos.pexels.com/video-files/7140937/7140937-hd_1280_720_24fps.mp4"
+  <video class="hero-video" data-src="https://videos.pexels.com/video-files/34934562/14798470_1280_720_30fps.mp4"
          muted loop playsinline preload="none" aria-hidden="true"></video>
   <div class="hero-veil" aria-hidden="true"></div>
   <canvas id="wave-canvas" aria-hidden="true"></canvas>
