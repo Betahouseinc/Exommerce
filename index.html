@@ -547,30 +547,49 @@
     .marquee-track img{width:22px;height:22px}
   }
 
-  /* Playbooks — representative engagements, each with an animated header */
-  .pb-intro{text-align:center;font-size:13px;color:var(--text3);margin:-28px auto 40px;max-width:62ch}
-  .pb-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+  /* Case studies — four compact cards, each led by the company's logo */
+  .pb-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
   .pb-card{
     background:var(--surface);
     border:1px solid var(--border);
-    border-radius:16px;
-    overflow:hidden;
+    border-radius:var(--radius);
+    padding:22px 22px 18px;
     display:flex;
     flex-direction:column;
+    gap:10px;
     transition:transform .2s,box-shadow .2s,border-color .2s
   }
-  .pb-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
-  /* Each card's accent colour runs along its top edge. */
-  .pb-card{border-top:3px solid var(--pb)}
-  .pb-body{padding:24px 26px 26px;display:flex;flex-direction:column;gap:14px;flex:1}
-  .pb-kicker{font-size:11px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;color:var(--pb)}
-  .pb-card h3{font-size:19px;line-height:1.3}
-  .pb-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .pb-stats div{padding:12px 14px;border-radius:10px;border:1px solid var(--border)}
-  .pb-stats b{display:block;font-family:var(--ff-display);font-size:20px;line-height:1.2;color:var(--pb);letter-spacing:-.02em}
-  .pb-stats span{font-size:12px;color:var(--text3)}
-  .pb-get{align-self:flex-start;border-color:var(--pb);color:var(--pb)}
-  .pb-get:hover{background:var(--pb);border-color:var(--pb);color:#FFFFFF}
+  .pb-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#BBD7C4}
+  .pb-co{display:flex;align-items:center;gap:10px;height:30px;font-family:var(--ff-display);font-weight:600;font-size:15px;color:var(--text)}
+  .pb-mark{
+    width:26px;
+    height:26px;
+    flex-shrink:0;
+    background:var(--pb);
+    -webkit-mask:var(--logo) center/contain no-repeat;
+    mask:var(--logo) center/contain no-repeat
+  }
+  .pb-wordmark{font-family:var(--ff-display);font-size:18px;font-weight:600;letter-spacing:-.02em;color:var(--pb)}
+  .pb-wordmark b{font-weight:800;margin-left:3px}
+  .pb-card h3{font-size:16px;line-height:1.35}
+  .pb-stat{font-size:13px;color:var(--text3);line-height:1.5}
+  .pb-stat b{display:block;font-family:var(--ff-display);font-size:19px;color:var(--pb);letter-spacing:-.02em;margin-bottom:1px}
+  .pb-get{
+    margin-top:auto;
+    align-self:flex-start;
+    background:none;
+    border:0;
+    padding:6px 0;
+    font:600 13.5px var(--ff-body);
+    color:var(--brand-green-dark);
+    cursor:pointer
+  }
+  .pb-get:hover{text-decoration:underline}
+  .pb-src{font-size:11.5px;color:var(--text3)}
+  .pb-src a{color:var(--text3);text-decoration:underline;text-underline-offset:2px}
+  .pb-intro{text-align:center;font-size:12.5px;color:var(--text3);margin:22px auto 0;max-width:62ch}
+  @media(max-width:980px){.pb-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.pb-grid{grid-template-columns:1fr}}
 
   /* Case-study request dialog */
   .cs-dialog{
@@ -622,24 +641,6 @@
     background:linear-gradient(135deg,var(--brand-green),var(--brand-lime))
   }
   @media(max-width:480px){.cs-dialog{padding:26px 20px 22px}}
-  .pb-src{font-size:12px;color:var(--text3)}
-  .pb-src a{color:var(--text2);text-decoration:underline;text-underline-offset:2px}
-  .pb-src a:hover{color:var(--pb)}
-  .pb-rows{margin:0;display:flex;flex-direction:column;gap:10px}
-  .pb-rows dt{font-size:11.5px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.08em}
-  .pb-rows dd{margin:2px 0 0;font-size:14px;color:var(--text2);line-height:1.6}
-  .pb-bench{
-    margin-top:auto;
-    padding:14px 16px;
-    border-radius:10px;
-    background:var(--pb-bg);
-    border-left:3px solid var(--pb);
-    font-size:13px;
-    color:var(--text2);
-    line-height:1.55
-  }
-  .pb-bench b{display:block;font-family:var(--ff-display);font-size:12px;color:var(--pb);letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px}
-  @media(max-width:860px){.pb-grid{grid-template-columns:1fr}}
 
   /* Resources */
   .posts{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
@@ -663,21 +664,18 @@
   .post .meta{font-size:12px;color:var(--text3);margin-top:auto;padding-top:6px}
   @media(max-width:860px){.posts{grid-template-columns:1fr}}
 
-  /* Contact */
-  .contact-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px}
-  .contact-info h2{font-size:clamp(28px,3.6vw,38px);margin-bottom:16px}
-  .cinfo-list{list-style:none;margin:32px 0 0;padding:0;display:flex;flex-direction:column;gap:16px}
-  .cinfo-list li{font-size:14px;color:var(--text2);display:flex;gap:10px}
-  .cinfo-list b{color:var(--text)}
+  /* Contact — centred like every other section, one compact form card */
   .form{
+    max-width:640px;
+    margin:0 auto;
     background:var(--surface);
     border:1px solid var(--border);
     border-radius:var(--radius);
-    padding:36px;
+    padding:32px;
     box-shadow:var(--shadow)
   }
-  .field{margin-bottom:18px}
-  .field label{display:block;font-size:12.5px;color:var(--text2);margin-bottom:8px}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:12.5px;color:var(--text2);margin-bottom:7px}
   .field input,.field select,.field textarea{
     width:100%;
     background:#FFFFFF;
@@ -686,7 +684,7 @@
     color:var(--text);
     font-family:var(--ff-body);
     font-size:14px;
-    padding:12px 14px;
+    padding:11px 13px;
     transition:border-color .15s,box-shadow .15s
   }
   .field input:focus,.field select:focus,.field textarea:focus{
@@ -694,27 +692,28 @@
     border-color:var(--brand-green);
     box-shadow:0 0 0 3px rgba(16,152,64,.10)
   }
-  .field textarea{min-height:100px;resize:vertical}
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  @media(max-width:920px){.contact-grid{grid-template-columns:1fr}}
-  @media(max-width:520px){.two{grid-template-columns:1fr}}
-  .fnote{font-size:12px;color:var(--text3);margin-top:14px}
-  .ok{display:none;text-align:center;padding:40px 0}
+  .field textarea{min-height:84px;resize:vertical}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:520px){.two{grid-template-columns:1fr}.form{padding:24px 20px}}
+  .fnote{font-size:12px;color:var(--text3);margin-top:12px;text-align:center}
+  .fnote a{color:var(--text2);text-decoration:underline}
+  .contact-alt{text-align:center;font-size:13.5px;color:var(--text3);margin-top:20px}
+  .contact-alt a{color:var(--brand-green-dark)}
+  .contact-alt a:hover{text-decoration:underline}
+  .ok{display:none;text-align:center;padding:32px 0}
   .ok .big{font-family:var(--ff-display);font-size:20px;margin-bottom:8px}
 
-  /* Footer */
-  footer{background:#F2F8F4;border-top:1px solid var(--border);padding:76px 0 32px}
-  .fg{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:56px}
-  .fbrand p{font-size:13.5px;color:var(--text3);margin-top:14px;max-width:34ch;line-height:1.6}
-  .fg h4{font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:18px}
-  .fg ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
-  .fg a{font-size:13.5px;color:var(--text3);transition:color .15s}
-  .fg a:hover{color:var(--brand-green)}
-  .fbottom{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid var(--border);font-size:12.5px;color:var(--text3);flex-wrap:wrap;gap:12px}
+  /* Footer — one quiet row: logo, links, then the legal line */
+  footer{background:var(--bg);border-top:1px solid var(--border);padding:36px 0 28px}
+  .ftop{display:flex;justify-content:space-between;align-items:center;gap:20px 32px;flex-wrap:wrap;margin-bottom:24px}
+  .ftop .logo img{height:26px}
+  .flinks{display:flex;flex-wrap:wrap;gap:10px 26px}
+  .flinks a{font-size:13.5px;color:var(--text2);transition:color .15s}
+  .flinks a:hover{color:var(--brand-green)}
+  .fbottom{display:flex;justify-content:space-between;align-items:center;padding-top:20px;border-top:1px solid var(--border);font-size:12.5px;color:var(--text3);flex-wrap:wrap;gap:12px}
   .fbottom a{color:var(--text3)}
   .fbottom a:hover{color:var(--brand-green)}
-  @media(max-width:860px){.fg{grid-template-columns:1fr 1fr}}
-  @media(max-width:520px){.fg{grid-template-columns:1fr}}
+  @media(max-width:620px){.ftop{flex-direction:column;align-items:flex-start}}
 
   /* Why us — four principles, then the practical facts */
   .why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:980px;margin:0 auto}
@@ -793,6 +792,28 @@
       scroll-behavior:auto !important
     }
   }
+
+  /* ===== Minimal theme =====
+     Quiet, flat surfaces: white sections split by hairlines, no tinted bands,
+     glows, card shadows or hover lifts. Kept as one block of overrides so the
+     look can be tuned in one place. */
+  .hero{background:var(--bg);padding-bottom:56px}
+  #wave-canvas{display:none}
+  .sec-alt{background:var(--bg)}
+  .sec-alt::before{display:none}
+  #solutions,#case-studies,#about,#products,#faq,#contact{border-top:1px solid var(--border)}
+  section[id]{scroll-margin-top:84px}
+  .sol-card,.why-card,.pb-card,.feature,.form{box-shadow:none}
+  .sol-card::before,.sol-card::after{display:none}
+  .sol-card:hover,.why-card:hover,.pb-card:hover{transform:none;box-shadow:none;border-color:var(--border-strong)}
+  .sol-card,.why-card{padding:26px 28px}
+  .sol-card h3,.why-card h3{margin-top:0}
+  .btn-primary,.btn-primary:hover{box-shadow:none}
+  .btn-primary:hover,.btn-outline:hover{transform:none}
+  .feature{border-color:var(--border)}
+  .feature-lede{margin-bottom:26px}
+  .marquee-track li,.logowall li{box-shadow:none}
+  header.nav.scrolled{box-shadow:none}
 </style>
 <!-- Analytics: GA4 loads only after cookie consent -->
 <script defer src="/analytics.js"></script>
@@ -875,9 +896,9 @@
       <p class="sub" style="margin:0 auto">Three areas we focus on, starting with the infrastructure your business runs on.</p>
     </div>
     <div class="sol-grid">
-      <div class="sol-card"><span class="n">01</span><h3>DevOps &amp; cloud</h3><p>Cloud setup and migration, CI/CD, monitoring, security and ongoing support, to keep production stable and easy to change.</p></div>
-      <div class="sol-card"><span class="n">02</span><h3>IT consulting</h3><p>A review of your systems and architecture, then a prioritised, costed roadmap for what to build, fix or retire.</p></div>
-      <div class="sol-card"><span class="n">03</span><h3>Business transformation</h3><p>Putting the roadmap into practice: new processes and systems, rolled out at a pace your team can adopt.</p></div>
+      <div class="sol-card"><h3>DevOps &amp; cloud</h3><p>Cloud setup and migration, CI/CD, monitoring, security and ongoing support, to keep production stable and easy to change.</p></div>
+      <div class="sol-card"><h3>IT consulting</h3><p>A review of your systems and architecture, then a prioritised, costed roadmap for what to build, fix or retire.</p></div>
+      <div class="sol-card"><h3>Business transformation</h3><p>Putting the roadmap into practice: new processes and systems, rolled out at a pace your team can adopt.</p></div>
     </div>
     <p class="sol-also"><b>Also:</b> data &amp; BI · data integration · AI &amp; automation · custom software · cybersecurity &amp; compliance · fractional CIO / CTO.</p>
   </div>
@@ -891,69 +912,42 @@
   <div class="wrap">
     <div class="shead">
       <span class="eyebrow">Case studies</span>
-      <h2>What we learn from well-known DevOps stories</h2>
-      <p class="sub" style="margin:0 auto">Four public examples, what made them work, and how the same ideas can apply to a smaller team.</p>
+      <h2>What we learn from well&#8209;known DevOps stories</h2>
+      <p class="sub" style="margin:0 auto">Four public examples and how the same ideas can apply to a smaller team. Each full write-up is a free PDF.</p>
     </div>
-    <p class="pb-intro">Public case studies, with sources on each card. These companies are not eXommerce clients.</p>
+    <!-- Logos are the companies' own marks (simple-icons via jsDelivr, coloured
+         with a CSS mask). Capital One has no public icon set, so it's a wordmark. -->
     <div class="pb-grid">
-
-      <article class="pb-card" style="--pb:var(--c-blue);--pb-bg:#EEF3FF">
-        <div class="pb-body">
-          <span class="pb-kicker">Etsy · online marketplace</span>
-          <h3>Deploying 50+ times a day</h3>
-          <div class="pb-stats">
-            <div><b>50+</b><span>deploys a day</span></div>
-            <div><b>14,000+</b><span>test-suite runs a day</span></div>
-          </div>
-          <p class="pb-bench"><b>For a smaller team</b>Managed CI, feature flags and a shared dashboard can build the same habit in a small team.</p>
-          <button type="button" class="btn btn-outline btn-sm pb-get" data-study="etsy">Get the full case study (PDF) &rarr;</button>
-          <p class="pb-src">Source: <a href="https://www.infoq.com/news/2014/03/etsy-deploy-50-times-a-day" target="_blank" rel="noopener">InfoQ, Etsy at QCon London 2014</a></p>
-        </div>
+      <article class="pb-card" style="--pb:#F1641E">
+        <div class="pb-co"><span class="pb-mark" style="--logo:url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/etsy.svg)" role="img" aria-label="Etsy logo"></span><span>Etsy</span></div>
+        <h3>Deploying 50+ times a day</h3>
+        <p class="pb-stat"><b>50+</b> deploys to production a day</p>
+        <button type="button" class="pb-get" data-study="etsy">Get the PDF &rarr;</button>
+        <p class="pb-src">Source: <a href="https://www.infoq.com/news/2014/03/etsy-deploy-50-times-a-day" target="_blank" rel="noopener">InfoQ, 2014</a></p>
       </article>
-
-      <article class="pb-card" style="--pb:var(--c-orange);--pb-bg:#FFF3EC">
-        <div class="pb-body">
-          <span class="pb-kicker">Netflix · streaming</span>
-          <h3>Staying up when the cloud went down</h3>
-          <div class="pb-stats">
-            <div><b>Apr 2011</b><span>major AWS US-East outage</span></div>
-            <div><b>Stayed up</b><span>Netflix kept streaming</span></div>
-          </div>
-          <p class="pb-bench"><b>For a smaller team</b>Two or more zones, a clear reliability target for your key journey, and regular failure drills.</p>
-          <button type="button" class="btn btn-outline btn-sm pb-get" data-study="netflix">Get the full case study (PDF) &rarr;</button>
-          <p class="pb-src">Source: <a href="https://netflixtechblog.com/lessons-netflix-learned-from-the-aws-outage-deefe5fd0c04" target="_blank" rel="noopener">Netflix Technology Blog, April 2011</a></p>
-        </div>
+      <article class="pb-card" style="--pb:#E50914">
+        <div class="pb-co"><span class="pb-mark" style="--logo:url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/netflix.svg)" role="img" aria-label="Netflix logo"></span><span>Netflix</span></div>
+        <h3>Staying up when the cloud went down</h3>
+        <p class="pb-stat"><b>Apr 2011</b> kept streaming through an AWS outage</p>
+        <button type="button" class="pb-get" data-study="netflix">Get the PDF &rarr;</button>
+        <p class="pb-src">Source: <a href="https://netflixtechblog.com/lessons-netflix-learned-from-the-aws-outage-deefe5fd0c04" target="_blank" rel="noopener">Netflix Tech Blog</a></p>
       </article>
-
-      <article class="pb-card" style="--pb:var(--c-teal);--pb-bg:#E9F7F5">
-        <div class="pb-body">
-          <span class="pb-kicker">Capital One · banking</span>
-          <h3>A regulated bank that ships many times a day</h3>
-          <div class="pb-stats">
-            <div><b>3 months → minutes</b><span>to build a dev environment</span></div>
-            <div><b>−50%</b><span>critical incident resolution time</span></div>
-          </div>
-          <p class="pb-bench"><b>For a smaller team</b>A landing zone as code, guardrails and pipeline-captured evidence: the same pattern at a smaller scale.</p>
-          <button type="button" class="btn btn-outline btn-sm pb-get" data-study="capital-one">Get the full case study (PDF) &rarr;</button>
-          <p class="pb-src">Source: <a href="https://aws.amazon.com/solutions/case-studies/capital-one-all-in-on-aws/" target="_blank" rel="noopener">AWS case study: Capital One</a></p>
-        </div>
+      <article class="pb-card" style="--pb:#004977">
+        <div class="pb-co"><span class="pb-wordmark">Capital<b>One</b></span></div>
+        <h3>A regulated bank that ships daily</h3>
+        <p class="pb-stat"><b>3 months → minutes</b> to build a dev environment</p>
+        <button type="button" class="pb-get" data-study="capital-one">Get the PDF &rarr;</button>
+        <p class="pb-src">Source: <a href="https://aws.amazon.com/solutions/case-studies/capital-one-all-in-on-aws/" target="_blank" rel="noopener">AWS case study</a></p>
       </article>
-
-      <article class="pb-card" style="--pb:var(--c-violet);--pb-bg:#F3EEFE">
-        <div class="pb-body">
-          <span class="pb-kicker">37signals · SaaS (Basecamp, HEY)</span>
-          <h3>Rethinking a $3.2M-a-year cloud bill</h3>
-          <div class="pb-stats">
-            <div><b>$3.2M</b><span>yearly cloud bill before</span></div>
-            <div><b>~$10M</b><span>projected 5-year savings</span></div>
-          </div>
-          <p class="pb-bench"><b>For a smaller team</b>Start with the basics in the cloud: tagging, right-sizing and commitments only for steady usage.</p>
-          <button type="button" class="btn btn-outline btn-sm pb-get" data-study="37signals">Get the full case study (PDF) &rarr;</button>
-          <p class="pb-src">Source: <a href="https://basecamp.com/cloud-exit" target="_blank" rel="noopener">37signals, Leaving the Cloud</a></p>
-        </div>
+      <article class="pb-card" style="--pb:#1D2D35">
+        <div class="pb-co"><span class="pb-mark" style="--logo:url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/basecamp.svg)" role="img" aria-label="Basecamp logo"></span><span>37signals</span></div>
+        <h3>Rethinking a $3.2M cloud bill</h3>
+        <p class="pb-stat"><b>~$10M</b> projected savings over five years</p>
+        <button type="button" class="pb-get" data-study="37signals">Get the PDF &rarr;</button>
+        <p class="pb-src">Source: <a href="https://basecamp.com/cloud-exit" target="_blank" rel="noopener">37signals</a></p>
       </article>
-
     </div>
+    <p class="pb-intro">Public stories, cited on each card. These companies are not eXommerce clients.</p>
   </div>
 </section>
 
@@ -1006,10 +1000,10 @@
       <p class="sub" style="margin:0 auto">We're a young team, so we keep things simple: clear plans, careful work, and systems you can run without us.</p>
     </div>
     <div class="why-grid">
-      <div class="why-card"><span class="n">01</span><h3>Support after launch</h3><p>We can stay on after launch to monitor and maintain what we've built, so it keeps running well.</p></div>
-      <div class="why-card"><span class="n">02</span><h3>Business first, tools second</h3><p>We start from what the business needs, then choose tools to fit. We don't resell any platform.</p></div>
-      <div class="why-card"><span class="n">03</span><h3>Yours to keep</h3><p>Everything is documented and owned by you, so your team can take it over at any time.</p></div>
-      <div class="why-card"><span class="n">04</span><h3>AI where it's useful</h3><p>We suggest AI only where it clearly helps, and say so when a simpler option will do.</p></div>
+      <div class="why-card"><h3>Support after launch</h3><p>We can stay on after launch to monitor and maintain what we've built, so it keeps running well.</p></div>
+      <div class="why-card"><h3>Business first, tools second</h3><p>We start from what the business needs, then choose tools to fit. We don't resell any platform.</p></div>
+      <div class="why-card"><h3>Yours to keep</h3><p>Everything is documented and owned by you, so your team can take it over at any time.</p></div>
+      <div class="why-card"><h3>AI where it's useful</h3><p>We suggest AI only where it clearly helps, and say so when a simpler option will do.</p></div>
     </div>
     <div class="sec-cta" style="text-align:center"><a href="#contact" class="btn btn-primary">Book a Discovery Call →</a></div>
   </div>
@@ -1020,8 +1014,8 @@
   <div class="wrap">
     <div class="shead">
       <span class="eyebrow">Our products</span>
-      <h2>Products we've built</h2>
-      <p class="sub">We also build and run a few products of our own. It keeps our engineering hands-on, and if one fits your business, it can give you a head start.</p>
+      <h2>Our own products</h2>
+      <p class="sub" style="margin:0 auto">Alongside client work, we build and run a couple of small products. Using them every day keeps our own engineering practical.</p>
     </div>
 
     <!-- Featured product — LeadGenAI -->
@@ -1029,7 +1023,7 @@
       <div class="feature-copy">
         <span class="st"><span class="d"></span>Live product</span>
         <h3>LeadGenAI</h3>
-        <p class="feature-lede">An AI lead generation engine for sales teams. LeadGenAI finds local businesses on Google Maps, scores them with AI so the best-fit prospects rise to the top, and exports a clean list to CSV or Excel — in about 60 seconds.</p>
+        <p class="feature-lede">A lead-list tool for small B2B sales teams, built first for India. Search Google Maps for businesses in any area and category, see which listings are complete and easy to reach (website, phone, reviews), and export the list to CSV or Excel.</p>
         <div class="feature-ctas">
           <a href="#contact" class="btn btn-primary" data-need="LeadGenAI demo">Request a LeadGenAI Demo →</a>
           <a href="https://leadgenai.exommerce.online" target="_blank" rel="noopener" class="btn btn-outline">Try it live</a>
@@ -1058,9 +1052,9 @@
         <rect x="76" y="187" width="100" height="6" rx="3" fill="var(--text3)" opacity=".4"/>
         <rect x="300" y="174" width="44" height="18" rx="9" fill="var(--brand-green)"/>
         <rect x="40" y="216" width="150" height="44" rx="10" fill="var(--brand-green)"/>
-        <text x="115" y="243" font-family="Sora,sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">60 sec scan</text>
+        <text x="115" y="243" font-family="Sora,sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">Search</text>
         <rect x="200" y="216" width="160" height="44" rx="10" fill="var(--bg2)" stroke="var(--border-strong)"/>
-        <text x="280" y="243" font-family="Sora,sans-serif" font-size="13" font-weight="700" fill="var(--ink)" text-anchor="middle">AI-scored</text>
+        <text x="280" y="243" font-family="Sora,sans-serif" font-size="13" font-weight="700" fill="var(--ink)" text-anchor="middle">Export</text>
       </svg>
     </div>
 
@@ -1136,48 +1130,44 @@
 
 <!-- ===== CONTACT ===== -->
 <section id="contact" class="sec-alt">
-  <div class="wrap contact-grid">
-    <div class="contact-info">
+  <div class="wrap">
+    <div class="shead">
       <span class="eyebrow">Get in touch</span>
       <h2 id="contactTitle">Book a discovery call</h2>
-      <p class="sub" id="contactSub">A short, no-obligation call to understand where you are today and whether we can help. Tell us a little below and we'll reply within 1 business day.</p>
-      <ul class="cinfo-list">
-        <li><b>Email —</b> <a href="mailto:hello@exommerce.online" style="color:var(--accent)">hello@exommerce.online</a></li>
-        <li><b>Based in —</b> Bengaluru, India · delivering worldwide</li>
-        <li><b>LinkedIn —</b> <a href="https://www.linkedin.com/company/exommerce" target="_blank" rel="noopener" style="color:var(--accent)">linkedin.com/company/exommerce</a></li>
-      </ul>
+      <p class="sub" id="contactSub" style="margin:0 auto">A short, no-obligation call. We reply within 1 business day.</p>
     </div>
     <div class="form">
       <div id="formInner">
         <form id="leadForm">
           <div style="position:absolute;left:-9999px" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off" /></div>
           <div class="two">
-            <div class="field"><label for="fn">First name *</label><input id="fn" name="first_name" required /></div>
-            <div class="field"><label for="ln">Last name *</label><input id="ln" name="last_name" required /></div>
+            <div class="field"><label for="fn">First name *</label><input id="fn" name="first_name" autocomplete="given-name" required /></div>
+            <div class="field"><label for="ln">Last name *</label><input id="ln" name="last_name" autocomplete="family-name" required /></div>
           </div>
-          <div class="field"><label for="em">Business email *</label><input id="em" type="email" name="email" required /></div>
-          <div class="field"><label for="co">Company *</label><input id="co" name="company" required /></div>
-          <div class="field"><label for="need">What do you need?</label>
-            <select id="need" name="need">
+          <div class="two">
+            <div class="field"><label for="em">Work email *</label><input id="em" type="email" name="email" autocomplete="email" required /></div>
+            <div class="field"><label for="co">Company *</label><input id="co" name="company" autocomplete="organization" required /></div>
+          </div>
+          <div class="two">
+            <div class="field"><label for="need">What do you need?</label>
+              <select id="need" name="need">
               <option value="">Select…</option>
               <option>DevOps &amp; CI/CD</option>
               <option>Monitoring &amp; reliability</option>
               <option>Cloud cost optimisation</option>
               <option>Cloud migration</option>
               <option>Security &amp; compliance</option>
-              <option>Containers &amp; Kubernetes</option>
-              <option>Review &amp; redesign</option>
-              <option>Data analysis &amp; BI</option>
-              <option>AI &amp; automation</option>
-              <option>Custom software</option>
-              <option>Infrastructure management</option>
+              <option>IT consulting</option>
+              <option>Business transformation</option>
+              <option>Data, AI or custom software</option>
               <option>LeadGenAI demo</option>
               <option>Not sure yet</option>
             </select>
+            </div>
+            <div class="field"><label for="ms">Anything else? (optional)</label><input id="ms" name="message" placeholder="A line about what you're trying to do" /></div>
           </div>
-          <div class="field"><label for="ms">Tell us about your enquiry</label><textarea id="ms" name="message" placeholder="What are you trying to do?"></textarea></div>
           <button type="submit" class="btn btn-primary" id="contactSubmit" style="width:100%">Book a Discovery Call →</button>
-          <div class="fnote">Your details stay private — we never share your data. <a href="/privacy.html" style="color:var(--text2);text-decoration:underline">Privacy Policy</a>.</div>
+          <div class="fnote">We only use your details to reply. <a href="/privacy.html">Privacy Policy</a></div>
         </form>
       </div>
       <div class="ok" id="ok">
@@ -1187,42 +1177,28 @@
         <p class="sub" style="margin:16px auto 0;font-size:13px">Nothing opened? Email us at <a href="mailto:hello@exommerce.online" style="color:var(--brand-green);text-decoration:underline">hello@exommerce.online</a>.</p>
       </div>
     </div>
+    <p class="contact-alt">Prefer email? <a href="mailto:hello@exommerce.online">hello@exommerce.online</a> · Bengaluru, India · <a href="https://www.linkedin.com/company/exommerce" target="_blank" rel="noopener">LinkedIn</a></p>
   </div>
 </section>
 
 <!-- ===== FOOTER ===== -->
 <footer>
   <div class="wrap">
-    <div class="fg">
-      <div class="fbrand">
-        <a href="#top" class="logo logo-lockup" aria-label="eXommerce home">
-          <img src="logo-full.png" alt="eXommerce.online — business transformation with technology, data &amp; AI"
-               width="560" height="123" loading="lazy" decoding="async" />
-        </a>
-        <p>Bridging the gap between infrastructure and technology. DevOps, IT consulting and business transformation from Bengaluru, for teams worldwide.</p>
-      </div>
-      <div><h4>Solutions</h4><ul>
-        <li><a href="#solutions">DevOps &amp; cloud</a></li>
-        <li><a href="#solutions">IT consulting</a></li>
-        <li><a href="#solutions">Business transformation</a></li>
-        <li><a href="#case-studies">Case studies</a></li>
-      </ul></div>
-      <div><h4>Products</h4><ul>
-        <li><a href="#leadgenai">LeadGenAI</a></li>
-        <li><a href="https://leadgenai.exommerce.online" target="_blank" rel="noopener">Try LeadGenAI</a></li>
-        <li><a href="#products">RentAI</a></li>
-        <li><a href="#products">In development</a></li>
-      </ul></div>
-      <div><h4>Company</h4><ul>
-        <li><a href="#about">How we work</a></li>
-        <li><a href="#faq">FAQ</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="mailto:hello@exommerce.online">hello@exommerce.online</a></li>
-        <li><a href="https://www.linkedin.com/company/exommerce" target="_blank" rel="noopener">LinkedIn</a></li>
-      </ul></div>
+    <div class="ftop">
+      <a href="#top" class="logo" aria-label="eXommerce home">
+        <img src="logo.png" alt="eXommerce.online" width="420" height="74" loading="lazy" decoding="async" />
+      </a>
+      <nav class="flinks" aria-label="Footer">
+        <a href="#solutions">What we do</a>
+        <a href="#case-studies">Case studies</a>
+        <a href="#products">Products</a>
+        <a href="#faq">FAQ</a>
+        <a href="team.html">Team</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </div>
     <div class="fbottom">
-      <span>© <span id="yr" style="font-family:var(--ff-mono)"></span> eXommerce LLP · Bengaluru, India</span>
+      <span>© <span id="yr"></span> eXommerce LLP · Bengaluru, India</span>
       <span><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a></span>
     </div>
   </div>
@@ -1505,7 +1481,7 @@
     if (!('IntersectionObserver' in window)) return;
 
     var targets = document.querySelectorAll(
-      '.shead, .sol-grid, .feature, .contact-grid,' +
+      '.shead, .sol-grid, .feature, .form,' +
       ' .logowall, .pb-grid, .why-grid, .faq'
     );
     Array.prototype.forEach.call(targets, function(el){ el.classList.add('reveal'); });
