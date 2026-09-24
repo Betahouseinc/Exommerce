@@ -260,7 +260,6 @@
       radial-gradient(circle at 78% 26%,rgba(123,207,22,.09),transparent 27%),
       linear-gradient(180deg,#FFFFFF 0%,#FBFEFC 100%)
   }
-  #wave-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.72}
   /* Video sits under a white veil that's near-solid behind the headline and
      thins out to the right, so copy stays readable and the footage shows
      around the status card. */
@@ -798,7 +797,6 @@
      glows, card shadows or hover lifts. Kept as one block of overrides so the
      look can be tuned in one place. */
   .hero{background:var(--bg);padding-bottom:56px}
-  #wave-canvas{display:none}
   .sec-alt{background:var(--bg)}
   .sec-alt::before{display:none}
   #solutions,#case-studies,#about,#products,#faq,#contact{border-top:1px solid var(--border)}
@@ -851,7 +849,6 @@
   <video class="hero-video" data-src="https://videos.pexels.com/video-files/34934562/14798470_1280_720_30fps.mp4"
          muted loop playsinline preload="none" aria-hidden="true"></video>
   <div class="hero-veil" aria-hidden="true"></div>
-  <canvas id="wave-canvas" aria-hidden="true"></canvas>
   <div class="wrap hero-in">
     <div class="hero-copy">
       <span class="eyebrow">DevOps · IT Consulting · Business Transformation</span>
@@ -1340,137 +1337,6 @@
         entries[0].isIntersecting ? play() : video.pause();
       }, { threshold: 0.05 }).observe(video);
     }
-  })();
-
-  // ================= HERO CANVAS — dotted particle wave =================
-  (function(){
-    var canvas = document.getElementById('wave-canvas');
-    var hero = document.querySelector('.hero');
-    var ctx = canvas.getContext('2d', { alpha: true });
-    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    var W=0, H=0, DPR = Math.min(window.devicePixelRatio || 1, 2);
-    var cols, rows, spacing = 34;
-    var t = 0;
-    var running = false;
-    var visible = true;
-    var mouse = { x: -9999, y: -9999 };
-    var frameTimes = [];
-    var qualityScale = 1; // 1 = full particle density, reduced under load
-
-    function resize(){
-      var rect = hero.getBoundingClientRect();
-      W = rect.width; H = rect.height;
-      canvas.width = Math.floor(W * DPR);
-      canvas.height = Math.floor(H * DPR);
-      canvas.style.width = W + 'px';
-      canvas.style.height = H + 'px';
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-      cols = Math.ceil(W / spacing) + 2;
-      rows = Math.ceil(H / spacing) + 2;
-    }
-
-    function drawStatic(){
-      ctx.clearRect(0,0,W,H);
-      ctx.fillStyle = 'rgba(16,152,64,0.20)';
-      var step = Math.max(1, Math.round(1/qualityScale));
-      for (var i=0;i<cols;i+=step){
-        for (var j=0;j<rows;j+=step){
-          var x = i*spacing, y = j*spacing;
-          ctx.beginPath();
-          ctx.arc(x, y, 1.1, 0, Math.PI*2);
-          ctx.fill();
-        }
-      }
-    }
-
-    function draw(){
-      ctx.clearRect(0,0,W,H);
-      var step = Math.max(1, Math.round(1/qualityScale));
-      for (var i=0;i<cols;i+=step){
-        for (var j=0;j<rows;j+=step){
-          var x = i*spacing, y = j*spacing;
-          // very slow, small-amplitude organic wave
-          var wave = Math.sin((i*0.35) + (j*0.25) + t) * 3.2
-                   + Math.sin((j*0.5) - t*0.7) * 1.6;
-          var py = y + wave;
-
-          // subtle cursor deformation, gentle, returns naturally (no persistent offset stored)
-          var dx = x - mouse.x, dy = py - mouse.y;
-          var dist = Math.sqrt(dx*dx + dy*dy);
-          var push = 0;
-          if (dist < 90) { push = (90 - dist) / 90 * 4; }
-          var fx = x + (dist>0 ? (dx/ (dist||1)) * push : 0);
-          var fy = py + (dist>0 ? (dy/ (dist||1)) * push : 0);
-
-          // Brand green, not the acid yellow-green this used to paint — at these
-          // alphas that was invisible against the white hero.
-          var alpha = 0.10 + (Math.sin((i*0.2)+(j*0.2)+t*0.6)+1)/2 * 0.26;
-          ctx.beginPath();
-          ctx.fillStyle = 'rgba(16,152,64,' + alpha.toFixed(3) + ')';
-          ctx.arc(fx, fy, 1.35, 0, Math.PI*2);
-          ctx.fill();
-        }
-      }
-    }
-
-    function tick(now){
-      if (!running) return;
-      // adaptive perf: track frame duration, reduce density if slow
-      if (tick._last){
-        var dt = now - tick._last;
-        frameTimes.push(dt);
-        if (frameTimes.length > 30){
-          var avg = frameTimes.reduce(function(a,b){return a+b},0)/frameTimes.length;
-          frameTimes = [];
-          if (avg > 28 && qualityScale > 0.4){ qualityScale = Math.max(0.4, qualityScale - 0.2); }
-          else if (avg < 16 && qualityScale < 1){ qualityScale = Math.min(1, qualityScale + 0.1); }
-        }
-      }
-      tick._last = now;
-      t += 0.0032;
-      draw();
-      raf = requestAnimationFrame(tick);
-    }
-
-    var raf = null;
-    function start(){
-      if (running || reduceMotion) return;
-      running = true;
-      tick._last = null;
-      raf = requestAnimationFrame(tick);
-    }
-    function stop(){
-      running = false;
-      if (raf) cancelAnimationFrame(raf);
-    }
-
-    resize();
-    if (reduceMotion){ drawStatic(); }
-    else { start(); }
-
-    window.addEventListener('resize', function(){ resize(); if(reduceMotion) drawStatic(); }, {passive:true});
-
-    hero.addEventListener('mousemove', function(e){
-      var r = hero.getBoundingClientRect();
-      mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
-    }, {passive:true});
-    hero.addEventListener('mouseleave', function(){ mouse.x = -9999; mouse.y = -9999; }, {passive:true});
-
-    // pause when hero leaves viewport
-    if ('IntersectionObserver' in window){
-      var io = new IntersectionObserver(function(entries){
-        visible = entries[0].isIntersecting;
-        if (!reduceMotion){ visible ? start() : stop(); }
-      }, { threshold: 0.05 });
-      io.observe(hero);
-    }
-
-    // pause when tab hidden
-    document.addEventListener('visibilitychange', function(){
-      if (reduceMotion) return;
-      if (document.hidden) stop(); else if (visible) start();
-    });
   })();
 
   // ================= SCROLL-REVEAL =================
