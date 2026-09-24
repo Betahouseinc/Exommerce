@@ -128,8 +128,6 @@
   section{padding:88px 0}
   @media(max-width:860px){section{padding:72px 0}}
   @media(max-width:560px){section{padding:64px 0}}
-  /* clip, not hidden: hidden would make this a scroll container and stop the
-     fit finder's sticky card from sticking. */
   .sec-alt{background:var(--bg2);position:relative;overflow:hidden;overflow:clip}
   .sec-alt::before{content:'';position:absolute;top:-120px;right:-120px;width:420px;height:420px;border-radius:50%;
     background:radial-gradient(circle, rgba(123,207,22,.16), rgba(16,152,64,.05) 60%, transparent 72%);pointer-events:none;z-index:0}
@@ -303,10 +301,8 @@
     max-width:1120px;
     margin:0 auto
   }
-  .hero-visual svg{width:100%;height:auto;display:block}
   @media(max-width:920px){
     .hero-in{grid-template-columns:1fr;text-align:center;max-width:640px;gap:36px}
-    .hero-visual{order:-1;max-width:420px;margin:0 auto}
   }
   .hero h1{
     font-size:clamp(32px,3.2vw,48px);
@@ -345,37 +341,15 @@
   }
   .hero .sub{font-size:18px;margin:0 0 32px;max-width:52ch;text-align:left}
   .hero-ctas{display:flex;gap:13px;justify-content:flex-start;flex-wrap:wrap;margin-bottom:44px}
-  /* Three equal columns, so the stats always share one row instead of wrapping. */
-  .hero-stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    padding-top:30px;
-    border-top:1px solid var(--border)
-  }
   @media(max-width:920px){
     .hero .sub{margin:0 auto 32px;text-align:center}
     .hero-ctas{justify-content:center}
   }
-  .hero-stats div{
-    text-align:center;
-    padding:0 16px;
-    border-right:1px solid var(--border)
-  }
-  .hero-stats div:last-child{border-right:0}
-  .hero-stats b{
-    display:block;
-    font-family:var(--ff-display);
-    font-size:25px;
-    color:var(--text)
-  }
-  .hero-stats span{display:block;font-size:12px;line-height:1.5;margin-top:4px;color:var(--text3)}
   @media(max-width:560px){
     .hero{padding:124px 0 72px}
     .hero .sub{font-size:16.5px;margin-bottom:32px}
     .hero-ctas{margin-bottom:40px}
     .hero-ctas .btn{width:100%}
-    .hero-stats div{padding:0 8px}
-    .hero-stats b{font-size:20px}
   }
 
 
@@ -537,8 +511,7 @@
     font-weight:700;
     margin-bottom:28px
   }
-  /* Logo wall — without JS it's a centred, wrapping set of chips; the script
-     duplicates the list and adds .is-moving to turn it into a marquee. */
+  /* Logo wall — a centred, wrapping row of logo chips */
   .logowall{padding:44px 0 48px;border-bottom:1px solid var(--border)}
   .logowall .techstrip-label{margin-bottom:24px}
   .marquee-track{
@@ -551,22 +524,6 @@
     gap:14px;
     max-width:var(--maxw)
   }
-  .marquee.is-moving{
-    overflow:hidden;
-    -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
-    mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)
-  }
-  .marquee.is-moving .marquee-track{
-    flex-wrap:nowrap;
-    width:max-content;
-    max-width:none;
-    padding:6px 0;
-    animation:marquee 55s linear infinite
-  }
-  .marquee.is-moving:hover .marquee-track{animation-play-state:paused}
-  /* Two identical copies sit in the track, so shifting by half (plus half a
-     gap) lands the second copy exactly where the first began. */
-  @keyframes marquee{to{transform:translateX(calc(-50% - 7px))}}
   .marquee-track li{
     display:flex;
     align-items:center;
@@ -590,136 +547,6 @@
     .marquee-track img{width:22px;height:22px}
   }
 
-  /* Fit finder — three questions on the left, a live plan on the right */
-  .fit{display:grid;grid-template-columns:1fr 1.05fr;gap:40px;align-items:start}
-  .fit-q{border:0;margin:0 0 28px;padding:0;min-width:0}
-  .fit-q legend{
-    font-family:var(--ff-display);
-    font-weight:600;
-    font-size:16px;
-    margin-bottom:14px;
-    padding:0
-  }
-  .fit-step{font-family:var(--ff-mono);font-size:12px;color:var(--brand-green);margin-right:8px}
-  .chips{display:flex;flex-wrap:wrap;gap:8px}
-  .chip{position:relative}
-  .chip input{position:absolute;opacity:0;pointer-events:none}
-  .chip span{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    min-height:42px;
-    padding:8px 15px;
-    border:1px solid var(--border-strong);
-    border-radius:999px;
-    background:#FFFFFF;
-    font-size:13.5px;
-    color:var(--text2);
-    cursor:pointer;
-    transition:background .18s,border-color .18s,color .18s,box-shadow .18s,transform .18s
-  }
-  .chip span:hover{border-color:var(--brand-green);color:var(--text);transform:translateY(-1px)}
-  .chip span img{width:20px;height:20px;padding:2px;border-radius:5px;background:#FFFFFF}
-  .chip input:checked + span{
-    background:var(--brand-green);
-    border-color:var(--brand-green);
-    color:#FFFFFF;
-    box-shadow:0 6px 16px rgba(16,152,64,.22)
-  }
-  .chip input:focus-visible + span{outline:3px solid var(--brand-green);outline-offset:2px}
-  .fit-card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:16px;
-    box-shadow:var(--shadow);
-    overflow:hidden;
-    position:sticky;
-    top:100px
-  }
-  .fit-head{
-    position:relative;
-    padding:26px 28px 24px;
-    color:#FFFFFF;
-    background:linear-gradient(135deg,var(--fit-a,#109840),var(--fit-b,#7BCF16));
-    overflow:hidden
-  }
-  .fit-head::after{
-    content:'';
-    position:absolute;
-    right:-50px;
-    top:-60px;
-    width:200px;
-    height:200px;
-    border-radius:50%;
-    background:rgba(255,255,255,.12)
-  }
-  .fit-kicker{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;opacity:.85}
-  .fit-head h3{font-size:23px;margin:8px 0 10px;position:relative;z-index:1}
-  .fit-model{font-size:14px;line-height:1.55;opacity:.95;position:relative;z-index:1;max-width:46ch}
-  .fit-body{padding:24px 28px 28px}
-  .fit-phases{list-style:none;margin:0 0 22px;padding:0;display:flex;flex-direction:column;gap:16px}
-  .fit-phases li{position:relative;padding-left:24px}
-  .fit-phases li::before{
-    content:'';
-    position:absolute;
-    left:0;
-    top:6px;
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    background:var(--fit-a,#109840);
-    box-shadow:0 0 0 4px rgba(16,152,64,.08)
-  }
-  .fit-phases li:not(:last-child)::after{
-    content:'';
-    position:absolute;
-    left:4.5px;
-    top:20px;
-    bottom:-14px;
-    width:1px;
-    background:var(--border-strong)
-  }
-  .fit-phases .when{display:block;font-family:var(--ff-mono);font-size:12px;color:var(--text3);margin-bottom:2px}
-  .fit-phases p{font-size:14px;color:var(--text2);line-height:1.6}
-  .fit-meta{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:18px;
-    border-top:1px solid var(--border);
-    padding-top:20px;
-    margin-bottom:24px
-  }
-  .fit-meta h4{
-    font-family:var(--ff-body);
-    font-size:11px;
-    letter-spacing:.12em;
-    text-transform:uppercase;
-    color:var(--text3);
-    margin-bottom:10px
-  }
-  .tags{display:flex;flex-wrap:wrap;gap:6px}
-  .tags span{
-    font-size:12px;
-    padding:4px 10px;
-    border-radius:999px;
-    background:var(--bg-green);
-    color:var(--brand-green-dark);
-    font-weight:600
-  }
-  .fit-measure{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:var(--text2)}
-  .fit-measure li::before{content:'↗ ';color:var(--brand-green);font-weight:700}
-  .fit-note{margin-top:12px;font-size:12px;color:var(--text3);text-align:center}
-  .fit-swap{animation:fitIn .45s ease}
-  @keyframes fitIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  @media(max-width:920px){
-    .fit{grid-template-columns:1fr;gap:28px}
-    .fit-card{position:static}
-  }
-  @media(max-width:480px){
-    .fit-meta{grid-template-columns:1fr}
-    .fit-head,.fit-body{padding-left:22px;padding-right:22px}
-  }
-
   /* Playbooks — representative engagements, each with an animated header */
   .pb-intro{text-align:center;font-size:13px;color:var(--text3);margin:-28px auto 40px;max-width:62ch}
   .pb-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
@@ -732,11 +559,9 @@
     flex-direction:column;
     transition:transform .2s,box-shadow .2s,border-color .2s
   }
-  .pb-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:#BBD7C4}
-  /* The gradient lives here, not in the SVG, so the drawing can scale to fit
-     narrow cards without cropping while the colour still fills the header. */
-  .pb-art{height:150px;overflow:hidden;background:linear-gradient(135deg,var(--g1),var(--g2))}
-  .pb-art svg{width:100%;height:100%}
+  .pb-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover)}
+  /* Each card's accent colour runs along its top edge. */
+  .pb-card{border-top:3px solid var(--pb)}
   .pb-body{padding:24px 26px 26px;display:flex;flex-direction:column;gap:14px;flex:1}
   .pb-kicker{font-size:11px;letter-spacing:.13em;text-transform:uppercase;font-weight:700;color:var(--pb)}
   .pb-card h3{font-size:19px;line-height:1.3}
@@ -814,77 +639,7 @@
     line-height:1.55
   }
   .pb-bench b{display:block;font-family:var(--ff-display);font-size:12px;color:var(--pb);letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px}
-  /* Header animations. Transforms on SVG shapes need fill-box so they scale
-     from the shape itself, not the whole drawing. */
-  .pb-art .flow{animation:pbFlow 3.6s cubic-bezier(.6,0,.4,1) infinite}
-  @keyframes pbFlow{0%{transform:translateX(0);opacity:0}8%,92%{opacity:1}100%{transform:translateX(384px);opacity:0}}
-  .pb-art .lit{animation:pbLit 3.6s ease infinite}
-  @keyframes pbLit{0%,100%{fill-opacity:.16}50%{fill-opacity:.32}}
-  .pb-art .grow{transform-box:fill-box;transform-origin:50% 100%;animation:pbGrow 2.8s ease-in-out infinite alternate}
-  @keyframes pbGrow{from{transform:scaleY(.4)}to{transform:scaleY(1)}}
-  .pb-art .draw{stroke-dasharray:640;stroke-dashoffset:640;animation:pbDraw 5s ease-in-out infinite}
-  @keyframes pbDraw{0%{stroke-dashoffset:640}50%,90%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
-  .pb-art .pulse{transform-box:fill-box;transform-origin:center;animation:pbPulse 2.4s ease-out infinite}
-  @keyframes pbPulse{0%{transform:scale(.6);opacity:.8}100%{transform:scale(2.4);opacity:0}}
-  .pb-art .bob{animation:pbBob 4s ease-in-out infinite}
-  @keyframes pbBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
   @media(max-width:860px){.pb-grid{grid-template-columns:1fr}}
-
-  /* Standards — the three cloud frameworks, then the DORA benchmarks */
-  .clouds{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:18px}
-  .cloud-card{
-    position:relative;
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:14px;
-    padding:26px 26px 28px;
-    overflow:hidden;
-    transition:transform .2s,box-shadow .2s
-  }
-  .cloud-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
-  .cloud-card::before{content:'';position:absolute;left:0;right:0;top:0;height:4px;background:var(--cc-bar)}
-  .cloud-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
-  .cloud-logo{width:58px;height:58px;border-radius:14px;background:var(--cc-bg);display:grid;place-items:center;flex-shrink:0}
-  .cloud-logo img{width:38px;height:38px}
-  .cloud-card h3{font-size:16.5px;line-height:1.25}
-  .cloud-card .fw{font-size:12.5px;color:var(--text3);margin-top:3px}
-  .cloud-card p{font-size:14px;color:var(--text2);line-height:1.6}
-  .pillars{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
-  .pillars span{font-size:11.5px;padding:4px 9px;border-radius:999px;background:var(--cc-bg);color:var(--cc-ink);font-weight:600}
-  .dora{
-    margin-top:22px;
-    display:grid;
-    grid-template-columns:.9fr 1.1fr;
-    gap:40px;
-    align-items:center;
-    padding:40px 44px;
-    border-radius:18px;
-    color:#FFFFFF;
-    background:
-      radial-gradient(circle at 92% 10%,rgba(123,207,22,.30),transparent 40%),
-      linear-gradient(135deg,#0B2A17,#0E4D26 55%,#109840)
-  }
-  .dora h3{font-size:clamp(24px,2.6vw,30px);color:#FFFFFF;margin-bottom:12px}
-  .dora p{font-size:14.5px;line-height:1.65;color:rgba(255,255,255,.82)}
-  .dora .dora-src{margin-top:14px;font-size:12px;color:rgba(255,255,255,.6)}
-  .dora-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .dora-grid li{
-    padding:18px 20px;
-    border-radius:12px;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.14);
-    backdrop-filter:blur(4px)
-  }
-  .dora-grid .lbl{display:block;font-size:12px;color:rgba(255,255,255,.72);margin-bottom:6px}
-  .dora-grid b{font-family:var(--ff-display);font-size:24px;color:var(--brand-lime);letter-spacing:-.02em}
-  @media(max-width:920px){
-    .clouds{grid-template-columns:1fr 1fr}
-    .dora{grid-template-columns:1fr;padding:32px 28px;gap:26px}
-  }
-  @media(max-width:620px){
-    .clouds{grid-template-columns:1fr}
-    .dora-grid b{font-size:20px}
-  }
 
   /* Resources */
   .posts{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
@@ -974,19 +729,8 @@
   .why-card .n{font-family:var(--ff-mono);font-size:12.5px;color:var(--brand-green);font-weight:700}
   .why-card h3{font-size:17px;margin:10px 0 8px}
   .why-card p{font-size:14px;color:var(--text2);line-height:1.65}
-  .why-facts{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:20px;
-    max-width:980px;
-    margin:28px auto 0;
-    padding-top:24px;
-    border-top:1px solid var(--border)
-  }
-  .why-facts dt{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--brand-green);margin-bottom:6px}
-  .why-facts dd{margin:0;font-size:13.5px;color:var(--text2);line-height:1.55}
-  @media(max-width:860px){.why-facts{grid-template-columns:1fr 1fr}}
-  @media(max-width:620px){.why-grid,.why-facts{grid-template-columns:1fr}}
+
+  @media(max-width:620px){.why-grid{grid-template-columns:1fr}}
 
   /* FAQ */
   .faq{max-width:780px;margin:0 auto;border-top:1px solid var(--border)}
@@ -1048,10 +792,6 @@
       transition-duration:.01ms !important;
       scroll-behavior:auto !important
     }
-    /* Looping illustrations hold their finished frame instead. */
-    .pb-art *{animation:none !important}
-    .pb-art .draw{stroke-dashoffset:0}
-    .pb-art .flow{opacity:0}
   }
 </style>
 <!-- Analytics: GA4 loads only after cookie consent -->
@@ -1070,7 +810,6 @@
       <a href="#case-studies">Case studies</a>
       <a href="#products">Products</a>
       <a href="#about">How we work</a>
-      <a href="#faq">FAQ</a>
       <a href="team.html">Team</a>
       <a href="#contact">Contact</a>
       <a href="#contact" class="nav-cta-mobile">Book a Discovery Call →</a>
@@ -1103,45 +842,6 @@
         <a href="#contact" class="btn btn-primary">Book a Discovery Call →</a>
         <a href="#solutions" class="btn btn-outline">See what we do</a>
       </div>
-      <div class="hero-stats">
-        <div><b>Reliability</b><span>Monitoring and support after launch</span></div>
-        <div><b>Build &amp; run</b><span>From setup to day-to-day running</span></div>
-        <div><b>Remote</b><span>Working across time zones</span></div>
-      </div>
-    </div>
-    <div class="hero-visual" aria-hidden="true">
-      <svg viewBox="0 0 400 260" role="img">
-        <rect x="10" y="10" width="380" height="240" rx="16" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="1.5"/>
-        <rect x="10" y="10" width="380" height="38" rx="16" fill="var(--bg2)"/>
-        <circle cx="32" cy="29" r="5" fill="var(--brand-lime)"/>
-        <circle cx="50" cy="29" r="5" fill="var(--border-strong)"/>
-        <circle cx="68" cy="29" r="5" fill="var(--border-strong)"/>
-        <text x="200" y="34" text-anchor="middle" font-family="Sora,sans-serif" font-size="12" font-weight="600" fill="var(--text3)">Infrastructure status</text>
-
-        <rect x="28" y="60" width="344" height="46" rx="10" fill="var(--bg2)"/>
-        <circle cx="50" cy="83" r="11" fill="var(--brand-green)"/>
-        <path d="M44 83l4 4 8-8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <text x="72" y="79" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="var(--text)">Production deploy</text>
-        <text x="72" y="94" font-family="Inter,sans-serif" font-size="11" fill="var(--text3)">main branch · auto-deployed</text>
-        <rect x="300" y="72" width="52" height="22" rx="11" fill="var(--bg-green)" stroke="#D8EBDD"/>
-        <text x="326" y="87" text-anchor="middle" font-family="Sora,sans-serif" font-size="10.5" font-weight="700" fill="var(--brand-green-dark)">Live</text>
-
-        <rect x="28" y="114" width="344" height="46" rx="10" fill="var(--bg2)"/>
-        <circle cx="50" cy="137" r="11" fill="var(--brand-green)"/>
-        <path d="M44 137l4 4 8-8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <text x="72" y="133" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="var(--text)">CI pipeline</text>
-        <text x="72" y="148" font-family="Inter,sans-serif" font-size="11" fill="var(--text3)">Build → test → deploy</text>
-        <rect x="300" y="126" width="52" height="22" rx="11" fill="var(--bg-green)" stroke="#D8EBDD"/>
-        <text x="326" y="141" text-anchor="middle" font-family="Sora,sans-serif" font-size="10.5" font-weight="700" fill="var(--brand-green-dark)">Passing</text>
-
-        <rect x="28" y="168" width="344" height="46" rx="10" fill="var(--bg2)"/>
-        <circle cx="50" cy="191" r="11" fill="var(--brand-lime)"/>
-        <path d="M44 191l4 4 8-8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <text x="72" y="187" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="var(--text)">Monitoring &amp; alerts</text>
-        <text x="72" y="202" font-family="Inter,sans-serif" font-size="11" fill="var(--text3)">Alerts routed to on-call</text>
-        <rect x="300" y="180" width="52" height="22" rx="11" fill="var(--bg-green)" stroke="#D8EBDD"/>
-        <text x="326" y="195" text-anchor="middle" font-family="Sora,sans-serif" font-size="10.5" font-weight="700" fill="var(--brand-green-dark)">Active</text>
-      </svg>
     </div>
   </div>
 </section>
@@ -1160,20 +860,8 @@
       <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/docker/docker-original.svg" alt="" width="28" height="28" loading="lazy" />Docker</li>
       <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/terraform/terraform-original.svg" alt="" width="28" height="28" loading="lazy" />Terraform</li>
       <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/githubactions/githubactions-original.svg" alt="" width="28" height="28" loading="lazy" />GitHub Actions</li>
-      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/gitlab/gitlab-original.svg" alt="" width="28" height="28" loading="lazy" />GitLab CI</li>
-      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/jenkins/jenkins-original.svg" alt="" width="28" height="28" loading="lazy" />Jenkins</li>
-      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/argocd/argocd-original.svg" alt="" width="28" height="28" loading="lazy" />Argo CD</li>
-      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/helm/helm-original.svg" alt="" width="28" height="28" loading="lazy" />Helm</li>
-      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/ansible/ansible-original.svg" alt="" width="28" height="28" loading="lazy" />Ansible</li>
       <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/prometheus/prometheus-original.svg" alt="" width="28" height="28" loading="lazy" />Prometheus</li>
       <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/grafana/grafana-original.svg" alt="" width="28" height="28" loading="lazy" />Grafana</li>
-      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/linux/linux-original.svg" alt="" width="28" height="28" loading="lazy" />Linux</li>
-      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/nginx/nginx-original.svg" alt="" width="28" height="28" loading="lazy" />NGINX</li>
-      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/cloudflare/cloudflare-original.svg" alt="" width="28" height="28" loading="lazy" />Cloudflare</li>
-      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/postgresql/postgresql-original.svg" alt="" width="28" height="28" loading="lazy" />PostgreSQL</li>
-      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/redis/redis-original.svg" alt="" width="28" height="28" loading="lazy" />Redis</li>
-      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/vercel/vercel-original.svg" alt="" width="28" height="28" loading="lazy" />Vercel</li>
-      <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/supabase/supabase-original.svg" alt="" width="28" height="28" loading="lazy" />Supabase</li>
     </ul>
   </div>
 </section>
@@ -1195,72 +883,11 @@
   </div>
 </section>
 
-<!-- ===== FIT FINDER — the visitor's answers pick the engagement ===== -->
-<section id="fit" class="sec-alt">
-  <div class="wrap">
-    <div class="shead">
-      <span class="eyebrow">Find your fit</span>
-      <h2>Not sure where to start?</h2>
-      <p class="sub" style="margin:0 auto">Answer three quick questions to see how we'd typically approach it.</p>
-    </div>
-    <div class="fit">
-      <form class="fit-form" id="fitForm">
-        <fieldset class="fit-q">
-          <legend><span class="fit-step">01</span>What's hurting most right now?</legend>
-          <div class="chips">
-            <label class="chip"><input type="radio" name="pain" value="deploy" checked /><span>Releases are slow or manual</span></label>
-            <label class="chip"><input type="radio" name="pain" value="outage" /><span>We hear about outages from customers</span></label>
-            <label class="chip"><input type="radio" name="pain" value="cost" /><span>The cloud bill keeps climbing</span></label>
-            <label class="chip"><input type="radio" name="pain" value="migrate" /><span>We're moving to (or between) clouds</span></label>
-            <label class="chip"><input type="radio" name="pain" value="comply" /><span>An audit or security review is coming</span></label>
-            <label class="chip"><input type="radio" name="pain" value="scale" /><span>We're outgrowing our setup</span></label>
-          </div>
-        </fieldset>
-        <fieldset class="fit-q">
-          <legend><span class="fit-step">02</span>Where do you run today?</legend>
-          <div class="chips">
-            <label class="chip"><input type="radio" name="cloud" value="aws" checked /><span><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="" width="20" height="20" loading="lazy" />AWS</span></label>
-            <label class="chip"><input type="radio" name="cloud" value="azure" /><span><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/azure/azure-original.svg" alt="" width="20" height="20" loading="lazy" />Azure</span></label>
-            <label class="chip"><input type="radio" name="cloud" value="gcp" /><span><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/googlecloud/googlecloud-original.svg" alt="" width="20" height="20" loading="lazy" />Google Cloud</span></label>
-            <label class="chip"><input type="radio" name="cloud" value="multi" /><span>Multi-cloud / hybrid</span></label>
-            <label class="chip"><input type="radio" name="cloud" value="none" /><span>Not on cloud yet</span></label>
-          </div>
-        </fieldset>
-        <fieldset class="fit-q">
-          <legend><span class="fit-step">03</span>Who looks after it today?</legend>
-          <div class="chips">
-            <label class="chip"><input type="radio" name="team" value="none" /><span>Nobody full-time</span></label>
-            <label class="chip"><input type="radio" name="team" value="small" checked /><span>One or two engineers</span></label>
-            <label class="chip"><input type="radio" name="team" value="platform" /><span>A platform or DevOps team</span></label>
-          </div>
-        </fieldset>
-      </form>
-
-      <div class="fit-card" id="fitCard">
-        <div class="fit-head" aria-live="polite">
-          <div class="fit-kicker">Where we'd start</div>
-          <h3 id="fitTitle">CI/CD &amp; release automation</h3>
-          <p class="fit-model" id="fitModel">Working alongside your team: we build it together and hand it over with documentation.</p>
-        </div>
-        <div class="fit-body">
-          <ol class="fit-phases" id="fitPhases"></ol>
-          <div class="fit-meta">
-            <div><h4>Standards we apply</h4><div class="tags" id="fitStd"></div></div>
-            <div><h4>What we'll measure</h4><ul class="fit-measure" id="fitMeasure"></ul></div>
-          </div>
-          <a href="#contact" class="btn btn-primary" id="fitCta" style="width:100%">Talk through this plan →</a>
-          <p class="fit-note">A typical plan. We tailor it to you on the call.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ===== CASE STUDIES — public DevOps stories, right-sized =====
      These are published case studies from other companies, cited on each card.
      None of them are eXommerce clients, and the page says so. Swap in our own
      client stories once they're cleared to share. -->
-<section id="case-studies">
+<section id="case-studies" class="sec-alt">
   <div class="wrap">
     <div class="shead">
       <span class="eyebrow">Case studies</span>
@@ -1271,29 +898,6 @@
     <div class="pb-grid">
 
       <article class="pb-card" style="--pb:var(--c-blue);--pb-bg:#EEF3FF">
-        <div class="pb-art" style="--g1:#2563EB;--g2:#7C3AED">
-          <svg viewBox="0 0 560 180" aria-hidden="true">
-            <circle cx="500" cy="10" r="90" fill="#FFFFFF" opacity=".08"/>
-            <circle cx="40" cy="190" r="70" fill="#FFFFFF" opacity=".06"/>
-            <text x="40" y="38" font-family="Consolas,monospace" font-size="12" fill="#FFFFFF" opacity=".75">small change → one click → live</text>
-            <g stroke="#FFFFFF" stroke-opacity=".5" stroke-width="2" stroke-dasharray="4 5">
-              <line x1="136" y1="94" x2="168" y2="94"/><line x1="264" y1="94" x2="296" y2="94"/><line x1="392" y1="94" x2="424" y2="94"/>
-            </g>
-            <g fill="#FFFFFF">
-              <rect class="lit" x="40" y="68" width="96" height="52" rx="12" fill-opacity=".16"/>
-              <rect class="lit" x="168" y="68" width="96" height="52" rx="12" fill-opacity=".16" style="animation-delay:.9s"/>
-              <rect class="lit" x="296" y="68" width="96" height="52" rx="12" fill-opacity=".16" style="animation-delay:1.8s"/>
-              <rect class="lit" x="424" y="68" width="96" height="52" rx="12" fill-opacity=".16" style="animation-delay:2.7s"/>
-            </g>
-            <g font-family="Sora,sans-serif" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">
-              <text x="88" y="99">Commit</text><text x="216" y="99">Test</text><text x="344" y="99">Flag</text><text x="472" y="99">Deploy</text>
-            </g>
-            <g font-family="Sora,sans-serif" font-size="11" fill="#FFFFFF" opacity=".8" text-anchor="middle">
-              <text x="88" y="146">✓ small diff</text><text x="216" y="146">✓ automated</text><text x="344" y="146">✓ dark launch</text><text x="472" y="146">✓ graphed</text>
-            </g>
-            <g class="flow"><circle cx="88" cy="60" r="9" fill="#7BCF16" opacity=".35"/><circle cx="88" cy="60" r="5" fill="#B9F36A"/></g>
-          </svg>
-        </div>
         <div class="pb-body">
           <span class="pb-kicker">Etsy · online marketplace</span>
           <h3>Deploying 50+ times a day</h3>
@@ -1308,34 +912,6 @@
       </article>
 
       <article class="pb-card" style="--pb:var(--c-orange);--pb-bg:#FFF3EC">
-        <div class="pb-art" style="--g1:#F97316;--g2:#E11D48">
-          <svg viewBox="0 0 560 180" aria-hidden="true">
-            <circle cx="520" cy="170" r="90" fill="#FFFFFF" opacity=".08"/>
-            <text x="40" y="38" font-family="Consolas,monospace" font-size="12" fill="#FFFFFF" opacity=".75">traffic across availability zones</text>
-            <g fill="#FFFFFF" fill-opacity=".85">
-              <rect class="grow" x="40"  y="84"  width="20" height="66" rx="4"/>
-              <rect class="grow" x="70"  y="72"  width="20" height="78" rx="4" style="animation-delay:.15s"/>
-              <rect class="grow" x="100" y="80"  width="20" height="70" rx="4" style="animation-delay:.3s"/>
-              <rect x="138" y="138" width="20" height="12" rx="4" fill-opacity=".3"/>
-              <rect x="168" y="138" width="20" height="12" rx="4" fill-opacity=".3"/>
-              <rect x="198" y="138" width="20" height="12" rx="4" fill-opacity=".3"/>
-              <rect class="grow" x="236" y="56"  width="20" height="94" rx="4" style="animation-delay:.6s"/>
-              <rect class="grow" x="266" y="60"  width="20" height="90" rx="4" style="animation-delay:.75s"/>
-              <rect class="grow" x="296" y="52"  width="20" height="98" rx="4" style="animation-delay:.9s"/>
-            </g>
-            <g font-family="Consolas,monospace" font-size="10" fill="#FFFFFF" opacity=".75" text-anchor="middle">
-              <text x="80" y="166">zone A</text><text x="178" y="166">zone B ✕</text><text x="276" y="166">zone C</text>
-            </g>
-            <g class="bob">
-              <rect x="350" y="52" width="170" height="98" rx="14" fill="#FFFFFF" fill-opacity=".16"/>
-              <text x="372" y="80" font-family="Sora,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" opacity=".85" letter-spacing="1.5">ZONE DOWN</text>
-              <text x="372" y="118" font-family="Sora,sans-serif" font-size="28" font-weight="700" fill="#FFFFFF">Still up</text>
-              <circle class="pulse" cx="494" cy="76" r="6" fill="#B9F36A"/>
-              <circle cx="494" cy="76" r="5" fill="#B9F36A"/>
-              <text x="372" y="138" font-family="Sora,sans-serif" font-size="11" fill="#FFFFFF" opacity=".8">traffic rerouted</text>
-            </g>
-          </svg>
-        </div>
         <div class="pb-body">
           <span class="pb-kicker">Netflix · streaming</span>
           <h3>Staying up when the cloud went down</h3>
@@ -1350,23 +926,6 @@
       </article>
 
       <article class="pb-card" style="--pb:var(--c-teal);--pb-bg:#E9F7F5">
-        <div class="pb-art" style="--g1:#0D9488;--g2:#0284C7">
-          <svg viewBox="0 0 560 180" aria-hidden="true">
-            <circle cx="120" cy="92" r="84" fill="#FFFFFF" opacity=".07"/>
-            <g class="bob">
-              <path d="M120 34l52 18v38c0 32-22 52-52 60-30-8-52-28-52-60V52z" fill="#FFFFFF" fill-opacity=".2" stroke="#FFFFFF" stroke-width="3"/>
-              <path class="draw" d="M96 92l17 17 33-35" fill="none" stroke="#B9F36A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-            </g>
-            <g font-family="Sora,sans-serif" font-size="13.5" font-weight="600" fill="#FFFFFF">
-              <rect class="lit" x="232" y="38"  width="288" height="34" rx="17" fill="#FFFFFF" fill-opacity=".16"/>
-              <rect class="lit" x="232" y="80"  width="288" height="34" rx="17" fill="#FFFFFF" fill-opacity=".16" style="animation-delay:1.2s"/>
-              <rect class="lit" x="232" y="122" width="288" height="34" rx="17" fill="#FFFFFF" fill-opacity=".16" style="animation-delay:2.4s"/>
-              <circle cx="252" cy="55" r="7" fill="#B9F36A"/><text x="270" y="60">Guardrails as code</text>
-              <circle cx="252" cy="97" r="7" fill="#B9F36A"/><text x="270" y="102">Environments in minutes</text>
-              <circle cx="252" cy="139" r="7" fill="#B9F36A"/><text x="270" y="144">Evidence captured per change</text>
-            </g>
-          </svg>
-        </div>
         <div class="pb-body">
           <span class="pb-kicker">Capital One · banking</span>
           <h3>A regulated bank that ships many times a day</h3>
@@ -1381,23 +940,6 @@
       </article>
 
       <article class="pb-card" style="--pb:var(--c-violet);--pb-bg:#F3EEFE">
-        <div class="pb-art" style="--g1:#7C3AED;--g2:#DB2777">
-          <svg viewBox="0 0 560 180" aria-hidden="true">
-            <text x="40" y="38" font-family="Consolas,monospace" font-size="12" fill="#FFFFFF" opacity=".75">annual infrastructure spend</text>
-            <g stroke="#FFFFFF" stroke-opacity=".16" stroke-width="1">
-              <line x1="40" y1="64" x2="400" y2="64"/><line x1="40" y1="100" x2="400" y2="100"/><line x1="40" y1="136" x2="400" y2="136"/>
-            </g>
-            <path d="M40 58 L100 54 L160 70 L220 92 L280 112 L340 122 L400 126 L400 150 L40 150Z" fill="#FFFFFF" fill-opacity=".1"/>
-            <path class="draw" d="M40 58 L100 54 L160 70 L220 92 L280 112 L340 122 L400 126" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle class="pulse" cx="400" cy="126" r="7" fill="#B9F36A"/>
-            <circle cx="400" cy="126" r="6" fill="#B9F36A"/>
-            <g class="bob">
-              <rect x="420" y="56" width="120" height="70" rx="14" fill="#FFFFFF" fill-opacity=".16"/>
-              <text x="438" y="82" font-family="Sora,sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" opacity=".85" letter-spacing="1.2">UNIT COST</text>
-              <text x="438" y="110" font-family="Sora,sans-serif" font-size="18" font-weight="700" fill="#FFFFFF">Known</text>
-            </g>
-          </svg>
-        </div>
         <div class="pb-body">
           <span class="pb-kicker">37signals · SaaS (Basecamp, HEY)</span>
           <h3>Rethinking a $3.2M-a-year cloud bill</h3>
@@ -1412,7 +954,6 @@
       </article>
 
     </div>
-    <div class="sec-cta" style="text-align:center"><a href="#fit" class="btn btn-outline">Find where you fit →</a></div>
   </div>
 </section>
 
@@ -1456,59 +997,6 @@
   </div>
 </dialog>
 
-<!-- ===== STANDARDS — best practices we build to ===== -->
-<section id="standards" class="sec-alt">
-  <div class="wrap">
-    <div class="shead">
-      <span class="eyebrow">Best practices</span>
-      <h2>Following your cloud provider's guidance</h2>
-      <p class="sub" style="margin:0 auto">We follow each provider's published well-architected guidance and track the delivery measures the industry commonly uses.</p>
-    </div>
-
-    <div class="clouds">
-      <div class="cloud-card" style="--cc-bar:#FF9900;--cc-bg:#FFF4E0;--cc-ink:#8A4B00">
-        <div class="cloud-top">
-          <div class="cloud-logo"><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="" width="38" height="38" loading="lazy" /></div>
-          <div><h3>Amazon Web Services</h3><div class="fw">AWS Well-Architected Framework</div></div>
-        </div>
-        <p>We review workloads against its six pillars and track the findings through to fixes.</p>
-        <div class="pillars"><span>Operational excellence</span><span>Security</span><span>Reliability</span><span>Performance efficiency</span><span>Cost optimization</span><span>Sustainability</span></div>
-      </div>
-      <div class="cloud-card" style="--cc-bar:#0078D4;--cc-bg:#E7F1FB;--cc-ink:#005A9E">
-        <div class="cloud-top">
-          <div class="cloud-logo"><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/azure/azure-original.svg" alt="" width="38" height="38" loading="lazy" /></div>
-          <div><h3>Microsoft Azure</h3><div class="fw">Azure Well-Architected Framework</div></div>
-        </div>
-        <p>We align setups with the Cloud Adoption Framework and review workloads against its pillars.</p>
-        <div class="pillars"><span>Reliability</span><span>Security</span><span>Cost optimization</span><span>Operational excellence</span><span>Performance efficiency</span></div>
-      </div>
-      <div class="cloud-card" style="--cc-bar:linear-gradient(90deg,#4285F4 25%,#EA4335 25% 50%,#FBBC05 50% 75%,#34A853 75%);--cc-bg:#EEF3FE;--cc-ink:#1A56C4">
-        <div class="cloud-top">
-          <div class="cloud-logo"><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/googlecloud/googlecloud-original.svg" alt="" width="38" height="38" loading="lazy" /></div>
-          <div><h3>Google Cloud</h3><div class="fw">Google Cloud Well-Architected Framework</div></div>
-        </div>
-        <p>We check designs against Google's framework and its published SRE practices.</p>
-        <div class="pillars"><span>Operational excellence</span><span>Security</span><span>Reliability</span><span>Cost optimization</span><span>Performance optimization</span></div>
-      </div>
-    </div>
-
-    <div class="dora">
-      <div>
-        <span class="eyebrow" style="color:var(--brand-lime)">A common benchmark</span>
-        <h3>DORA's four keys</h3>
-        <p>DORA's research is a widely used reference for software delivery performance. We measure your four key metrics at the start and report progress against them.</p>
-        <p class="dora-src">Elite-tier figures from the Accelerate State of DevOps Report 2023 (DORA)</p>
-      </div>
-      <ul class="dora-grid">
-        <li><span class="lbl">Deployment frequency</span><b>On demand</b></li>
-        <li><span class="lbl">Lead time for changes</span><b>&lt; 1 day</b></li>
-        <li><span class="lbl">Change failure rate</span><b>~5%</b></li>
-        <li><span class="lbl">Failed deployment recovery</span><b>&lt; 1 hour</b></li>
-      </ul>
-    </div>
-  </div>
-</section>
-
 <!-- ===== WHY US — how we work, plus the practical facts buyers check ===== -->
 <section id="about">
   <div class="wrap">
@@ -1523,12 +1011,6 @@
       <div class="why-card"><span class="n">03</span><h3>Yours to keep</h3><p>Everything is documented and owned by you, so your team can take it over at any time.</p></div>
       <div class="why-card"><span class="n">04</span><h3>AI where it's useful</h3><p>We suggest AI only where it clearly helps, and say so when a simpler option will do.</p></div>
     </div>
-    <dl class="why-facts">
-      <div><dt>Team</dt><dd>Based in Bengaluru, working with clients remotely</dd></div>
-      <div><dt>Your hours</dt><dd>Overlap with UK, Europe, Middle East and APAC hours, and US mornings</dd></div>
-      <div id="industries"><dt>Industries</dt><dd>Manufacturing · healthcare · retail · financial services · logistics · real estate</dd></div>
-      <div><dt>Contracts</dt><dd>NDA on request · IP assignment · GDPR-aware · flexible terms</dd></div>
-    </dl>
     <div class="sec-cta" style="text-align:center"><a href="#contact" class="btn btn-primary">Book a Discovery Call →</a></div>
   </div>
 </section>
@@ -1548,11 +1030,6 @@
         <span class="st"><span class="d"></span>Live product</span>
         <h3>LeadGenAI</h3>
         <p class="feature-lede">An AI lead generation engine for sales teams. LeadGenAI finds local businesses on Google Maps, scores them with AI so the best-fit prospects rise to the top, and exports a clean list to CSV or Excel — in about 60 seconds.</p>
-        <ul class="feature-pts">
-          <li><b>Who it's for —</b> sales and growth teams running local B2B outbound, built first for Indian markets.</li>
-          <li><b>The problem it solves —</b> prospect lists are built by hand, so reps lose hours to copy-paste research and still work leads that were never a fit.</li>
-          <li><b>The benefit —</b> reps open the day with a scored, exportable list instead of a blank sheet, and spend their selling time on conversations.</li>
-        </ul>
         <div class="feature-ctas">
           <a href="#contact" class="btn btn-primary" data-need="LeadGenAI demo">Request a LeadGenAI Demo →</a>
           <a href="https://leadgenai.exommerce.online" target="_blank" rel="noopener" class="btn btn-outline">Try it live</a>
@@ -1728,7 +1205,6 @@
         <li><a href="#solutions">DevOps &amp; cloud</a></li>
         <li><a href="#solutions">IT consulting</a></li>
         <li><a href="#solutions">Business transformation</a></li>
-        <li><a href="#fit">Find your fit</a></li>
         <li><a href="#case-studies">Case studies</a></li>
       </ul></div>
       <div><h4>Products</h4><ul>
@@ -2030,10 +1506,10 @@
 
     var targets = document.querySelectorAll(
       '.shead, .sol-grid, .feature, .contact-grid,' +
-      ' .logowall, .fit, .pb-grid, .clouds, .dora, .dora-grid, .why-grid, .why-facts, .faq'
+      ' .logowall, .pb-grid, .why-grid, .faq'
     );
     Array.prototype.forEach.call(targets, function(el){ el.classList.add('reveal'); });
-    Array.prototype.forEach.call(document.querySelectorAll('.pb-grid, .clouds, .dora-grid, .why-grid'), function(el){
+    Array.prototype.forEach.call(document.querySelectorAll('.pb-grid, .why-grid'), function(el){
       el.classList.add('stagger');
     });
 
@@ -2047,160 +1523,6 @@
     }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
 
     Array.prototype.forEach.call(targets, function(el){ io.observe(el); });
-  })();
-
-  // ================= LOGO MARQUEE =================
-  // A second, hidden copy of the list makes the loop seamless. Reduced-motion
-  // visitors keep the static, wrapping layout.
-  (function(){
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var marquee = document.querySelector('.marquee');
-    var track = marquee.querySelector('.marquee-track');
-    Array.prototype.slice.call(track.children).forEach(function(li){
-      var copy = li.cloneNode(true);
-      copy.setAttribute('aria-hidden', 'true');
-      track.appendChild(copy);
-    });
-    marquee.classList.add('is-moving');
-  })();
-
-  // ================= FIT FINDER =================
-  // Maps the visitor's three answers to the engagement we'd most likely
-  // propose. Plans are typical, not quotes; the call is where they get real.
-  (function(){
-    var form = document.getElementById('fitForm');
-    if (!form) return;
-
-    var CLOUDS = {
-      aws:   { name:'AWS', label:'AWS', fw:'AWS Well-Architected', k8s:'EKS', obs:'CloudWatch', commit:'Savings Plans' },
-      azure: { name:'Azure', label:'Azure', fw:'Azure Well-Architected', k8s:'AKS', obs:'Azure Monitor', commit:'Azure reservations' },
-      gcp:   { name:'Google Cloud', label:'Google Cloud', fw:'Google Cloud Well-Architected', k8s:'GKE', obs:'Cloud Monitoring', commit:'committed use discounts' },
-      multi: { name:'each of your clouds', label:'Multi-cloud / hybrid', fw:'Provider-neutral Terraform', k8s:'Kubernetes', obs:'OpenTelemetry and Grafana', commit:'per-provider commitments' },
-      none:  { name:'your target cloud', label:'Not on cloud yet', fw:'Cloud Adoption Framework', k8s:'managed Kubernetes', obs:'a managed monitoring stack', commit:'commitments' }
-    };
-
-    var TEAMS = {
-      none:     { label:'Nobody full-time', model:'Managed support: we set it up and look after it for you, including monitoring and updates.', last:'Ongoing · Support' },
-      small:    { label:'One or two engineers', model:'Working alongside your team: we build it together and hand it over with documentation.', last:'Weeks 9–10 · Handover' },
-      platform: { label:'A platform or DevOps team', model:'Review and advice: an assessment and roadmap, plus hands-on help where your team wants it.', last:'Then · Your team owns it' }
-    };
-
-    var PAINS = {
-      deploy: {
-        title:'CI/CD & release automation', need:'DevOps & CI/CD', a:'#2563EB', b:'#7C3AED',
-        assess:'Map how code reaches production today and baseline your four DORA metrics.',
-        build:function(c){ return 'Pipelines with automated tests, security scans and one-click rollback, plus infrastructure as code on ' + c.name + ' so every environment is reproducible.'; },
-        run:'Releases become routine; lead time and change failure rate are tracked monthly.',
-        std:['DORA metrics','GitOps','Infrastructure as code'],
-        measure:['Deployment frequency','Lead time for changes','Change failure rate']
-      },
-      outage: {
-        title:'Observability & on-call (SRE)', need:'Monitoring & reliability', a:'#EA580C', b:'#E11D48',
-        assess:'Agree SLOs for the customer journeys that matter most.',
-        build:function(c){ return 'Metrics, logs and traces in ' + c.obs + ', with alerts that page on customer impact, not noise.'; },
-        run:'On-call rota, runbooks and a blameless review after every incident.',
-        std:['SRE practices','SLOs & error budgets','OpenTelemetry'],
-        measure:['Failed deployment recovery time','SLO attainment','Alerts per on-call shift']
-      },
-      cost: {
-        title:'Cloud cost optimisation (FinOps)', need:'Cloud cost optimisation', a:'#7C3AED', b:'#DB2777',
-        assess:'Tag and allocate spend so every line of the bill has an owner.',
-        build:function(c){ return 'Right-size, schedule non-production, and buy ' + c.commit + ' only where usage is steady.'; },
-        run:'Budgets and anomaly alerts reviewed monthly, so costs are easier to predict.',
-        std:['FinOps Framework','Cost optimization pillar'],
-        measure:['Monthly cloud spend','Cost per customer or transaction','Commitment coverage']
-      },
-      migrate: {
-        title:'Cloud migration & landing zone', need:'Cloud migration', a:'#0284C7', b:'#0D9488',
-        assess:'Inventory workloads and choose rehost, replatform or refactor for each one.',
-        build:function(c){ return 'A secure landing zone on ' + c.name + ', built as code, then migration in waves with a rollback plan for every cutover.'; },
-        run:'Cutovers are rehearsed, and the old infrastructure is retired on schedule.',
-        std:['Cloud Adoption Framework','Landing zone as code','7 Rs of migration'],
-        measure:['Workloads migrated on plan','Downtime per cutover','Run cost vs. baseline']
-      },
-      comply: {
-        title:'DevSecOps & audit readiness', need:'Security & compliance', a:'#0D9488', b:'#16A34A',
-        assess:'Gap assessment against the controls you\'re audited on: SOC 2, ISO 27001 or a customer\'s questionnaire.',
-        build:function(c){ return 'CIS-hardened baselines, managed secrets and least-privilege access on ' + c.name + ', with scanning in every pipeline.'; },
-        run:'Evidence is captured automatically with each change, so audits need less preparation.',
-        std:['CIS Benchmarks','OWASP','SOC 2 / ISO 27001 controls'],
-        measure:['Open critical findings','Time to patch','Controls with automated evidence']
-      },
-      scale: {
-        title:'Containers & platform engineering', need:'Containers & Kubernetes', a:'#109840', b:'#7BCF16',
-        assess:'Find the bottlenecks: builds, deploys, databases and single points of failure.',
-        build:function(c){ return 'Containerise services and run them on ' + c.k8s + ', or something simpler if that fits better.'; },
-        run:'Autoscaling, blue-green deploys and a paved road for every new service.',
-        std:['Twelve-Factor App','CNCF tooling','Platform engineering'],
-        measure:['Time to launch a new service','Deploys without incident','Cost per request']
-      }
-    };
-
-    var card = document.getElementById('fitCard');
-    var cta = document.getElementById('fitCta');
-    var current = null;
-
-    function fill(list, items, tag){
-      list.innerHTML = '';
-      items.forEach(function(text){
-        var el = document.createElement(tag);
-        el.textContent = text;
-        list.appendChild(el);
-      });
-    }
-
-    function render(animate){
-      var p = PAINS[form.pain.value], c = CLOUDS[form.cloud.value], t = TEAMS[form.team.value];
-      current = { p:p, c:c, t:t };
-
-      card.style.setProperty('--fit-a', p.a);
-      card.style.setProperty('--fit-b', p.b);
-      document.getElementById('fitTitle').textContent = p.title;
-      document.getElementById('fitModel').textContent = t.model;
-
-      var phases = document.getElementById('fitPhases');
-      phases.innerHTML = '';
-      [['Weeks 1–2 · Assess', p.assess], ['Weeks 3–8 · Build', p.build(c)], [t.last, p.run]].forEach(function(ph){
-        var li = document.createElement('li');
-        var when = document.createElement('span');
-        when.className = 'when';
-        when.textContent = ph[0];
-        var body = document.createElement('p');
-        body.textContent = ph[1];
-        li.appendChild(when);
-        li.appendChild(body);
-        phases.appendChild(li);
-      });
-
-      fill(document.getElementById('fitStd'), [c.fw].concat(p.std), 'span');
-      fill(document.getElementById('fitMeasure'), p.measure, 'li');
-
-      if (animate){
-        card.classList.remove('fit-swap');
-        void card.offsetWidth; // restart the animation
-        card.classList.add('fit-swap');
-      }
-    }
-
-    form.addEventListener('change', function(){ render(true); });
-    render(false);
-
-    // Carry the chosen plan into the contact form, so the enquiry arrives
-    // already describing the situation. Never overwrite what someone typed.
-    var msg = document.getElementById('ms');
-    var lastPrefill = '';
-    cta.addEventListener('click', function(){
-      var sel = document.getElementById('need');
-      for (var i = 0; i < sel.options.length; i++){
-        if (sel.options[i].text === current.p.need){ sel.selectedIndex = i; break; }
-      }
-      if (!msg.value.trim() || msg.value === lastPrefill){
-        lastPrefill = 'From the fit finder: ' + current.p.title + '\n'
-          + 'Platform: ' + current.c.label + '\n'
-          + 'Team today: ' + current.t.label + '\n\n';
-        msg.value = lastPrefill;
-      }
-    });
   })();
 
   // ================= CASE-STUDY REQUESTS =================
