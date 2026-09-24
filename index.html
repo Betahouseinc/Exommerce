@@ -2381,7 +2381,8 @@
   // The Google Apps Script web app URL (ends in /exec) from case-study-mailer.gs.
   // Until it's set, requests fall back to a pre-filled email to hello@, so the
   // form still works and nothing is lost.
-  var CASE_STUDY_ENDPOINT = '';
+  // Deployed from admin@exommerce.online; logs to the "Case study requests" Sheet.
+  var CASE_STUDY_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyo6QASQ4wgBQxCiKid3dJZsCpRupRTFbisglyGsBHZuIRTFVBxv9trJx8xSjLScPgNEQ/exec';
 
   (function(){
     var dialog = document.getElementById('csDialog');
