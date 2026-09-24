@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>eXommerce.online — DevOps, IT Consulting &amp; Business Transformation</title>
-<meta name="description" content="eXommerce is a small DevOps and IT consulting team in Bengaluru. We help businesses set up and look after their cloud, deployments and monitoring, and plan the technology changes worth making next." />
+<title>eXommerce.online — DevOps, Infrastructure Management &amp; IT Consulting</title>
+<meta name="description" content="eXommerce is a small DevOps and IT consulting team in Bengaluru. We manage and modernise infrastructure for growing businesses (cloud, deployments, monitoring, disaster recovery, security) and offer IT consulting, web development and data work." />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://exommerce.online/" />
 
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="eXommerce.online" />
 <meta property="og:url" content="https://exommerce.online/" />
-<meta property="og:title" content="eXommerce.online — DevOps, IT Consulting &amp; Business Transformation" />
-<meta property="og:description" content="A small DevOps and IT consulting team helping businesses set up, run and improve their cloud infrastructure." />
+<meta property="og:title" content="eXommerce.online — DevOps, Infrastructure Management &amp; IT Consulting" />
+<meta property="og:description" content="DevOps, infrastructure management and IT consulting for growing businesses, from Bengaluru." />
 <meta property="og:image" content="https://exommerce.online/og-image.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="eXommerce.online — DevOps, IT Consulting &amp; Business Transformation" />
-<meta name="twitter:description" content="A small DevOps and IT consulting team helping businesses set up, run and improve their cloud infrastructure." />
+<meta name="twitter:title" content="eXommerce.online — DevOps, Infrastructure Management &amp; IT Consulting" />
+<meta name="twitter:description" content="DevOps, infrastructure management and IT consulting for growing businesses, from Bengaluru." />
 <meta name="twitter:image" content="https://exommerce.online/og-image.png" />
 
 <script type="application/ld+json">
@@ -223,9 +223,11 @@
   .nav-links a{
     font-size:13.5px;
     color:var(--text2);
+    white-space:nowrap;
     transition:color .15s
   }
   .nav-links a:hover{color:var(--brand-green)}
+  @media(max-width:1180px){.nav-links{gap:18px}}
   .nav-cta{display:flex;align-items:center;gap:14px}
   .menu-btn{
     display:none;
@@ -262,7 +264,7 @@
   }
   /* Video sits under a white veil that's near-solid behind the headline and
      thins out to the right, so copy stays readable and the footage shows
-     around the status card. */
+     on the open right-hand side. */
   .hero-video{
     position:absolute;
     inset:0;
@@ -275,10 +277,15 @@
     /* The footage is green arrows on near-black. Inverting (then rotating the
        hue back) turns the black to white and keeps the arrows green; multiply
        then drops the white out, so only the arrows sit on the light hero. */
-    filter:invert(1) hue-rotate(180deg);
+    filter:invert(1) hue-rotate(180deg) saturate(.7);
     mix-blend-mode:multiply
   }
-  .hero-video.is-ready{opacity:1}
+  .hero-video.is-ready{opacity:.85}
+  /* Between tablet and desktop the hero stacks and the copy spans the full
+     width, so the veil evens out to keep every line readable. */
+  @media(max-width:920px){
+    .hero-veil{background:rgba(255,255,255,.82)}
+  }
   .hero-veil{
     display:none;
     position:absolute;
@@ -412,6 +419,12 @@
   .sol-card:hover::after{width:100%}
   .sol-card h3{font-size:17px;margin-bottom:10px}
   .sol-card p{font-size:14px;color:var(--text2);line-height:1.65}
+  .sol-list{list-style:none;margin:16px 0 0;padding:14px 0 0;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px}
+  .sol-list li{position:relative;padding-left:16px;font-size:13.5px;color:var(--text2);line-height:1.5}
+  .sol-list li::before{content:'';position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:var(--brand-green)}
+  /* The primary pillar is marked by a label and a green edge, nothing louder. */
+  .sol-card.sol-primary{border-color:var(--brand-green);border-top-width:3px}
+  .sol-tag{display:inline-block;margin-bottom:10px;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand-green-dark)}
   .sol-also{margin-top:24px;font-size:13.5px;color:var(--text3);text-align:center}
   .sol-also b{color:var(--text2)}
   @media(max-width:860px){.sol-grid{grid-template-columns:1fr 1fr}}
@@ -792,6 +805,36 @@
     }
   }
 
+  /* Two-column sections: an image on one side, the copy on the other */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  .split.rev .split-media{order:2}
+  .split-media{position:relative}
+  .split-media img{width:100%;height:100%;min-height:380px;object-fit:cover;border-radius:16px;border:1px solid var(--border);background:var(--bg2)}
+  .split-h2{font-size:clamp(28px,3.2vw,40px);margin-bottom:14px;text-wrap:balance}
+  .why-list{list-style:none;margin:26px 0 0;padding:0;border-top:1px solid var(--border)}
+  .why-list li{padding:16px 0;border-bottom:1px solid var(--border)}
+  .why-list h3{font-size:16px;margin-bottom:4px}
+  .why-list p{font-size:14px;color:var(--text2);line-height:1.6}
+  .geo-list{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+  .geo-list li{padding:8px 14px;border:1px solid var(--border-strong);border-radius:999px;font-size:13.5px;font-weight:600;font-family:var(--ff-display);color:var(--text)}
+  .geo-note{margin-top:18px;font-size:13.5px;color:var(--text3)}
+  .geo-hq{
+    position:absolute;
+    left:16px;
+    bottom:16px;
+    padding:7px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,.94);
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--brand-green-dark)
+  }
+  @media(max-width:920px){
+    .split{grid-template-columns:1fr;gap:32px}
+    .split .split-media,.split.rev .split-media{order:-1}
+    .split-media img{min-height:0;aspect-ratio:16/9}
+  }
+
   /* ===== Minimal theme =====
      Quiet, flat surfaces: white sections split by hairlines, no tinted bands,
      glows, card shadows or hover lifts. Kept as one block of overrides so the
@@ -846,16 +889,17 @@
        Pexels (free licence, no attribution required). The script sets the src
        only on wide screens without reduced motion or data saver, so phones
        never download it. -->
-  <video class="hero-video" data-src="https://videos.pexels.com/video-files/34934562/14798470_1280_720_30fps.mp4"
+  <video class="hero-video" data-src="/media/hero-arrows.mp4"
+         data-poster="https://images.pexels.com/videos/34934562/pexels-photo-34934562.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1280"
          muted loop playsinline preload="none" aria-hidden="true"></video>
   <div class="hero-veil" aria-hidden="true"></div>
   <div class="wrap hero-in">
     <div class="hero-copy">
-      <span class="eyebrow">DevOps · IT Consulting · Business Transformation</span>
+      <span class="eyebrow">DevOps · Infrastructure management · IT consulting</span>
       <h1 class="rotator" aria-label="Bridging the gap between infrastructure and technology.">
         <span class="rot-item is-active" aria-hidden="true">Bridging the gap between <span class="accent">infrastructure and technology.</span></span>
       </h1>
-      <p class="sub">We help teams set up and look after their cloud, deployments and monitoring, then plan the technology changes that are worth making next.</p>
+      <p class="sub">We manage and modernise infrastructure for growing businesses: cloud, deployments, monitoring, backups and security. Then we help plan the technology changes worth making next.</p>
       <div class="hero-ctas">
         <a href="#contact" class="btn btn-primary">Book a Discovery Call →</a>
         <a href="#solutions" class="btn btn-outline">See what we do</a>
@@ -890,14 +934,44 @@
     <div class="shead">
       <span class="eyebrow">What we do</span>
       <h2>From the servers up to the strategy.</h2>
-      <p class="sub" style="margin:0 auto">Three areas we focus on, starting with the infrastructure your business runs on.</p>
+      <p class="sub" style="margin:0 auto">DevOps and infrastructure are our main focus. IT consulting and digital work build on the same foundation.</p>
     </div>
     <div class="sol-grid">
-      <div class="sol-card"><h3>DevOps &amp; cloud</h3><p>Cloud setup and migration, CI/CD, monitoring, security and ongoing support, to keep production stable and easy to change.</p></div>
-      <div class="sol-card"><h3>IT consulting</h3><p>A review of your systems and architecture, then a prioritised, costed roadmap for what to build, fix or retire.</p></div>
-      <div class="sol-card"><h3>Business transformation</h3><p>Putting the roadmap into practice: new processes and systems, rolled out at a pace your team can adopt.</p></div>
+      <div class="sol-card sol-primary">
+        <span class="sol-tag">Main focus</span>
+        <h3>DevOps &amp; Infrastructure</h3>
+        <p>Setting up, running and modernising the infrastructure your business depends on.</p>
+        <ul class="sol-list">
+          <li>Infrastructure management &amp; monitoring</li>
+          <li>CI/CD and DevOps</li>
+          <li>Legacy infrastructure modernisation</li>
+          <li>Disaster recovery &amp; backups</li>
+          <li>Database management</li>
+          <li>Data warehousing</li>
+          <li>Cybersecurity</li>
+        </ul>
+      </div>
+      <div class="sol-card">
+        <h3>IT Consulting</h3>
+        <p>Planning technology change and seeing it through, with the business side in mind.</p>
+        <ul class="sol-list">
+          <li>Business transformation</li>
+          <li>Change management</li>
+          <li>Project management</li>
+          <li>IT service management (ITSM)</li>
+        </ul>
+      </div>
+      <div class="sol-card">
+        <h3>Digital &amp; Data</h3>
+        <p>Building the tools and data flows your teams use every day.</p>
+        <ul class="sol-list">
+          <li>Web development</li>
+          <li>Business analytics</li>
+          <li>Data integration</li>
+        </ul>
+      </div>
     </div>
-    <p class="sol-also"><b>Also:</b> data &amp; BI · data integration · AI &amp; automation · custom software · cybersecurity &amp; compliance · fractional CIO / CTO.</p>
+    <p class="sol-also"><b>Also experienced in:</b> IoT projects.</p>
   </div>
 </section>
 
@@ -991,18 +1065,54 @@
 <!-- ===== WHY US — how we work, plus the practical facts buyers check ===== -->
 <section id="about">
   <div class="wrap">
-    <div class="shead">
-      <span class="eyebrow">How we work</span>
-      <h2>A few principles we work by</h2>
-      <p class="sub" style="margin:0 auto">We're a young team, so we keep things simple: clear plans, careful work, and systems you can run without us.</p>
+    <div class="split">
+      <div class="split-media">
+        <img src="https://images.pexels.com/photos/7693692/pexels-photo-7693692.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900"
+             alt="A team planning a business transformation around charts and a laptop"
+             width="900" height="600" loading="lazy" decoding="async" />
+      </div>
+      <div>
+        <span class="eyebrow">How we work</span>
+        <h2 class="split-h2">A few principles we work by</h2>
+        <p class="sub">We're a young team, so we keep things simple: clear plans, careful work, and systems you can run without us.</p>
+        <ul class="why-list">
+          <li><h3>Make the most of what you have</h3><p>We start by getting more from your existing systems, licences and team before recommending anything new. We don't resell any platform.</p></li>
+          <li><h3>Support after launch</h3><p>We can stay on after launch to monitor and maintain what we've built, so it keeps running well.</p></li>
+          <li><h3>Yours to keep</h3><p>Everything is documented and owned by you, so your team can take it over at any time.</p></li>
+          <li><h3>AI where it's useful</h3><p>We suggest AI only where it clearly helps, and say so when a simpler option will do.</p></li>
+        </ul>
+        <div class="sec-cta"><a href="#contact" class="btn btn-primary">Book a Discovery Call →</a></div>
+      </div>
     </div>
-    <div class="why-grid">
-      <div class="why-card"><h3>Support after launch</h3><p>We can stay on after launch to monitor and maintain what we've built, so it keeps running well.</p></div>
-      <div class="why-card"><h3>Business first, tools second</h3><p>We start from what the business needs, then choose tools to fit. We don't resell any platform.</p></div>
-      <div class="why-card"><h3>Yours to keep</h3><p>Everything is documented and owned by you, so your team can take it over at any time.</p></div>
-      <div class="why-card"><h3>AI where it's useful</h3><p>We suggest AI only where it clearly helps, and say so when a simpler option will do.</p></div>
+  </div>
+</section>
+
+<!-- ===== LOCAL TO GLOBAL — where we've delivered work ===== -->
+<section id="global">
+  <div class="wrap">
+    <div class="split rev">
+      <div class="split-media">
+        <img src="https://images.pexels.com/photos/30596263/pexels-photo-30596263.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900"
+             alt="Earth at night from space, with city lights across India and Asia"
+             width="900" height="600" loading="lazy" decoding="async" />
+        <span class="geo-hq">HQ · Bengaluru, India</span>
+      </div>
+      <div>
+        <span class="eyebrow">Local to global</span>
+        <h2 class="split-h2">Based in Bengaluru, working worldwide</h2>
+        <p class="sub">Our headquarters is in Bengaluru, and we support clients around the world. We've delivered work for clients in:</p>
+        <ul class="geo-list">
+          <li>United States</li>
+          <li>United Kingdom</li>
+          <li>Germany</li>
+          <li>United Arab Emirates</li>
+          <li>Africa</li>
+          <li>Japan</li>
+          <li>Australia</li>
+        </ul>
+        <p class="geo-note">Working hours overlap with the UK, Europe, the Middle East and Asia-Pacific, plus US mornings.</p>
+      </div>
     </div>
-    <div class="sec-cta" style="text-align:center"><a href="#contact" class="btn btn-primary">Book a Discovery Call →</a></div>
   </div>
 </section>
 
@@ -1149,14 +1259,16 @@
             <div class="field"><label for="need">What do you need?</label>
               <select id="need" name="need">
               <option value="">Select…</option>
+              <option>Infrastructure management &amp; monitoring</option>
               <option>DevOps &amp; CI/CD</option>
-              <option>Monitoring &amp; reliability</option>
-              <option>Cloud cost optimisation</option>
-              <option>Cloud migration</option>
-              <option>Security &amp; compliance</option>
-              <option>IT consulting</option>
-              <option>Business transformation</option>
-              <option>Data, AI or custom software</option>
+              <option>Legacy modernisation or cloud migration</option>
+              <option>Disaster recovery &amp; backups</option>
+              <option>Cybersecurity</option>
+              <option>Databases or data warehousing</option>
+              <option>IT consulting &amp; business transformation</option>
+              <option>Project management or ITSM</option>
+              <option>Web development</option>
+              <option>Business analytics or data integration</option>
               <option>LeadGenAI demo</option>
               <option>Not sure yet</option>
             </select>
@@ -1317,17 +1429,19 @@
   });
 
   // ================= HERO VIDEO =================
-  // Desktop-only: skipped for reduced motion, data saver and narrow screens,
-  // where the src is never set so nothing downloads. Plays only while the
-  // hero is on screen.
+  // Tablet and up: skipped for reduced motion, data saver and phones, where
+  // the src is never set so nothing downloads. The clip's first frame shows
+  // at once as a poster, so the hero never sits empty while the video loads
+  // (or if it can't play at all). Plays only while the hero is on screen.
   (function(){
     var video = document.querySelector('.hero-video');
     if (!video) return;
     var conn = navigator.connection || {};
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    if (!window.matchMedia('(min-width: 921px)').matches || conn.saveData) return;
+    if (!window.matchMedia('(min-width: 768px)').matches || conn.saveData) return;
 
-    video.addEventListener('playing', function(){ video.classList.add('is-ready'); }, { once:true });
+    video.poster = video.getAttribute('data-poster');
+    video.classList.add('is-ready');
     video.src = video.getAttribute('data-src');
     var play = function(){ var p = video.play(); if (p && p.catch) p.catch(function(){}); };
     play();
@@ -1348,10 +1462,10 @@
 
     var targets = document.querySelectorAll(
       '.shead, .sol-grid, .feature, .form,' +
-      ' .logowall, .pb-grid, .why-grid, .faq'
+      ' .logowall, .pb-grid, .split, .faq'
     );
     Array.prototype.forEach.call(targets, function(el){ el.classList.add('reveal'); });
-    Array.prototype.forEach.call(document.querySelectorAll('.pb-grid, .why-grid'), function(el){
+    Array.prototype.forEach.call(document.querySelectorAll('.pb-grid'), function(el){
       el.classList.add('stagger');
     });
 
