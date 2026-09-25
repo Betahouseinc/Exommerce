@@ -896,6 +896,20 @@
   .book-dialog::backdrop{background:rgba(11,20,13,.55)}
   .book-frame,.book-frame iframe{width:100%;height:100%;border:0;display:block}
   .book-dialog .cs-close{z-index:2}
+  /* Who you'll work with */
+  #people{border-top:1px solid var(--border)}
+  .people-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:26px;flex-wrap:wrap}
+  .people-head .sub{max-width:62ch}
+  .people-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .person{display:flex;gap:14px;align-items:flex-start;padding:18px;border:1px solid var(--border);border-radius:var(--radius)}
+  .person img{width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--bg2)}
+  .person b{display:block;font-family:var(--ff-display);font-size:14.5px;color:var(--text);line-height:1.3}
+  .person .role{display:block;font-size:12.5px;color:var(--brand-green-dark);font-weight:600;margin:2px 0 6px}
+  .person .cred{display:block;font-size:12.5px;color:var(--text3);line-height:1.5}
+  .person-lead{border-color:var(--brand-green)}
+  @media(max-width:1100px){.people-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.people-grid{grid-template-columns:1fr}}
+  .sol-outcome{margin-top:10px;font-family:var(--ff-display);font-weight:600;font-size:14px;color:var(--brand-green-dark)}
 </style>
 <!-- Analytics: GA4 loads only after cookie consent -->
 <script defer src="/analytics.js"></script>
@@ -1001,6 +1015,7 @@
         <span class="sol-tag">Technology</span>
         <h3>IT Consulting</h3>
         <p>We design, build and run the technology your business relies on, from the cloud and deployments to data and the web.</p>
+        <p class="sol-outcome">Lower cloud costs · fewer outages · faster, safer releases</p>
         <ul class="sol-list sol-list-2">
           <li>DevOps &amp; CI/CD</li>
           <li>Cloud services management</li>
@@ -1021,6 +1036,7 @@
         <span class="sol-tag">Business</span>
         <h3>Business Consulting</h3>
         <p>We work alongside organisations to understand where they are, navigate change with confidence, and evolve how they operate as their industry transforms.</p>
+        <p class="sol-outcome">Clearer decisions · smoother change · less wasted effort</p>
         <ul class="sol-list">
           <li>Business &amp; technology assessment and roadmap</li>
           <li>Fractional CTO / CIO</li>
@@ -1036,6 +1052,38 @@
   </div>
 </section>
 
+<!-- ===== WHO YOU'LL WORK WITH — the founder and the specialist network =====
+     Details mirror team.html; keep both in sync. -->
+<section id="people">
+  <div class="wrap">
+    <div class="people-head">
+      <div>
+        <span class="eyebrow">Who you'll work with</span>
+        <h2 class="split-h2">Senior people, directly involved</h2>
+        <p class="sub">A founder-led core with a network of senior specialists, brought in for each engagement. You work with the people doing the work.</p>
+      </div>
+      <a href="team.html" class="sol-link">Meet the full team →</a>
+    </div>
+    <div class="people-grid">
+      <div class="person person-lead">
+        <img src="team/bhavin.jpg" alt="Bhavin Chawla" width="84" height="84" loading="lazy" decoding="async" />
+        <div><b>Bhavin Chawla</b><span class="role">Founder &amp; Principal Consultant</span><span class="cred">15+ years in technology &amp; transformation · PMP &amp; ITIL certified · ex-CData</span></div>
+      </div>
+      <div class="person">
+        <img src="team/manoj.jpg" alt="ManojKumar Munnuswamy" width="84" height="84" loading="lazy" decoding="async" />
+        <div><b>ManojKumar Munnuswamy</b><span class="role">Senior Cybersecurity Consultant</span><span class="cred">20+ years in US IT · delivery lead at Coforge</span></div>
+      </div>
+      <div class="person">
+        <img src="team/joseph.jpg" alt="Joseph Charles Arockiaraj" width="84" height="84" loading="lazy" decoding="async" />
+        <div><b>Joseph Charles Arockiaraj</b><span class="role">Technology &amp; Business Consultant</span><span class="cred">~15 years in cloud operations · AWS, Azure, GCP · ex-Jamcracker</span></div>
+      </div>
+      <div class="person">
+        <img src="team/arun.jpg" alt="Arun Raj" width="84" height="84" loading="lazy" decoding="async" />
+        <div><b>Arun Raj</b><span class="role">Technology Operations Head</span><span class="cred">15+ years in IT operations &amp; client management</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 <!-- ===== CASE STUDIES — public DevOps stories, right-sized =====
      These are published case studies from other companies, cited on each card.
      None of them are eXommerce clients, and the page says so. Swap in our own
