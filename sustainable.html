@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>How We're Building a Sustainable Business — eXommerce.online</title>
+<meta name="description" content="How eXommerce is growing: at a pace we can keep, improving what already works, human-led and AI-assisted, with lean costs and clear handovers." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://exommerce.online/sustainable.html" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="eXommerce.online" />
+<meta property="og:url" content="https://exommerce.online/sustainable.html" />
+<meta property="og:title" content="How We're Building a Sustainable Business — eXommerce.online" />
+<meta property="og:description" content="Growing at a pace we can keep, improving what already works, and keeping people at the centre." />
+<meta property="og:image" content="https://exommerce.online/og-image.png" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="How We're Building a Sustainable Business — eXommerce.online" />
+<meta name="twitter:description" content="Growing at a pace we can keep, improving what already works, and keeping people at the centre." />
+<meta name="twitter:image" content="https://exommerce.online/og-image.png" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23109840'/%3E%3Ctext x='32' y='44' font-family='Sora,sans-serif' font-weight='700' font-size='34' fill='%23FFFFFF' text-anchor='middle'%3Ee%3C/text%3E%3C/svg%3E" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --bg2:#F7FBF8;
+    --bg-green:#EFF8F1;
+    --surface:#FFFFFF;
+    --surface-hover:#F3FAF5;
+
+    --brand-green:#109840;
+    --brand-green-dark:#087A32;
+    --brand-lime:#7BCF16;
+    --accent:#109840;
+
+    --ink:#0B0D0C;
+    --text:#0B0D0C;
+    --text2:#4B5560;
+    --text3:#6B7280;
+
+    --border:#DDE8E0;
+    --border-strong:#C9D9CE;
+
+    --ff-display:'Sora',system-ui,sans-serif;
+    --ff-body:'Inter',system-ui,sans-serif;
+    --maxw:1200px;
+    --radius:12px;
+    --shadow:0 10px 30px rgba(11,13,12,.06);
+    --shadow-hover:0 16px 40px rgba(16,152,64,.10);
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--ff-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden
+  }
+  a{color:inherit;text-decoration:none}
+  img,svg{max-width:100%;display:block}
+  h1,h2,h3,h4{
+    font-family:var(--ff-display);
+    margin:0;
+    font-weight:600;
+    letter-spacing:-.025em;
+    line-height:1.1
+  }
+  p{margin:0}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--brand-green);
+    font-weight:700;
+    margin-bottom:16px
+  }
+  .eyebrow::before{
+    content:'';
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--brand-green)
+  }
+  .sub{color:var(--text2);font-size:16px;max-width:58ch}
+  section{padding:112px 0}
+  @media(max-width:860px){section{padding:88px 0}}
+  @media(max-width:560px){section{padding:64px 0}}
+  .sec-alt{background:var(--bg2);position:relative;overflow:hidden}
+  .sec-alt::before{content:'';position:absolute;top:-120px;right:-120px;width:420px;height:420px;border-radius:50%;
+    background:radial-gradient(circle, rgba(123,207,22,.16), rgba(16,152,64,.05) 60%, transparent 72%);pointer-events:none;z-index:0}
+  .sec-alt .wrap{position:relative;z-index:1}
+  .shead{max-width:680px;margin-bottom:52px}
+  .shead h2{font-size:clamp(30px,4vw,46px);margin-bottom:16px}
+  .shead .sub{margin-top:0}
+
+  /* Brand logo */
+  .logo{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    font-family:var(--ff-display);
+    font-size:20px;
+    font-weight:700;
+    letter-spacing:-.045em;
+    color:var(--text)
+  }
+  .logo img{height:30px;width:auto;display:block}
+  .logo.logo-lockup img{height:auto;width:230px;max-width:100%}
+  @media(max-width:480px){.logo img{height:24px}}
+
+  /* Buttons */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    font-family:var(--ff-body);
+    font-weight:600;
+    font-size:14px;
+    padding:13px 23px;
+    border-radius:9px;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:transform .18s ease,box-shadow .18s ease,background .18s ease,border-color .18s ease;
+    white-space:nowrap;
+    min-height:46px;
+    line-height:1.2
+  }
+  .cta-short{display:none}
+  @media(max-width:560px){
+    .cta-long{display:none}
+    .cta-short{display:inline}
+  }
+  .btn-primary{
+    background:var(--brand-green);
+    color:#FFFFFF;
+    box-shadow:0 5px 16px rgba(16,152,64,.14)
+  }
+  .btn-primary:hover{
+    background:var(--brand-green-dark);
+    transform:translateY(-1px);
+    box-shadow:0 9px 22px rgba(16,152,64,.18)
+  }
+  .btn-outline{
+    background:#FFFFFF;
+    color:var(--text);
+    border-color:var(--border-strong)
+  }
+  .btn-outline:hover{
+    border-color:var(--brand-green);
+    color:var(--brand-green-dark);
+    transform:translateY(-1px)
+  }
+  .btn-sm{padding:9px 17px;font-size:13px;min-height:44px}
+
+  /* Navigation */
+  header.nav{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:100;
+    background:rgba(255,255,255,.84);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid transparent;
+    transition:border-color .2s,background .2s,box-shadow .2s
+  }
+  header.nav.scrolled{
+    border-color:var(--border);
+    background:rgba(255,255,255,.94);
+    box-shadow:0 4px 20px rgba(11,13,12,.04)
+  }
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:76px}
+  .nav-links{display:flex;gap:27px;align-items:center}
+  .nav-links a{
+    font-size:13.5px;
+    color:var(--text2);
+    transition:color .15s
+  }
+  .nav-links a:hover{color:var(--brand-green)}
+  .nav-links .current{
+    font-size:13.5px;
+    color:var(--brand-green);
+    font-weight:600
+  }
+  .nav-cta{display:flex;align-items:center;gap:14px}
+  .menu-btn{
+    display:none;
+    background:#FFFFFF;
+    border:1px solid var(--border);
+    color:var(--text);
+    width:44px;
+    height:44px;
+    border-radius:8px;
+    cursor:pointer
+  }
+  .nav-cta-mobile{display:none}
+  @media(max-width:920px){
+    .nav-links{display:none}
+    .menu-btn{display:block}
+    .nav-cta-mobile{display:block;font-weight:600;color:var(--brand-green)}
+  }
+
+  /* Hero */
+  .hero{
+    position:relative;
+    padding:172px 0 96px;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 78% 26%,rgba(123,207,22,.09),transparent 27%),
+      linear-gradient(180deg,#FFFFFF 0%,#FBFEFC 100%)
+  }
+  .hero-in{position:relative;z-index:1;text-align:center;max-width:900px;margin:0 auto}
+  .hero h1{
+    font-size:clamp(36px,5vw,58px);
+    letter-spacing:-.045em;
+    margin-bottom:22px
+  }
+  .hero h1 .accent{color:var(--brand-green)}
+  .hero .sub{font-size:18px;margin:0 auto 38px;max-width:57ch;text-align:center}
+  .hero-ctas{display:flex;gap:13px;justify-content:center;flex-wrap:wrap;margin-bottom:50px}
+  .hero-stats{
+    display:flex;
+    gap:0;
+    justify-content:center;
+    flex-wrap:wrap;
+    padding-top:30px;
+    border-top:1px solid var(--border)
+  }
+  .hero-stats div{
+    text-align:center;
+    min-width:150px;
+    padding:0 22px;
+    border-right:1px solid var(--border)
+  }
+  .hero-stats div:last-child{border-right:0}
+  .hero-stats b{
+    display:block;
+    font-family:var(--ff-display);
+    font-size:25px;
+    color:var(--text)
+  }
+  .hero-stats span{font-size:12px;color:var(--text3)}
+  @media(max-width:560px){
+    .hero{padding:124px 0 72px}
+    .hero .sub{font-size:16.5px;margin-bottom:32px}
+    .hero-ctas{margin-bottom:40px}
+    .hero-ctas .btn{width:100%}
+  }
+
+  /* Team grid */
+  .team-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+  }
+  @media(max-width:700px){.team-grid{grid-template-columns:1fr}}
+
+  .team-card{
+    position:relative;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:30px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    transition:background .2s,border-color .2s,transform .2s,box-shadow .2s;
+    overflow:hidden;
+  }
+  .team-card:hover{
+    background:var(--surface-hover);
+    border-color:#BBD7C4;
+    transform:translateY(-3px);
+    box-shadow:var(--shadow-hover)
+  }
+  .team-card::after{
+    content:'';
+    position:absolute;
+    left:0;
+    top:0;
+    height:3px;
+    width:0;
+    background:linear-gradient(90deg,var(--brand-green),var(--brand-lime));
+    border-radius:var(--radius) var(--radius) 0 0;
+    transition:width .28s ease
+  }
+  .team-card:hover::after{width:100%}
+
+  .card-top{display:flex;align-items:center;gap:18px}
+  .avatar{
+    flex:none;
+    width:84px;
+    height:84px;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:inset 0 0 0 1px var(--border-strong);
+  }
+  .avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform .25s ease;
+  }
+  .team-card:hover .avatar img{transform:scale(1.05)}
+
+  .card-id h3{font-size:17px;margin-bottom:3px}
+  .role{font-size:0.92rem;font-weight:500;color:var(--brand-green);margin:0}
+  .location{font-size:0.8rem;color:var(--text3);margin-top:4px}
+
+  .blurb{font-size:14px;line-height:1.65;color:var(--text2);margin:0}
+
+  .card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:4px}
+  .tag{
+    font-size:.72rem;
+    font-weight:600;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    color:var(--brand-green);
+    background:var(--bg-green);
+    padding:5px 10px;
+    border-radius:6px;
+    border:1px solid #D8EBDD;
+  }
+  .li-link{
+    font-size:.84rem;
+    font-weight:600;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    border-bottom:1px solid transparent;
+  }
+  .li-link:hover,.li-link:focus-visible{color:var(--brand-green);border-color:currentColor}
+
+  /* Work culture */
+  .culture-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+  }
+  @media(max-width:900px){.culture-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.culture-grid{grid-template-columns:1fr}}
+  /* Seven rules: the last one runs double-width so no row is left ragged */
+  @media(min-width:521px){.culture-card.wide{grid-column:span 2}}
+  #talk .hero-in{text-align:center}
+  #talk h2{font-size:clamp(26px,3vw,36px);margin-bottom:12px}
+  #talk .sub{margin:0 auto 26px}
+  .culture-card{
+    background:#FFFFFF;
+    border:1px solid var(--border);
+    border-top:3px solid var(--brand-green);
+    border-radius:var(--radius);
+    padding:24px 20px;
+  }
+  .culture-card b{
+    display:block;
+    font-family:var(--ff-display);
+    font-weight:600;
+    font-size:1.02rem;
+    color:var(--text);
+    margin-bottom:8px;
+  }
+  .culture-card p{
+    font-size:.88rem;
+    line-height:1.5;
+    color:var(--text2);
+    margin:0;
+  }
+
+  /* Footer */
+  footer{background:#F2F8F4;border-top:1px solid var(--border);padding:76px 0 32px}
+  .fg{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:56px}
+  .fbrand p{font-size:13.5px;color:var(--text3);margin-top:14px;max-width:34ch;line-height:1.6}
+  .fg h4{font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:18px}
+  .fg ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+  .fg a{font-size:13.5px;color:var(--text3);transition:color .15s}
+  .fg a:hover{color:var(--brand-green)}
+  .fbottom{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid var(--border);font-size:12.5px;color:var(--text3);flex-wrap:wrap;gap:12px}
+  .fbottom a{color:var(--text3)}
+  .fbottom a:hover{color:var(--brand-green)}
+  @media(max-width:860px){.fg{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.fg{grid-template-columns:1fr}}
+
+  [hidden]{display:none !important}
+  :focus-visible{outline:3px solid var(--brand-green);outline-offset:3px;border-radius:4px}
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{
+      animation-duration:.01ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.01ms !important;
+      scroll-behavior:auto !important
+    }
+  }
+</style>
+<!-- Analytics: GA4 loads only after cookie consent -->
+<script defer src="/analytics.js"></script>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a href="index.html" class="logo" aria-label="eXommerce home">
+      <img src="logo.png" alt="eXommerce.online" width="420" height="74" />
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="index.html#solutions">Solutions</a>
+      <a href="index.html#case-studies">Case studies</a>
+      <a href="index.html#about">How we work</a>
+      <a href="team.html">Team</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="index.html#contact" class="nav-cta-mobile">Book a free consultation →</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="index.html#contact" class="btn btn-primary btn-sm" aria-label="Book a free consultation"><span class="cta-long">Book a free consultation</span><span class="cta-short">Book a call</span></a>
+      <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="top">
+  <div class="wrap hero-in">
+    <span class="eyebrow">Our approach</span>
+    <h1>How we're building a <span class="accent">sustainable&nbsp;business.</span></h1>
+    <p class="sub">
+      We're a young firm, and we'd rather grow slowly and keep every promise than grow
+      fast and break some. This is how we're going about it. We'll keep this page
+      updated as we learn.
+    </p>
+    <div class="hero-ctas">
+      <a href="index.html#contact" class="btn btn-primary">Talk to us →</a>
+      <a href="index.html" class="btn btn-outline">Back to eXommerce</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRINCIPLES ===== -->
+<section class="sec-alt" id="principles">
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">What we hold ourselves to</span>
+      <h2>Seven working rules</h2>
+      <p class="sub">None of these are new ideas. The work is in keeping to them.</p>
+    </div>
+
+    <div class="culture-grid">
+      <div class="culture-card">
+        <b>Take on only what we can deliver</b>
+        <p>We match commitments to what our team can actually carry. Saying "not yet" is part of doing the work well.</p>
+      </div>
+      <div class="culture-card">
+        <b>Improve before replacing</b>
+        <p>Most businesses already have technology that mostly works. We start there, and only suggest a rebuild when it clearly pays for itself.</p>
+      </div>
+      <div class="culture-card">
+        <b>Human-led, AI-assisted</b>
+        <p>AI speeds up the routine work. Decisions, judgement and relationships stay with people.</p>
+      </div>
+      <div class="culture-card">
+        <b>Keep costs lean</b>
+        <p>We use free and open-source tools where they do the job, and we flag anything that would add a recurring bill before it's added.</p>
+      </div>
+      <div class="culture-card">
+        <b>Build our own products</b>
+        <p>Alongside consulting we build products of our own, starting with <a href="https://leadgenai.exommerce.online" target="_blank" rel="noopener">LeadGenAI</a>. A second line of work means we never need to push services a client doesn't need.</p>
+      </div>
+      <div class="culture-card">
+        <b>Hand over cleanly</b>
+        <p>What we set up is documented and handed over, so you can run it without us.</p>
+      </div>
+      <div class="culture-card wide">
+        <b>Say only what we can back</b>
+        <p>No borrowed logos or inflated numbers. The case studies on our site are public examples, cited as such.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section id="talk">
+  <div class="wrap hero-in">
+    <h2>Working the same way?</h2>
+    <p class="sub">If this sounds like how you'd like to work, tell us what you're solving.</p>
+    <div class="hero-ctas">
+      <a href="index.html#contact" class="btn btn-primary">Talk to us →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="wrap">
+    <div class="fg">
+      <div class="fbrand">
+        <a href="index.html" class="logo logo-lockup" aria-label="eXommerce home">
+          <img src="logo-full.png" alt="eXommerce.online" width="560" height="123" loading="lazy" decoding="async" />
+        </a>
+        <p>IT consulting, DevOps and cloud services from Electronic City, Bengaluru.</p>
+      </div>
+      <div><h4>Services</h4><ul>
+        <li><a href="index.html#solutions">IT Consulting</a></li>
+        <li><a href="index.html#solutions">Business Consulting</a></li>
+        <li><a href="index.html#case-studies">Case studies</a></li>
+      </ul></div>
+      <div><h4>Our Products &amp; Labs</h4><ul>
+        <li><a href="https://leadgenai.exommerce.online" target="_blank" rel="noopener">LeadGenAI</a></li>
+        <li><span style="font-size:13.5px;color:var(--text3)">RentAI (beta)</span></li>
+      </ul></div>
+      <div><h4>Company</h4><ul>
+        <li><a href="index.html#about">How we work</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="mailto:hello@exommerce.online">hello@exommerce.online</a></li>
+        <li><a href="https://www.linkedin.com/company/exommerce" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul></div>
+    </div>
+    <div class="fbottom">
+      <span>© <span id="yr"></span> eXommerce LLP · Electronic City, Bengaluru</span>
+      <span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // nav scroll state
+  var navEl = document.getElementById('nav');
+  window.addEventListener('scroll', function(){ navEl.classList.toggle('scrolled', window.scrollY > 8); }, {passive:true});
+
+  // mobile menu (simple toggle of inline links list)
+  var mb = document.getElementById('menuBtn');
+  mb.addEventListener('click', function(){
+    var links = document.querySelector('.nav-links');
+    var open = links.style.display === 'flex';
+    links.style.cssText = open ? '' : 'display:flex;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:var(--bg);padding:20px 28px;border-bottom:1px solid var(--border);gap:18px';
+    mb.setAttribute('aria-expanded', String(!open));
+  });
+</script>
+</body>
+</html>
