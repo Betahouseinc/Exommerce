@@ -12,27 +12,30 @@
 <meta property="og:site_name" content="eXommerce.online" />
 <meta property="og:url" content="https://exommerce.online/" />
 <meta property="og:title" content="eXommerce.online — IT Consulting, DevOps &amp; Cloud Services" />
-<meta property="og:description" content="IT consulting, DevOps and cloud services for growing businesses, from Bengaluru." />
-<meta property="og:image" content="https://exommerce.online/og-image.png" />
+<meta property="og:description" content="IT and business consulting for growing businesses. Human-led, AI-assisted. Electronic City, Bengaluru, working worldwide." />
+<meta property="og:image" content="https://exommerce.online/og-image-2026.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="eXommerce.online — IT Consulting, DevOps &amp; Cloud Services" />
-<meta name="twitter:description" content="IT consulting, DevOps and cloud services for growing businesses, from Bengaluru." />
-<meta name="twitter:image" content="https://exommerce.online/og-image.png" />
+<meta name="twitter:description" content="IT and business consulting for growing businesses. Human-led, AI-assisted. Electronic City, Bengaluru, working worldwide." />
+<meta name="twitter:image" content="https://exommerce.online/og-image-2026.png" />
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": "ProfessionalService",
   "name": "eXommerce LLP",
   "alternateName": "eXommerce.online",
   "url": "https://exommerce.online/",
-  "logo": "https://exommerce.online/og-image.png",
+  "logo": "https://exommerce.online/logo.png",
+  "image": "https://exommerce.online/og-image-2026.png",
   "email": "hello@exommerce.online",
-  "description": "IT consulting, DevOps and cloud services for growing businesses, based in Electronic City, Bengaluru.",
-  "address": { "@type": "PostalAddress", "addressLocality": "Bengaluru", "addressCountry": "IN" },
+  "description": "IT consulting, DevOps and cloud services, and business consulting, for growing businesses. Human-led, AI-assisted. Based in Electronic City, Bengaluru, working with clients worldwide.",
+  "address": { "@type": "PostalAddress", "addressLocality": "Electronic City, Bengaluru", "addressRegion": "Karnataka", "postalCode": "560100", "addressCountry": "IN" },
+  "areaServed": "Worldwide",
+  "knowsAbout": ["IT consulting", "DevOps", "Cloud services management", "Data integration", "Web development", "Cybersecurity", "Business consulting", "Fractional CTO", "IT service management", "AI governance"],
   "sameAs": ["https://www.linkedin.com/company/exommerce"]
 }
 </script>
@@ -1358,6 +1361,10 @@
 </footer>
 
 <script>
+  // Enquiry tracking — a no-op unless the visitor accepted analytics cookies
+  // (analytics.js only defines gtag after consent).
+  function track(name, params){ try { if (window.gtag) window.gtag('event', name, params || {}); } catch (e) {} }
+
   document.getElementById('yr').textContent = new Date().getFullYear();
 
   // nav scroll state
@@ -1428,6 +1435,7 @@
     var label   = btn.textContent;
 
     function thanks(){
+      track('generate_lead', { form: 'contact', area: need || 'unspecified' });
       document.getElementById('okName').textContent = fname || 'there';
       document.getElementById('formInner').style.display = 'none';
       document.getElementById('ok').style.display = 'block';
@@ -1526,6 +1534,7 @@
           ifr.loading = 'lazy';
           frame.appendChild(ifr);
         }
+        track('book_call_open', { location: el.closest('header') ? 'header' : 'contact' });
         dlg.showModal();
       });
     });
@@ -1623,7 +1632,7 @@
       fetch(CASE_STUDY_ENDPOINT, { method:'POST', body:data })
         .then(function(r){ return r.json(); })
         .then(function(res){
-          if (res && res.ok) done(email);
+          if (res && res.ok){ track('case_study_request', { study: form.study.value }); done(email); }
           else throw { server: res && res.error };
         })
         .catch(function(e2){
