@@ -289,10 +289,12 @@
     /* The footage is green arrows on near-black. Inverting (then rotating the
        hue back) turns the black to white and keeps the arrows green; multiply
        then drops the white out, so only the arrows sit on the light hero. */
-    filter:invert(1) hue-rotate(180deg) saturate(.7);
+    /* grayscale + sepia + hue-rotate turns the footage one even green, so the
+       pink shading in the original clip disappears */
+    filter:invert(1) grayscale(1) sepia(.55) hue-rotate(75deg) saturate(1.5);
     mix-blend-mode:multiply
   }
-  .hero-video.is-ready{opacity:.85}
+  .hero-video.is-ready{opacity:.7}
   /* Between tablet and desktop the hero stacks and the copy spans the full
      width, so the veil evens out to keep every line readable. */
   @media(max-width:920px){
@@ -934,8 +936,8 @@
   <div class="wrap hero-in">
     <div class="hero-copy">
       <span class="eyebrow">IT consulting · DevOps · Cloud services</span>
-      <h1 class="rotator" aria-label="Bridging the gap between infrastructure and technology.">
-        <span class="rot-item is-active" aria-hidden="true">Bridging the gap between <span class="accent">infrastructure and technology.</span></span>
+      <h1 class="rotator" aria-label="Bridging the gap between business and technology.">
+        <span class="rot-item is-active" aria-hidden="true">Bridging the gap between <span class="accent">business and technology.</span></span>
       </h1>
       <p class="sub">We're an IT consulting team helping growing businesses run and improve their technology, from cloud and DevOps to data and the web, and we're just as happy to help with the business side of change.</p>
       <div class="hero-ctas">
