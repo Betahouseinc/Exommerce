@@ -35,11 +35,17 @@ var STUDIES = {
 var HEADERS = ['Timestamp', 'Case study', 'First name', 'Last name', 'Email', 'Company',
                'Role', 'Company size', 'Consent', 'Page', 'Status'];
 
+var CONTACT_SHEET   = 'Contact enquiries';
+var CONTACT_HEADERS = ['Timestamp', 'First name', 'Last name', 'Email', 'Company', 'Area',
+                       'Message', 'Page', 'Status'];
+
 function doPost(e) {
   var p = (e && e.parameter) || {};
 
   // Honeypot: people never fill the hidden field, bots do. Pretend success.
   if (p.website) return json({ ok: true });
+
+  if (p.form === 'contact') return handleContact(p);
 
   var study = STUDIES[p.study];
   var first = clean(p.first_name, 60);
@@ -97,6 +103,59 @@ function doPost(e) {
     log(row.concat('failed: ' + err));
     return json({ ok: false, error: 'We could not send it right now. Email hello@exommerce.online and we will send it.' });
   }
+}
+
+// Contact form on the homepage: log the enquiry to its own tab and email
+// hello@ with the details, reply-to set to the visitor.
+function handleContact(p) {
+  var first   = clean(p.first_name, 60);
+  var last    = clean(p.last_name, 60);
+  var email   = clean(p.email, 120).toLowerCase();
+  var company = clean(p.company, 120);
+  var need    = clean(p.need, 80);
+  var message = clean(p.message, 3000);
+
+  if (!first || !company || !message) return json({ ok: false, error: 'Please fill in the required fields' });
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ ok: false, error: 'Please enter a valid email' });
+
+  var row = [new Date(), first, last, email, company, need, message, clean(p.page, 200)];
+
+  // The same person sending the same message twice in 10 minutes is logged once.
+  var cache = CacheService.getScriptCache();
+  var key = 'contact:' + email + ':' + Utilities.base64Encode(Utilities.computeDigest(
+    Utilities.DigestAlgorithm.MD5, message)).slice(0, 16);
+  if (cache.get(key)) return json({ ok: true });
+
+  try {
+    MailApp.sendEmail({
+      to: NOTIFY_TO,
+      replyTo: email,
+      name: SENDER_NAME + ' website',
+      subject: 'New enquiry: ' + first + ' ' + last + ' · ' + company,
+      body: 'Name:    ' + (first + ' ' + last).trim() + '\n'
+          + 'Email:   ' + email + '\n'
+          + 'Company: ' + company + '\n'
+          + 'Area:    ' + (need || '—') + '\n\n'
+          + message + '\n\n'
+          + 'Reply to this email to answer them directly.'
+    });
+    cache.put(key, '1', 600);
+    logTo(CONTACT_SHEET, CONTACT_HEADERS, row.concat('received'));
+    return json({ ok: true });
+  } catch (err) {
+    logTo(CONTACT_SHEET, CONTACT_HEADERS, row.concat('failed: ' + err));
+    return json({ ok: false, error: 'We could not send it just now. Please email hello@exommerce.online.' });
+  }
+}
+
+function logTo(name, headers, values) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(name) || ss.insertSheet(name);
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(headers);
+    sheet.setFrozenRows(1);
+  }
+  sheet.appendRow(values);
 }
 
 // Visiting the /exec URL in a browser confirms the deployment is live.

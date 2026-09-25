@@ -1299,11 +1299,10 @@
           <div class="fnote">We only use your details to reply. <a href="/privacy.html">Privacy Policy</a></div>
         </form>
       </div>
-      <div class="ok" id="ok">
-        <div class="big">Almost there — just hit send.</div>
-        <p class="sub" style="margin:0 auto 18px">Your email app should have opened with your message ready to go. Just hit send and we'll get back to you.</p>
-        <a id="okMailto" class="btn btn-primary btn-sm" href="mailto:hello@exommerce.online">Open it again →</a>
-        <p class="sub" style="margin:16px auto 0;font-size:13px">Nothing opened? Email us at <a href="mailto:hello@exommerce.online" style="color:var(--brand-green);text-decoration:underline">hello@exommerce.online</a>.</p>
+      <div class="ok" id="ok" role="status">
+        <div class="cs-tick" aria-hidden="true">✓</div>
+        <div class="big">Thanks, <span id="okName">there</span>!</div>
+        <p class="sub" style="margin:0 auto 18px">We've received your message and will be in touch soon. If it's urgent, you can also <a href="#contact" data-book style="color:var(--brand-green);text-decoration:underline">book a call</a>.</p>
       </div>
     </div>
   </div>
@@ -1399,8 +1398,10 @@
     });
   });
 
-  // contact form — composes the enquiry as an email in the visitor's own mail
-  // client. No backend, so there is nothing that can silently drop a lead.
+  // contact form — sent to the Apps Script mailer (case-study-mailer.gs), which
+  // logs it to the "Contact enquiries" tab and emails hello@. The visitor just
+  // sees a thank-you. If that fails, fall back to their own mail app so the
+  // enquiry is never lost.
   document.getElementById('leadForm').addEventListener('submit', function(e){
     e.preventDefault();
     var f = e.target;
@@ -1415,29 +1416,31 @@
     var company = f.company.value.trim();
     var need    = f.need.value;
     var message = f.message.value.trim();
+    var btn     = document.getElementById('contactSubmit');
+    var label   = btn.textContent;
 
-    var body = [
-      'Name:    ' + (fname + ' ' + lname).trim(),
-      'Email:   ' + email,
-      'Company: ' + company,
-      'Need:    ' + (need || '—'),
-      '',
-      'Enquiry:',
-      (message || '—')
-    ].join('\n');
+    function thanks(){
+      document.getElementById('okName').textContent = fname || 'there';
+      document.getElementById('formInner').style.display = 'none';
+      document.getElementById('ok').style.display = 'block';
+      document.getElementById('ok').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function viaMailApp(){
+      var body = ['Name:    ' + (fname + ' ' + lname).trim(), 'Email:   ' + email,
+                  'Company: ' + company, 'Area:    ' + (need || '—'), '', message].join('\n');
+      window.location.href = 'mailto:hello@exommerce.online?subject='
+        + encodeURIComponent('Enquiry from ' + (company || fname)) + '&body=' + encodeURIComponent(body);
+      btn.disabled = false; btn.textContent = label;
+    }
 
-    var href = 'mailto:hello@exommerce.online'
-      + '?subject=' + encodeURIComponent('Enquiry from ' + (company || fname || 'the website'))
-      + '&body='    + encodeURIComponent(body);
-
-    // Give the visitor a link too — mailto: silently does nothing when no mail
-    // client is configured, so the address must stay reachable either way.
-    document.getElementById('okMailto').href = href;
-    document.getElementById('formInner').style.display = 'none';
-    document.getElementById('ok').style.display = 'block';
-    document.getElementById('ok').scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-    window.location.href = href;
+    var data = new URLSearchParams(new FormData(f));
+    data.set('form', 'contact');
+    data.set('page', location.href);
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch(CASE_STUDY_ENDPOINT, { method: 'POST', body: data })
+      .then(function(r){ return r.json(); })
+      .then(function(res){ if (res && res.ok) thanks(); else viaMailApp(); })
+      .catch(viaMailApp);
   });
 
   // ================= HERO VIDEO =================
