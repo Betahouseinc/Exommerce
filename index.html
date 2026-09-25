@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>eXommerce.online — DevOps, Infrastructure Management &amp; IT Consulting</title>
-<meta name="description" content="eXommerce is a small DevOps and IT consulting team in Bengaluru. We manage and modernise infrastructure for growing businesses (cloud, deployments, monitoring, disaster recovery, security) and offer IT consulting, web development and data work." />
+<title>eXommerce.online — IT Consulting, DevOps &amp; Cloud Services</title>
+<meta name="description" content="IT consulting, DevOps and cloud services from Electronic City, Bengaluru. Tell us what you're solving; we reply within 1 business day." />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://exommerce.online/" />
 
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="eXommerce.online" />
 <meta property="og:url" content="https://exommerce.online/" />
-<meta property="og:title" content="eXommerce.online — DevOps, Infrastructure Management &amp; IT Consulting" />
-<meta property="og:description" content="DevOps, infrastructure management and IT consulting for growing businesses, from Bengaluru." />
+<meta property="og:title" content="eXommerce.online — IT Consulting, DevOps &amp; Cloud Services" />
+<meta property="og:description" content="IT consulting, DevOps and cloud services for growing businesses, from Bengaluru." />
 <meta property="og:image" content="https://exommerce.online/og-image.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="eXommerce.online — DevOps, Infrastructure Management &amp; IT Consulting" />
-<meta name="twitter:description" content="DevOps, infrastructure management and IT consulting for growing businesses, from Bengaluru." />
+<meta name="twitter:title" content="eXommerce.online — IT Consulting, DevOps &amp; Cloud Services" />
+<meta name="twitter:description" content="IT consulting, DevOps and cloud services for growing businesses, from Bengaluru." />
 <meta name="twitter:image" content="https://exommerce.online/og-image.png" />
 
 <script type="application/ld+json">
@@ -30,10 +30,22 @@
   "alternateName": "eXommerce.online",
   "url": "https://exommerce.online/",
   "logo": "https://exommerce.online/og-image.png",
-  "email": "info@exommerce.online",
-  "description": "A DevOps-first technology partner for IT consulting and business transformation.",
+  "email": "hello@exommerce.online",
+  "description": "IT consulting, DevOps and cloud services for growing businesses, based in Electronic City, Bengaluru.",
   "address": { "@type": "PostalAddress", "addressLocality": "Bengaluru", "addressCountry": "IN" },
   "sameAs": ["https://www.linkedin.com/company/exommerce"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "How does an engagement start?", "acceptedAnswer": { "@type": "Answer", "text": "With a friendly call about your challenge. If we're a good fit, we take a short look at your current setup and send a written plan covering scope, timeline and cost. Nothing begins until you're happy with it." } },
+    { "@type": "Question", "name": "How do you keep our systems and data secure?", "acceptedAnswer": { "@type": "Answer", "text": "We work with least-privilege access you can revoke at any time, keep secrets out of code, and review and log every change. We're happy to sign an NDA and to follow your own security policies." } },
+    { "@type": "Question", "name": "How do you price your work?", "acceptedAnswer": { "@type": "Answer", "text": "A fixed price for assessments and one-off projects, or a simple monthly fee for ongoing support. Either way, you'll get a clear written quote before anything starts." } },
+    { "@type": "Question", "name": "Can you take over infrastructure someone else built?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. We get to know what's running, document it and fix the most urgent gaps first. Then we can look after it day to day or hand it back to your team." } }
+  ]
 }
 </script>
 <meta name="theme-color" content="#FFFFFF" />
@@ -430,88 +442,7 @@
   @media(max-width:860px){.sol-grid{grid-template-columns:1fr 1fr}}
   @media(max-width:560px){.sol-grid{grid-template-columns:1fr}}
 
-  /* Products — featured product block */
-  .feature{
-    display:grid;
-    grid-template-columns:1.05fr .95fr;
-    gap:56px;
-    align-items:center;
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:46px;
-    box-shadow:var(--shadow)
-  }
-  .feature h3{font-size:clamp(26px,3.2vw,36px);margin:12px 0 16px}
-  .feature-lede{font-size:16.5px;color:var(--text2);line-height:1.65;max-width:52ch}
-  .feature-pts{list-style:none;margin:28px 0 32px;padding:0;display:flex;flex-direction:column;gap:15px}
-  .feature-pts li{
-    position:relative;
-    padding-left:21px;
-    font-size:14.5px;
-    color:var(--text2);
-    line-height:1.6
-  }
-  .feature-pts li::before{
-    content:'';
-    position:absolute;
-    left:0;
-    top:8px;
-    width:7px;
-    height:7px;
-    border-radius:50%;
-    background:var(--brand-green)
-  }
-  .feature-pts b{color:var(--text)}
-  .feature-ctas{display:flex;gap:12px;flex-wrap:wrap}
-  .feature-visual{justify-self:center;width:100%;max-width:420px}
-  @media(max-width:920px){
-    .feature{grid-template-columns:1fr;gap:34px;padding:34px}
-    .feature-visual{order:-1;max-width:360px}
-  }
-  @media(max-width:480px){
-    .feature{padding:26px}
-    .feature-ctas .btn{width:100%}
-  }
 
-  /* Products */
-  .prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:20px}
-  .prod-card{
-    position:relative;
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:30px;
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-    transition:border-color .2s,transform .2s,box-shadow .2s
-  }
-  .prod-card:hover{
-    border-color:#BBD7C4;
-    transform:translateY(-3px);
-    box-shadow:var(--shadow)
-  }
-  .prod-top{display:flex;align-items:center;justify-content:space-between}
-  .prod-top h3{font-size:19px}
-  .st{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    font-size:10px;
-    font-weight:700;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-    color:var(--brand-green)
-  }
-  .st .d{width:6px;height:6px;border-radius:50%;background:var(--brand-green)}
-  .st.beta{color:#6B7280}.st.beta .d{background:var(--brand-lime)}
-  .st.dev{color:var(--text3)}.st.dev .d{background:var(--text3)}
-  .prod-tl{font-size:12.5px;color:var(--text3);letter-spacing:.02em}
-  .prod-card p{font-size:14px;color:var(--text2);line-height:1.65}
-  .prod-meta{font-size:12px;color:var(--text3);border-top:1px solid var(--border);padding-top:14px}
-  .prod-cta{margin-top:auto}
-  @media(max-width:860px){.prod-grid{grid-template-columns:1fr}}
 
   /* Logo wall label */
   .techstrip-label{
@@ -812,12 +743,17 @@
   .split-media img{width:100%;height:100%;min-height:380px;object-fit:cover;border-radius:16px;border:1px solid var(--border);background:var(--bg2)}
   .split-h2{font-size:clamp(28px,3.2vw,40px);margin-bottom:14px;text-wrap:balance}
   .why-list{list-style:none;margin:26px 0 0;padding:0;border-top:1px solid var(--border)}
-  .why-list li{padding:16px 0;border-bottom:1px solid var(--border)}
+  .why-list li{padding:12px 0;border-bottom:1px solid var(--border)}
   .why-list h3{font-size:16px;margin-bottom:4px}
   .why-list p{font-size:14px;color:var(--text2);line-height:1.6}
   .geo-list{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
   .geo-list li{padding:8px 14px;border:1px solid var(--border-strong);border-radius:999px;font-size:13.5px;font-weight:600;font-family:var(--ff-display);color:var(--text)}
-  .geo-note{margin-top:18px;font-size:13.5px;color:var(--text3)}
+  .geo-label{margin-top:22px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--text3)}
+  .geo-list{margin-top:10px}
+  .geo-list li{padding:6px 12px;font-size:13px}
+  /* The HQ photo is portrait; frame it landscape on the skyline so the
+     section stays compact. */
+  #global img{min-height:0;height:auto;aspect-ratio:4/5;object-position:50% 50%}
   .geo-hq{
     position:absolute;
     left:16px;
@@ -842,19 +778,122 @@
   .hero{background:var(--bg);padding-bottom:56px}
   .sec-alt{background:var(--bg)}
   .sec-alt::before{display:none}
-  #solutions,#case-studies,#about,#products,#faq,#contact{border-top:1px solid var(--border)}
+  #solutions,#case-studies,#about,#faq,#contact{border-top:1px solid var(--border)}
   section[id]{scroll-margin-top:84px}
-  .sol-card,.why-card,.pb-card,.feature,.form{box-shadow:none}
+  .sol-card,.why-card,.pb-card,.form{box-shadow:none}
   .sol-card::before,.sol-card::after{display:none}
   .sol-card:hover,.why-card:hover,.pb-card:hover{transform:none;box-shadow:none;border-color:var(--border-strong)}
   .sol-card,.why-card{padding:26px 28px}
   .sol-card h3,.why-card h3{margin-top:0}
   .btn-primary,.btn-primary:hover{box-shadow:none}
   .btn-primary:hover,.btn-outline:hover{transform:none}
-  .feature{border-color:var(--border)}
-  .feature-lede{margin-bottom:26px}
   .marquee-track li,.logowall li{box-shadow:none}
   header.nav.scrolled{box-shadow:none}
+  /* Tighter rhythm so the page reads in about five screens */
+  section{padding:72px 0}
+  .shead{margin-bottom:36px}
+  .logowall{padding:28px 0 32px}
+  .logowall .techstrip-label{margin-bottom:14px}
+  .marquee-track{gap:10px}
+  .marquee-track li{padding:6px 14px 6px 9px;font-size:13px}
+  .marquee-track img{width:22px;height:22px}
+  .hero-ctas{margin-bottom:22px}
+  .hero-trust{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px 22px}
+  .hero-trust li{position:relative;padding-left:20px;font-size:13.5px;font-weight:600;color:var(--text2)}
+  .hero-trust li::before{content:'✓';position:absolute;left:0;top:0;color:var(--brand-green);font-weight:800}
+  @media(max-width:920px){.hero-trust{justify-content:center}}
+  .fprod{font-size:13px;color:var(--text3);margin-top:14px}
+  .fprod a{color:var(--text2);font-weight:600}
+  .fprod a:hover{color:var(--brand-green)}
+  .field textarea{min-height:84px}
+  /* Contact — the pitch on the left, the form on the right */
+  .contact-split{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+  .contact-split h2{font-size:clamp(28px,3.2vw,40px);margin-bottom:14px;text-wrap:balance}
+  .contact-split .form{max-width:none;margin:0}
+  .contact-points{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+  .contact-points li{position:relative;padding-left:22px;font-size:14px;color:var(--text2)}
+  .contact-points li::before{content:'✓';position:absolute;left:0;color:var(--brand-green);font-weight:800}
+  .contact-split .contact-alt{text-align:left;margin-top:22px}
+  @media(max-width:920px){.contact-split{grid-template-columns:1fr;gap:28px}}
+  /* The HQ photo fills the height of the copy beside it */
+  #about .split{align-items:stretch}
+  #global img{min-height:0;height:100%;aspect-ratio:auto}
+  @media(max-width:920px){#global img{height:auto;aspect-ratio:16/9}}
+  .hero{padding-top:140px}
+  .sol-list{gap:5px;margin-top:12px;padding-top:12px}
+  .sol-card,.why-card{padding:22px 24px}
+  .why-list li{padding:10px 0}
+  .why-list{margin-top:18px}
+  /* Service hierarchy: DevOps & Infrastructure leads, the rest support it */
+  .sol-tiered{grid-template-columns:1.45fr 1fr;grid-template-rows:auto auto}
+  .sol-tiered .sol-primary{grid-row:1 / span 2;padding:30px 32px}
+  .sol-tiered .sol-primary h3{font-size:clamp(22px,2.2vw,28px);margin-bottom:10px}
+  .sol-tiered .sol-primary > p{font-size:15px}
+  .sol-list-2{display:grid;grid-template-columns:1fr 1fr;gap:8px 22px}
+  .sol-link{display:inline-block;margin-top:18px;font-size:14px;font-weight:700;color:var(--brand-green-dark)}
+  .sol-link:hover{text-decoration:underline}
+  .sol-secondary h3{font-size:16px;margin-bottom:6px}
+  .sol-secondary p{font-size:13.5px}
+  .sol-inline{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);color:var(--text3)}
+  .sol-tag-muted{color:var(--text3)}
+  @media(max-width:860px){.sol-tiered{grid-template-columns:1fr}.sol-tiered .sol-primary{grid-row:auto}}
+  @media(max-width:520px){.sol-list-2{grid-template-columns:1fr}}
+  /* Footer: consulting services and in-house products kept visibly apart */
+  .fgrid{display:grid;grid-template-columns:1.3fr 1fr 1.2fr 1fr;gap:32px;margin-bottom:28px}
+  .fbrand p{font-size:13px;color:var(--text3);margin-top:12px;max-width:30ch;line-height:1.55}
+  .fbrand .logo img{height:26px}
+  .fcol{display:flex;flex-direction:column;gap:9px}
+  .fcol h4{font-family:var(--ff-body);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
+  .fcol a,.flab-item{font-size:13.5px;color:var(--text2);padding:2px 0}
+  .fcol a:hover{color:var(--brand-green)}
+  .flabs{padding-left:24px;border-left:1px solid var(--border)}
+  .flabs a span,.flab-item span{display:block;font-size:12px;color:var(--text3)}
+  .fnote-sm{font-size:12px;color:var(--text3);line-height:1.5;margin-bottom:2px}
+  @media(max-width:860px){.fgrid{grid-template-columns:1fr 1fr}.flabs{padding-left:0;border-left:0}}
+  @media(max-width:520px){.fgrid{grid-template-columns:1fr}}
+  /* Testimonials — real client quotes only (section stays hidden until then) */
+  #testimonials{border-top:1px solid var(--border)}
+  .tm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .tm-card{margin:0;padding:24px 26px;border:1px solid var(--border);border-radius:var(--radius);display:flex;flex-direction:column;gap:18px}
+  .tm-card blockquote{margin:0;font-size:15px;line-height:1.65;color:var(--text)}
+  .tm-card blockquote::before{content:'\201C';display:block;font-family:var(--ff-display);font-size:40px;line-height:.6;color:var(--brand-green);margin-bottom:10px}
+  .tm-card figcaption{margin-top:auto;padding-top:14px;border-top:1px solid var(--border);font-size:13px;color:var(--text3)}
+  .tm-card figcaption b{display:block;font-size:14px;color:var(--text)}
+  @media(max-width:860px){.tm-grid{grid-template-columns:1fr}}
+  /* Partnerships band — sits under the tools row */
+  .partners{margin-top:22px;padding-top:20px;border-top:1px solid var(--border)}
+  .partner-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .partner-list li{padding:10px 14px;border:1px solid var(--border);border-radius:10px;text-align:center}
+  .partner-list b{display:block;font-family:var(--ff-display);font-size:14px;color:var(--text)}
+  .partner-list span{font-size:12px;color:var(--text3)}
+  @media(max-width:860px){.partner-list{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:520px){.partner-list{grid-template-columns:1fr 1fr}}
+  .partner-list li.is-partner{border-color:var(--brand-green)}
+  .partner-list li.is-partner span{color:var(--brand-green-dark);font-weight:600}
+  .partner-cta{margin-top:16px;text-align:center;font-size:14px;color:var(--text2)}
+  .partner-cta a{font-weight:700;color:var(--brand-green-dark);white-space:nowrap}
+  .partner-cta a:hover{text-decoration:underline}
+  /* Two-card version: the core card no longer spans two rows */
+  .sol-two{grid-template-columns:1fr 1fr}
+  .sol-two .sol-primary{grid-row:auto}
+  .sol-two .sol-primary h3{font-size:clamp(22px,2.2vw,26px)}
+  .sol-two .sol-primary > p{font-size:15px}
+  .sol-two .sol-list{display:grid;grid-template-columns:1fr 1fr;gap:8px 22px}
+  @media(max-width:1100px){.sol-two .sol-list{grid-template-columns:1fr}}
+  .sol-two{align-items:stretch}
+  /* Contact: booking card, trust badges */
+  .book-card{margin-top:22px;padding:20px 22px;border:1px solid var(--brand-green);border-radius:var(--radius);background:var(--bg-green)}
+  .book-card b{display:block;font-family:var(--ff-display);font-size:16px;color:var(--text);margin-bottom:6px}
+  .book-card p{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:14px}
+  .form-title{font-family:var(--ff-display);font-weight:600;font-size:16px;color:var(--text);margin-bottom:10px}
+  .trust-badges{list-style:none;margin:0 0 18px;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+  .trust-badges li{padding:5px 10px 5px 26px;position:relative;border:1px solid var(--border-strong);border-radius:999px;font-size:12px;font-weight:600;color:var(--text2)}
+  .trust-badges li::before{content:'✓';position:absolute;left:10px;color:var(--brand-green);font-weight:800}
+  /* Booking pop-up */
+  .book-dialog{width:min(920px,calc(100vw - 32px));height:min(760px,calc(100vh - 32px));padding:0;border:0;border-radius:16px;overflow:hidden}
+  .book-dialog::backdrop{background:rgba(11,20,13,.55)}
+  .book-frame,.book-frame iframe{width:100%;height:100%;border:0;display:block}
+  .book-dialog .cs-close{z-index:2}
 </style>
 <!-- Analytics: GA4 loads only after cookie consent -->
 <script defer src="/analytics.js"></script>
@@ -870,14 +909,13 @@
     <nav class="nav-links" aria-label="Primary">
       <a href="#solutions">Solutions</a>
       <a href="#case-studies">Case studies</a>
-      <a href="#products">Products</a>
       <a href="#about">How we work</a>
       <a href="team.html">Team</a>
       <a href="#contact">Contact</a>
-      <a href="#contact" class="nav-cta-mobile">Book a Discovery Call →</a>
+      <a href="#contact" class="nav-cta-mobile" data-book>Book a free consultation →</a>
     </nav>
     <div class="nav-cta">
-      <a href="#contact" class="btn btn-primary btn-sm" aria-label="Book a Discovery Call"><span class="cta-long">Book a Discovery Call</span><span class="cta-short">Book a Call</span></a>
+      <a href="#contact" class="btn btn-primary btn-sm" data-book aria-label="Book a free consultation"><span class="cta-long">Book a free consultation</span><span class="cta-short">Book a call</span></a>
       <button class="menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false">☰</button>
     </div>
   </div>
@@ -895,15 +933,20 @@
   <div class="hero-veil" aria-hidden="true"></div>
   <div class="wrap hero-in">
     <div class="hero-copy">
-      <span class="eyebrow">DevOps · Infrastructure management · IT consulting</span>
+      <span class="eyebrow">IT consulting · DevOps · Cloud services</span>
       <h1 class="rotator" aria-label="Bridging the gap between infrastructure and technology.">
         <span class="rot-item is-active" aria-hidden="true">Bridging the gap between <span class="accent">infrastructure and technology.</span></span>
       </h1>
-      <p class="sub">We manage and modernise infrastructure for growing businesses: cloud, deployments, monitoring, backups and security. Then we help plan the technology changes worth making next.</p>
+      <p class="sub">We're an IT consulting team helping growing businesses run and improve their technology, from cloud and DevOps to data and the web, and we're just as happy to help with the business side of change.</p>
       <div class="hero-ctas">
-        <a href="#contact" class="btn btn-primary">Book a Discovery Call →</a>
+        <a href="#contact" class="btn btn-primary">Tell us what you're solving →</a>
         <a href="#solutions" class="btn btn-outline">See what we do</a>
       </div>
+      <ul class="hero-trust">
+        <li>Security built in from day one</li>
+        <li>Team experience across 5 continents</li>
+        <li>Reply within 1 business day</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -926,6 +969,22 @@
       <li><img src="https://cdn.jsdelivr.net/npm/devicon@2.16.0/icons/grafana/grafana-original.svg" alt="" width="28" height="28" loading="lazy" />Grafana</li>
     </ul>
   </div>
+  <!-- Partnerships, by category. Swap a chip for a named logo only once that
+       partner or client has agreed to be listed. -->
+  <div class="wrap partners">
+    <p class="techstrip-label">Partnerships &amp; focus industries</p>
+    <ul class="partner-list">
+      <li class="is-partner"><b>API &amp; AI governance</b><span>Strategic partner</span></li>
+      <li class="is-partner"><b>Healthcare</b><span>Strategic partner</span></li>
+      <li class="is-partner"><b>Real estate</b><span>Strategic partner</span></li>
+      <li><b>Technology</b><span>Focus industry</span></li>
+      <li><b>Lifestyle</b><span>Focus industry</span></li>
+      <li><b>E-commerce</b><span>Focus industry</span></li>
+      <li><b>Logistics</b><span>Focus industry</span></li>
+      <li><b>Aviation</b><span>Focus industry</span></li>
+    </ul>
+    <p class="partner-cta">We're open to partnering with like-minded businesses: technology vendors, agencies and consultancies. <a href="#contact" data-need="Partnership">Let's talk partnership →</a></p>
+  </div>
 </section>
 
 <!-- ===== SOLUTIONS ===== -->
@@ -934,44 +993,45 @@
     <div class="shead">
       <span class="eyebrow">What we do</span>
       <h2>From the servers up to the strategy.</h2>
-      <p class="sub" style="margin:0 auto">DevOps and infrastructure are our main focus. IT consulting and digital work build on the same foundation.</p>
+      <p class="sub" style="margin:0 auto">Two equal practices: IT consulting for the technology your business runs on, and business consulting for the people, processes and decisions around it.</p>
     </div>
-    <div class="sol-grid">
+    <div class="sol-grid sol-tiered sol-two">
       <div class="sol-card sol-primary">
-        <span class="sol-tag">Main focus</span>
-        <h3>DevOps &amp; Infrastructure</h3>
-        <p>Setting up, running and modernising the infrastructure your business depends on.</p>
-        <ul class="sol-list">
-          <li>Infrastructure management &amp; monitoring</li>
-          <li>CI/CD and DevOps</li>
-          <li>Legacy infrastructure modernisation</li>
-          <li>Disaster recovery &amp; backups</li>
-          <li>Database management</li>
-          <li>Data warehousing</li>
-          <li>Cybersecurity</li>
-        </ul>
-      </div>
-      <div class="sol-card">
+        <span class="sol-tag">Technology</span>
         <h3>IT Consulting</h3>
-        <p>Planning technology change and seeing it through, with the business side in mind.</p>
-        <ul class="sol-list">
-          <li>Business transformation</li>
-          <li>Change management</li>
-          <li>Project management</li>
-          <li>IT service management (ITSM)</li>
-        </ul>
-      </div>
-      <div class="sol-card">
-        <h3>Digital &amp; Data</h3>
-        <p>Building the tools and data flows your teams use every day.</p>
-        <ul class="sol-list">
-          <li>Web development</li>
-          <li>Business analytics</li>
+        <p>We design, build and run the technology your business relies on, from the cloud and deployments to data and the web.</p>
+        <ul class="sol-list sol-list-2">
+          <li>DevOps &amp; CI/CD</li>
+          <li>Cloud services management</li>
+          <li>Infrastructure management &amp; monitoring</li>
           <li>Data integration</li>
+          <li>Web development</li>
+          <li>Legacy modernisation &amp; migration</li>
+          <li>Disaster recovery &amp; backups</li>
+          <li>Cybersecurity &amp; access control</li>
+          <li>Databases &amp; data warehousing</li>
+          <li>Business analytics</li>
+          <li>IoT &amp; connected devices</li>
+          <li>AI &amp; automation</li>
         </ul>
+        <a href="#contact" class="sol-link">Talk to us about your setup →</a>
+      </div>
+      <div class="sol-card sol-primary">
+        <span class="sol-tag">Business</span>
+        <h3>Business Consulting</h3>
+        <p>We work alongside organisations to understand where they are, navigate change with confidence, and evolve how they operate as their industry transforms.</p>
+        <ul class="sol-list">
+          <li>Business &amp; technology assessment and roadmap</li>
+          <li>Fractional CTO / CIO</li>
+          <li>Process improvement &amp; automation</li>
+          <li>Data analytics &amp; reporting</li>
+          <li>Change &amp; project management</li>
+          <li>IT service management (ITSM)</li>
+          <li>AI governance &amp; adoption</li>
+        </ul>
+        <a href="#contact" class="sol-link" data-need="Business consulting">Talk to us about your business →</a>
       </div>
     </div>
-    <p class="sol-also"><b>Also experienced in:</b> IoT projects.</p>
   </div>
 </section>
 
@@ -984,7 +1044,7 @@
     <div class="shead">
       <span class="eyebrow">Case studies</span>
       <h2>What we learn from well&#8209;known DevOps stories</h2>
-      <p class="sub" style="margin:0 auto">Four public examples and how the same ideas can apply to a smaller team. Each full write-up is a free PDF.</p>
+      <p class="sub" style="margin:0 auto">Four well-known examples, what made them work, and how the same ideas can help a smaller team. Each full write-up is a free PDF.</p>
     </div>
     <!-- Logos are the companies' own marks (simple-icons via jsDelivr, coloured
          with a CSS mask). Capital One has no public icon set, so it's a wordmark. -->
@@ -1022,6 +1082,35 @@
   </div>
 </section>
 
+<!-- ===== TESTIMONIALS — what our own clients say =====
+     Hidden until real, approved quotes are in. To publish: replace each card's
+     quote, name, title and company with a client's own words (with their
+     written OK), delete any unused card, then remove the `hidden` attribute.
+     Never publish placeholder or invented quotes. -->
+<section id="testimonials" hidden>
+  <div class="wrap">
+    <div class="shead">
+      <span class="eyebrow">Client feedback</span>
+      <h2>What our clients say</h2>
+      <p class="sub" style="margin:0 auto">In their own words, from teams we've worked with.</p>
+    </div>
+    <div class="tm-grid">
+      <figure class="tm-card">
+        <blockquote>CLIENT QUOTE: one or two sentences about the problem and the result.</blockquote>
+        <figcaption><b>Client name</b><span>Job title, Company · Country</span></figcaption>
+      </figure>
+      <figure class="tm-card">
+        <blockquote>CLIENT QUOTE: one or two sentences about the problem and the result.</blockquote>
+        <figcaption><b>Client name</b><span>Job title, Company · Country</span></figcaption>
+      </figure>
+      <figure class="tm-card">
+        <blockquote>CLIENT QUOTE: one or two sentences about the problem and the result.</blockquote>
+        <figcaption><b>Client name</b><span>Job title, Company · Country</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
 <!-- ===== CASE-STUDY REQUEST FORM =====
      Posts to the Google Apps Script web app (case-study-mailer.gs), which logs
      the request to a Google Sheet and emails the PDF. -->
@@ -1030,7 +1119,7 @@
   <div id="csFormWrap">
     <span class="eyebrow">Free case study · PDF</span>
     <h3 id="csTitle">Get the full case study</h3>
-    <p class="cs-lede">A two-page PDF: the full story, a 90-day plan for a team your size, and a readiness checklist. We'll email it to you.</p>
+    <p class="cs-lede">A short two-page read: the full story, a 90-day plan for a team your size, and a readiness checklist. We'll send it straight to your inbox.</p>
     <form id="csForm" novalidate>
       <input type="hidden" name="study" />
       <div style="position:absolute;left:-9999px" aria-hidden="true"><label for="cs-website">Website</label><input id="cs-website" name="website" tabindex="-1" autocomplete="off" /></div>
@@ -1057,115 +1146,36 @@
   <div class="cs-done" id="csDone" hidden>
     <div class="cs-tick" aria-hidden="true">✓</div>
     <h3>Check your inbox</h3>
-    <p>We've sent the case study to <b id="csSentTo"></b>. It can take a minute or two; if you don't see it, check your spam folder.</p>
+    <p>Thanks! The case study is on its way to <b id="csSentTo"></b>. It can take a minute or two, so if it hasn't arrived, please check your spam folder.</p>
     <button type="button" class="btn btn-outline btn-sm" id="csDoneClose">Close</button>
   </div>
 </dialog>
 
-<!-- ===== WHY US — how we work, plus the practical facts buyers check ===== -->
+<!-- ===== WHY US — how we work, where we've worked ===== -->
 <section id="about">
   <div class="wrap">
     <div class="split">
-      <div class="split-media">
-        <img src="https://images.pexels.com/photos/7693692/pexels-photo-7693692.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900"
-             alt="A team planning a business transformation around charts and a laptop"
-             width="900" height="600" loading="lazy" decoding="async" />
+      <div class="split-media" id="global">
+        <img src="https://images.pexels.com/photos/14845309/pexels-photo-14845309.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1200"
+             alt="Aerial view of city buildings lit up at sunset"
+             width="1200" height="904" loading="lazy" decoding="async" />
+        <span class="geo-hq">HQ · Electronic City, Bengaluru</span>
       </div>
       <div>
-        <span class="eyebrow">How we work</span>
-        <h2 class="split-h2">A few principles we work by</h2>
-        <p class="sub">We're a young team, so we keep things simple: clear plans, careful work, and systems you can run without us.</p>
+        <span class="eyebrow">Why teams choose us</span>
+        <h2 class="split-h2">Hands-on experts, careful with your systems</h2>
         <ul class="why-list">
-          <li><h3>Make the most of what you have</h3><p>We start by getting more from your existing systems, licences and team before recommending anything new. We don't resell any platform.</p></li>
-          <li><h3>Support after launch</h3><p>We can stay on after launch to monitor and maintain what we've built, so it keeps running well.</p></li>
-          <li><h3>Yours to keep</h3><p>Everything is documented and owned by you, so your team can take it over at any time.</p></li>
-          <li><h3>AI where it's useful</h3><p>We suggest AI only where it clearly helps, and say so when a simpler option will do.</p></li>
+          <li><h3>Security by default</h3><p>Least-privilege access, secrets kept out of code, and every change reviewed and logged.</p></li>
+          <li><h3>Make the most of what you have</h3><p>We get more out of your existing systems and licences before suggesting anything new, and we don't resell any platform.</p></li>
+          <li><h3>With you after launch</h3><p>We're happy to stay on, keep an eye on things and look after what we've built together.</p></li>
+          <li><h3>Lean core, expert network</h3><p>A small core team, with vetted specialists brought in when a project needs them, so you get senior expertise without big-firm overheads.</p></li><p>Everything is documented and yours, so your team can run it with confidence.</p></li>
         </ul>
-        <div class="sec-cta"><a href="#contact" class="btn btn-primary">Book a Discovery Call →</a></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== LOCAL TO GLOBAL — where we've delivered work ===== -->
-<section id="global">
-  <div class="wrap">
-    <div class="split rev">
-      <div class="split-media">
-        <img src="https://images.pexels.com/photos/30596263/pexels-photo-30596263.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900"
-             alt="Earth at night from space, with city lights across India and Asia"
-             width="900" height="600" loading="lazy" decoding="async" />
-        <span class="geo-hq">HQ · Bengaluru, India</span>
-      </div>
-      <div>
-        <span class="eyebrow">Local to global</span>
-        <h2 class="split-h2">Based in Bengaluru, working worldwide</h2>
-        <p class="sub">Our headquarters is in Bengaluru, and we support clients around the world. We've delivered work for clients in:</p>
+        <p class="geo-label">Through past roles, our team has worked with clients in</p>
         <ul class="geo-list">
-          <li>United States</li>
-          <li>United Kingdom</li>
-          <li>Germany</li>
-          <li>United Arab Emirates</li>
-          <li>Africa</li>
-          <li>Japan</li>
-          <li>Australia</li>
+          <li>United States</li><li>United Kingdom</li><li>Germany</li><li>UAE</li><li>Africa</li><li>Japan</li><li>Australia</li>
         </ul>
-        <p class="geo-note">Working hours overlap with the UK, Europe, the Middle East and Asia-Pacific, plus US mornings.</p>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ===== PRODUCTS ===== -->
-<section id="products" class="sec-alt">
-  <div class="wrap">
-    <div class="shead">
-      <span class="eyebrow">Our products</span>
-      <h2>Our own products</h2>
-      <p class="sub" style="margin:0 auto">Alongside client work, we build and run a couple of small products. Using them every day keeps our own engineering practical.</p>
-    </div>
-
-    <!-- Featured product — LeadGenAI -->
-    <div class="feature" id="leadgenai">
-      <div class="feature-copy">
-        <span class="st"><span class="d"></span>Live product</span>
-        <h3>LeadGenAI</h3>
-        <p class="feature-lede">A lead-list tool for small B2B sales teams, built first for India. Search Google Maps for businesses in any area and category, see which listings are complete and easy to reach (website, phone, reviews), and export the list to CSV or Excel.</p>
-        <div class="feature-ctas">
-          <a href="#contact" class="btn btn-primary" data-need="LeadGenAI demo">Request a LeadGenAI Demo →</a>
-          <a href="https://leadgenai.exommerce.online" target="_blank" rel="noopener" class="btn btn-outline">Try it live</a>
-        </div>
-      </div>
-
-      <svg class="feature-visual" viewBox="0 0 400 300" aria-hidden="true">
-        <rect x="20" y="20" width="360" height="260" rx="16" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="1.5"/>
-        <rect x="20" y="20" width="360" height="40" rx="16" fill="var(--bg2)"/>
-        <circle cx="42" cy="40" r="5" fill="var(--brand-lime)"/>
-        <circle cx="60" cy="40" r="5" fill="var(--border-strong)"/>
-        <circle cx="78" cy="40" r="5" fill="var(--border-strong)"/>
-        <rect x="40" y="78" width="320" height="34" rx="8" fill="var(--bg2)"/>
-        <circle cx="58" cy="95" r="9" fill="var(--brand-green)"/>
-        <rect x="76" y="88" width="140" height="7" rx="3.5" fill="var(--border-strong)"/>
-        <rect x="76" y="99" width="90" height="6" rx="3" fill="var(--text3)" opacity=".4"/>
-        <rect x="300" y="86" width="44" height="18" rx="9" fill="var(--brand-green)"/>
-        <rect x="40" y="122" width="320" height="34" rx="8" fill="var(--bg2)"/>
-        <circle cx="58" cy="139" r="9" fill="var(--brand-lime)"/>
-        <rect x="76" y="132" width="120" height="7" rx="3.5" fill="var(--border-strong)"/>
-        <rect x="76" y="143" width="70" height="6" rx="3" fill="var(--text3)" opacity=".4"/>
-        <rect x="300" y="130" width="44" height="18" rx="9" fill="var(--brand-lime)"/>
-        <rect x="40" y="166" width="320" height="34" rx="8" fill="var(--bg2)"/>
-        <circle cx="58" cy="183" r="9" fill="var(--brand-green)"/>
-        <rect x="76" y="176" width="160" height="7" rx="3.5" fill="var(--border-strong)"/>
-        <rect x="76" y="187" width="100" height="6" rx="3" fill="var(--text3)" opacity=".4"/>
-        <rect x="300" y="174" width="44" height="18" rx="9" fill="var(--brand-green)"/>
-        <rect x="40" y="216" width="150" height="44" rx="10" fill="var(--brand-green)"/>
-        <text x="115" y="243" font-family="Sora,sans-serif" font-size="13" font-weight="700" fill="#FFFFFF" text-anchor="middle">Search</text>
-        <rect x="200" y="216" width="160" height="44" rx="10" fill="var(--bg2)" stroke="var(--border-strong)"/>
-        <text x="280" y="243" font-family="Sora,sans-serif" font-size="13" font-weight="700" fill="var(--ink)" text-anchor="middle">Export</text>
-      </svg>
-    </div>
-
-    <p class="sol-also" style="text-align:center;margin-top:22px"><b>Also in-house:</b> RentAI <span class="st beta" style="vertical-align:middle"><span class="d"></span>Beta</span>, rental intelligence for the Bengaluru market, and more AI products in development.</p>
   </div>
 </section>
 
@@ -1180,30 +1190,21 @@
     <div class="faq">
       <details>
         <summary>How does an engagement start?</summary>
-        <p>With a discovery call. If there's a fit, we do a short assessment of your current setup and send a written plan covering scope, timeline and cost. Nothing starts until you've agreed to it.</p>
+        <p>With a friendly call about your challenge. If we're a good fit, we take a short look at your current setup and send a written plan covering scope, timeline and cost. Nothing begins until you're happy with it.</p>
+      </details>
+      <details>
+        <summary>How do you keep our systems and data secure?</summary>
+        <p>We work with least-privilege access you can revoke at any time, keep secrets out of code, and review and log every change. We're happy to sign an NDA and to follow your own security policies.</p>
       </details>
       <details>
         <summary>How do you price your work?</summary>
-        <p>It depends on the work: a fixed scope for assessments and one-off builds, and a monthly fee for ongoing managed support. Either way you get a written quote before anything starts.</p>
+        <p>A fixed price for assessments and one-off projects, or a simple monthly fee for ongoing support. Either way, you'll get a clear written quote before anything starts.</p>
       </details>
       <details>
-        <summary>Can you take over an infrastructure someone else built?</summary>
-        <p>Yes. We start by reviewing what's running, document it, fix the riskiest gaps first, and then take on day-to-day running or hand it back to your team.</p>
+        <summary>Can you take over infrastructure someone else built?</summary>
+        <p>Absolutely. We get to know what's running, document it and fix the most urgent gaps first. Then we can look after it day to day or hand it back to your team.</p>
       </details>
-      <details>
-        <summary>Which clouds and tools do you work with?</summary>
-        <p>AWS, Microsoft Azure and Google Cloud, plus Kubernetes, Terraform, GitHub Actions, GitLab CI and the monitoring stack you already use. We don't resell any platform, so we recommend what fits.</p>
-      </details>
-      <details>
-        <summary>Do you work in our time zone?</summary>
-        <p>We're based in Bengaluru and overlap with US mornings, full UK and EU afternoons, and most of the working day in the Middle East and APAC. On-call cover is agreed per engagement.</p>
-      </details>
-      <details>
-        <summary>Who owns the code and infrastructure?</summary>
-        <p>You do. We sign an NDA on request, assign IP to you, and document everything, so nothing depends on us staying.</p>
-      </details>
-    </div>
-  </div>
+    </div>  </div>
 </section>
 
 <!-- ===== RESOURCES — removed for now. The three articles are still published
@@ -1237,77 +1238,113 @@
 
 <!-- ===== CONTACT ===== -->
 <section id="contact" class="sec-alt">
-  <div class="wrap">
-    <div class="shead">
+  <div class="wrap contact-split">
+    <div class="contact-copy">
       <span class="eyebrow">Get in touch</span>
-      <h2 id="contactTitle">Book a discovery call</h2>
-      <p class="sub" id="contactSub" style="margin:0 auto">A short, no-obligation call. We reply within 1 business day.</p>
-    </div>
-    <div class="form">
+      <h2 id="contactTitle">Tell us what you're working on</h2>
+      <p class="sub" id="contactSub">A fragile setup or rising cloud costs, a process that no longer scales, a transformation you're planning, or an idea for working together. Two ways to start:</p>
+      <div class="book-card">
+        <b>Skip the form: book a free 20-minute call</b>
+        <p>Pick a time that suits you. No sales pitch, just practical technology and business advice. Happy to sign an NDA before we talk.</p>
+        <a href="#contact" class="btn btn-primary" data-book>Pick a time →</a>
+      </div>
+      <p class="contact-alt">Prefer email? <a href="mailto:hello@exommerce.online">hello@exommerce.online</a> · Electronic City, Bengaluru · <a href="https://www.linkedin.com/company/exommerce" target="_blank" rel="noopener">LinkedIn</a></p>
+    </div>    <div class="form">
+      <p class="form-title">Or send us a message</p>
+      <ul class="trust-badges" aria-label="How we handle your enquiry">
+        <li>Least-privilege access</li>
+        <li>NDA on request</li>
+        <li>Reply within 1 business day</li>
+      </ul>
       <div id="formInner">
         <form id="leadForm">
           <div style="position:absolute;left:-9999px" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off" /></div>
           <div class="two">
             <div class="field"><label for="fn">First name *</label><input id="fn" name="first_name" autocomplete="given-name" required /></div>
-            <div class="field"><label for="ln">Last name *</label><input id="ln" name="last_name" autocomplete="family-name" required /></div>
+            <div class="field"><label for="ln">Last name</label><input id="ln" name="last_name" autocomplete="family-name" /></div>
           </div>
           <div class="two">
             <div class="field"><label for="em">Work email *</label><input id="em" type="email" name="email" autocomplete="email" required /></div>
             <div class="field"><label for="co">Company *</label><input id="co" name="company" autocomplete="organization" required /></div>
           </div>
-          <div class="two">
-            <div class="field"><label for="need">What do you need?</label>
+          <div class="field"><label for="ms">What would you like help with? *</label><textarea id="ms" name="message" rows="3" required placeholder="e.g. Our releases are manual and error-prone, or we want to streamline how our teams work."></textarea></div>
+          <div class="field"><label for="need">Closest area (optional)</label>
               <select id="need" name="need">
-              <option value="">Select…</option>
-              <option>Infrastructure management &amp; monitoring</option>
-              <option>DevOps &amp; CI/CD</option>
-              <option>Legacy modernisation or cloud migration</option>
-              <option>Disaster recovery &amp; backups</option>
-              <option>Cybersecurity</option>
-              <option>Databases or data warehousing</option>
-              <option>IT consulting &amp; business transformation</option>
-              <option>Project management or ITSM</option>
-              <option>Web development</option>
-              <option>Business analytics or data integration</option>
-              <option>LeadGenAI demo</option>
-              <option>Not sure yet</option>
-            </select>
-            </div>
-            <div class="field"><label for="ms">Anything else? (optional)</label><input id="ms" name="message" placeholder="A line about what you're trying to do" /></div>
+                <option value="">Select…</option>
+                <optgroup label="Cloud &amp; Infrastructure">
+                  <option>DevOps &amp; CI/CD</option>
+                  <option>Cloud services management</option>
+                  <option>Legacy modernisation or cloud migration</option>
+                  <option>Infrastructure management &amp; monitoring</option>
+                  <option>Disaster recovery &amp; backups</option>
+                  <option>Cybersecurity</option>
+                  <option>Databases or data warehousing</option>
+                </optgroup>
+                <optgroup label="Business &amp; Advisory">
+                  <option>Business consulting</option>
+                  <option>Fractional CTO / CIO</option>
+                  <option>Project management or ITSM</option>
+                  <option>AI governance &amp; adoption</option>
+                </optgroup>
+                <optgroup label="Other">
+                  <option>Web development</option>
+                  <option>Data integration</option>
+                  <option>Data &amp; business analytics</option>
+                  <option>Partnership</option>
+                  <option>Not sure yet</option>
+                </optgroup>
+              </select>
           </div>
-          <button type="submit" class="btn btn-primary" id="contactSubmit" style="width:100%">Book a Discovery Call →</button>
+          <button type="submit" class="btn btn-primary" id="contactSubmit" style="width:100%">Send request · reply within 1 business day →</button>
           <div class="fnote">We only use your details to reply. <a href="/privacy.html">Privacy Policy</a></div>
         </form>
       </div>
       <div class="ok" id="ok">
         <div class="big">Almost there — just hit send.</div>
-        <p class="sub" style="margin:0 auto 18px">Your email app should have opened with this enquiry ready to go. Send it and we'll reply within 1 business day.</p>
+        <p class="sub" style="margin:0 auto 18px">Your email app should have opened with your message ready to go. Just hit send and we'll get back to you within 1 business day.</p>
         <a id="okMailto" class="btn btn-primary btn-sm" href="mailto:hello@exommerce.online">Open it again →</a>
         <p class="sub" style="margin:16px auto 0;font-size:13px">Nothing opened? Email us at <a href="mailto:hello@exommerce.online" style="color:var(--brand-green);text-decoration:underline">hello@exommerce.online</a>.</p>
       </div>
     </div>
-    <p class="contact-alt">Prefer email? <a href="mailto:hello@exommerce.online">hello@exommerce.online</a> · Bengaluru, India · <a href="https://www.linkedin.com/company/exommerce" target="_blank" rel="noopener">LinkedIn</a></p>
   </div>
 </section>
 
-<!-- ===== FOOTER ===== -->
-<footer>
+<!-- ===== BOOKING POP-UP — Google Calendar appointment page, loaded on first click ===== -->
+<dialog class="book-dialog" id="bookDialog" aria-label="Book a free consultation">
+  <button type="button" class="cs-close" id="bookClose" aria-label="Close">×</button>
+  <div class="book-frame" id="bookFrame"></div>
+</dialog>
+
+<!-- ===== FOOTER ===== --><footer>
   <div class="wrap">
-    <div class="ftop">
-      <a href="#top" class="logo" aria-label="eXommerce home">
-        <img src="logo.png" alt="eXommerce.online" width="420" height="74" loading="lazy" decoding="async" />
-      </a>
-      <nav class="flinks" aria-label="Footer">
-        <a href="#solutions">What we do</a>
-        <a href="#case-studies">Case studies</a>
-        <a href="#products">Products</a>
+    <div class="fgrid">
+      <div class="fbrand">
+        <a href="#top" class="logo" aria-label="eXommerce home">
+          <img src="logo.png" alt="eXommerce.online" width="420" height="74" loading="lazy" decoding="async" />
+        </a>
+        <p>IT consulting, DevOps and cloud services from Electronic City, Bengaluru.</p>
+      </div>
+      <nav class="fcol" aria-label="Services">
+        <h4>Services</h4>
+        <a href="#solutions">IT Consulting</a>
+        <a href="#solutions">Business Consulting</a>
+                <a href="#case-studies">Case studies</a>
+      </nav>
+      <nav class="fcol flabs" aria-label="Our products and labs">
+        <h4>Our Products &amp; Labs</h4>
+        <p class="fnote-sm">Software we build and run in-house, separate from our consulting work.</p>
+        <a href="https://leadgenai.exommerce.online" target="_blank" rel="noopener">LeadGenAI <span>Lead-list tool</span></a>
+        <span class="flab-item">RentAI <span>Beta · rental intelligence</span></span>
+      </nav>
+      <nav class="fcol" aria-label="Company">
+        <h4>Company</h4>
+        <a href="#about">How we work</a>
         <a href="#faq">FAQ</a>
         <a href="team.html">Team</a>
         <a href="#contact">Contact</a>
       </nav>
-    </div>
-    <div class="fbottom">
-      <span>© <span id="yr"></span> eXommerce LLP · Bengaluru, India</span>
+    </div>    <div class="fbottom">
+      <span>© <span id="yr"></span> eXommerce LLP · Electronic City, Bengaluru</span>
       <span><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a></span>
     </div>
   </div>
@@ -1351,39 +1388,14 @@
     });
   })();
 
-  // CTAs that name a specific need (the LeadGenAI demo button) preselect it in
-  // the contact form, so the enquiry arrives already labelled. Choosing the
-  // demo, by button or dropdown, turns the section into a demo request.
-  var DEMO = 'LeadGenAI demo';
-  var needSel = document.getElementById('need');
-  var contactCopy = {
-    title: document.getElementById('contactTitle').textContent,
-    sub: document.getElementById('contactSub').textContent,
-    submit: document.getElementById('contactSubmit').textContent
-  };
-  function applyContactMode(){
-    var demo = needSel.value === DEMO;
-    document.getElementById('contactTitle').textContent = demo ? 'Request a LeadGenAI demo' : contactCopy.title;
-    document.getElementById('contactSub').textContent = demo
-      ? 'A short live walkthrough: we run a search for your market, show you how the AI scores each lead, and answer questions about volume and Enterprise pricing. Tell us a little below and we\'ll come back within 1 business day to book it.'
-      : contactCopy.sub;
-    document.getElementById('contactSubmit').textContent = demo ? 'Request my demo →' : contactCopy.submit;
-  }
-  needSel.addEventListener('change', applyContactMode);
-
-  Array.prototype.forEach.call(document.querySelectorAll('[data-need]'), function(el){
+  // Links that name a need (e.g. "Let's talk partnership") preselect it in the
+  // contact form, so the enquiry arrives already labelled.
+  Array.prototype.forEach.call(document.querySelectorAll('a[data-need]'), function(el){
     el.addEventListener('click', function(){
-      var want = el.getAttribute('data-need');
-      for (var i = 0; i < needSel.options.length; i++){
-        if (needSel.options[i].text === want){ needSel.selectedIndex = i; break; }
+      var sel = document.getElementById('need');
+      for (var i = 0; i < sel.options.length; i++){
+        if (sel.options[i].text === el.getAttribute('data-need')){ sel.selectedIndex = i; break; }
       }
-      applyContactMode();
-    });
-  });
-  // Every other "Book a Discovery Call" link puts the section back.
-  Array.prototype.forEach.call(document.querySelectorAll('a[href="#contact"]:not([data-need])'), function(el){
-    el.addEventListener('click', function(){
-      if (needSel.value === DEMO){ needSel.selectedIndex = 0; applyContactMode(); }
     });
   });
 
@@ -1415,7 +1427,7 @@
     ].join('\n');
 
     var href = 'mailto:hello@exommerce.online'
-      + '?subject=' + encodeURIComponent((need === DEMO ? 'LeadGenAI demo request from ' : 'Enquiry from ') + (company || fname || 'the website'))
+      + '?subject=' + encodeURIComponent('Enquiry from ' + (company || fname || 'the website'))
       + '&body='    + encodeURIComponent(body);
 
     // Give the visitor a link too — mailto: silently does nothing when no mail
@@ -1461,7 +1473,7 @@
     if (!('IntersectionObserver' in window)) return;
 
     var targets = document.querySelectorAll(
-      '.shead, .sol-grid, .feature, .form,' +
+      '.shead, .sol-grid, .form,' +
       ' .logowall, .pb-grid, .split, .faq'
     );
     Array.prototype.forEach.call(targets, function(el){ el.classList.add('reveal'); });
@@ -1481,8 +1493,38 @@
     Array.prototype.forEach.call(targets, function(el){ io.observe(el); });
   })();
 
-  // ================= CASE-STUDY REQUESTS =================
-  // The Google Apps Script web app URL (ends in /exec) from case-study-mailer.gs.
+  // ================= BOOKING =================
+  // Paste the Google Calendar appointment-schedule booking link here. Until it
+  // is set, "book" buttons simply scroll to the contact form. The calendar
+  // iframe is only created on first click, so it never slows the page.
+  var BOOKING_URL = '';
+  (function(){
+    var dlg = document.getElementById('bookDialog');
+    var frame = document.getElementById('bookFrame');
+    Array.prototype.forEach.call(document.querySelectorAll('[data-book]'), function(el){
+      el.addEventListener('click', function(e){
+        if (!BOOKING_URL || !dlg || typeof dlg.showModal !== 'function'){
+          setTimeout(function(){ var f = document.getElementById('fn'); if (f) f.focus({ preventScroll:true }); }, 450);
+          return;
+        }
+        e.preventDefault();
+        if (!frame.firstChild){
+          var ifr = document.createElement('iframe');
+          ifr.src = BOOKING_URL;
+          ifr.title = 'Book a free consultation';
+          ifr.loading = 'lazy';
+          frame.appendChild(ifr);
+        }
+        dlg.showModal();
+      });
+    });
+    if (dlg){
+      document.getElementById('bookClose').addEventListener('click', function(){ dlg.close(); });
+      dlg.addEventListener('click', function(e){ if (e.target === dlg) dlg.close(); });
+    }
+  })();
+
+  // ================= CASE-STUDY REQUESTS =================  // The Google Apps Script web app URL (ends in /exec) from case-study-mailer.gs.
   // Until it's set, requests fall back to a pre-filled email to hello@, so the
   // form still works and nothing is lost.
   // Deployed from admin@exommerce.online; logs to the "Case study requests" Sheet.
