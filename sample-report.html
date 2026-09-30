@@ -143,12 +143,14 @@ pre .k{color:var(--lime)}
 .fine{font-size:12px;color:var(--text3);text-align:center;margin:0 0 40px}
 
 @media print{
-  .topbar,.sample-banner,.cta,.no-print{display:none!important}
+  .topbar,.sample-banner,.cta,.no-print,.ck-bar{display:none!important}
   body{background:#fff}
   .sheet{border:0;margin:0 0 12px;padding:12px 0;break-inside:avoid-page}
   .dive,.phase,.kpi{break-inside:avoid}
 }
 </style>
+<!-- Analytics: GA4 loads only after cookie consent -->
+<script defer src="/analytics.js"></script>
 </head>
 <body>
 
@@ -157,7 +159,7 @@ pre .k{color:var(--lime)}
     <a href="cloud-audit.html" aria-label="Back to the Cloud Audit"><img src="logo.png" alt="eXommerce.online" width="420" height="74" /></a>
     <div class="actions">
       <button class="btn btn-ghost" onclick="window.print()">Save as PDF</button>
-      <a class="btn btn-primary" href="cloud-audit.html#offer">Get your audit</a>
+      <a class="btn btn-primary" href="cloud-audit.html#pricing">Get your audit</a>
     </div>
   </div>
 </div>
@@ -323,7 +325,7 @@ pre .k{color:var(--lime)}
   <div class="cta">
     <h2>Want this for your AWS account?</h2>
     <p>Your report in 24 hours. Under $500/month found means a 100% refund.</p>
-    <a class="btn btn-primary" style="padding:14px 26px;font-size:15px" href="cloud-audit.html#offer">Get your 24-Hour Audit →</a>
+    <a class="btn btn-primary" style="padding:14px 26px;font-size:15px" href="cloud-audit.html#pricing">Get your 24-Hour Audit →</a>
   </div>
   <p class="fine">Sample only. DemoCo is fictional and not an eXommerce client. Prices are AWS us-east-1 on-demand list prices and may differ from your account's pricing, region or discounts. © <span id="yr"></span> eXommerce LLP</p>
 </main>
