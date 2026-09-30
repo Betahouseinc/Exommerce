@@ -1,5 +1,5 @@
 // Runs case-study-mailer.gs in Node with fake Google services (Sheets, Mail,
-// Cache, Properties, triggers), so the Apps Script logic can be tested without
+// Cache, Properties), so the Apps Script logic can be tested without
 // deploying it.
 //   node --test tests/case-study-mailer.test.mjs
 import { test } from 'node:test';
@@ -16,7 +16,6 @@ function load({ quota = 100, failMailTo = null, token = null } = {}) {
   const cache = new Map();
   const props = new Map(token ? [['EVENTS_TOKEN', token]] : []);
   const logs = [];
-  const triggers = [];
   const formats = [];
   const sheet = name => {
     const rows = (sheets[name] ||= []);
@@ -72,11 +71,6 @@ function load({ quota = 100, failMailTo = null, token = null } = {}) {
       getUuid: () => randomUUID(),
     },
     Session: { getScriptTimeZone: () => 'Asia/Kolkata' },
-    ScriptApp: {
-      getProjectTriggers: () => triggers,
-      newTrigger: fn => ({ timeBased: () => ({ everyDays: () => ({ atHour: () => ({
-        create: () => triggers.push({ getHandlerFunction: () => fn }) }) }) }) }),
-    },
     UrlFetchApp: { fetch: () => ({ getBlob: () => ({ setName() { return this; } }) }) },
     Logger: { log: m => logs.push(m) },
   };
@@ -89,7 +83,7 @@ function load({ quota = 100, failMailTo = null, token = null } = {}) {
     assert.ok(rows[0].includes(header), `no column "${header}"`);
     return rows[rowIndex][rows[0].indexOf(header)];
   };
-  return { post, sheets, sent, logs, ctx, cell, triggers, props, formats };
+  return { post, sheets, sent, logs, ctx, cell, props, formats };
 }
 
 const request = (over = {}) => ({
@@ -439,11 +433,16 @@ test('due reviews are sent to hello@ once', () => {
   assert.equal(sent.length, 0);
 });
 
-test('reminders are installed once', () => {
-  const { ctx, triggers } = load();
-  assert.equal(ctx.installReminders(), true);
-  assert.equal(ctx.installReminders(), false);
-  assert.equal(triggers.length, 1);
+test('needs no Google permission beyond what the live version already has', () => {
+  // A new permission means the web app stops answering until the owner re-approves it, so
+  // the site's forms would fail in between. Services with no permission of their own
+  // (Cache, Content, Properties, Utilities) are fine.
+  const code = SOURCE.replace(/\/\/.*$/gm, '');
+  const services = new Set([...code.matchAll(/\b([A-Z][A-Za-z]*(?:App|Service))\./g)].map(m => m[1]));
+  const granted = ['SpreadsheetApp', 'MailApp', 'UrlFetchApp', 'CacheService', 'ContentService', 'PropertiesService'];
+  assert.deepEqual([...services].filter(s => !granted.includes(s)), [], 'e.g. ScriptApp asks to "run when you are not present"');
+  assert.deepEqual([...new Set([...code.matchAll(/\bSession\.(\w+)/g)].map(m => m[1]))], ['getScriptTimeZone'],
+    'Session.getScriptTimeZone needs no permission; getActiveUser would');
 });
 
 test('no bookings sheet yet: reminders do nothing', () => {
@@ -454,13 +453,28 @@ test('no bookings sheet yet: reminders do nothing', () => {
 
 // ---- everything else ---------------------------------------------------------------------------
 
-test('GET reports which forms this deployment handles', () => {
-  const ctx = { ContentService: { MimeType: { JSON: 'json' }, createTextOutput: s => ({ setMimeType: () => ({ getContent: () => s }) }) } };
-  vm.createContext(ctx);
-  vm.runInContext(SOURCE, ctx);
+test('GET reports which forms this deployment handles, and sets up a missing dashboard', () => {
+  const { ctx, sheets, formats } = load();
   const res = JSON.parse(ctx.doGet().getContent());
   assert.equal(res.ok, true);
   assert.deepEqual(res.forms, ['case_study', 'contact', 'audit_booking', 'audit_event']);
+  assert.ok(sheets['Beta dashboard'], 'created by the status check');
+  const built = formats.length;
+  ctx.doGet();
+  assert.equal(formats.length, built, 'an existing dashboard is never rebuilt');
+});
+
+test('the first audit request builds the dashboard; a dashboard problem never fails a request', () => {
+  const first = load();
+  first.post(request());
+  assert.ok(first.sheets['Beta dashboard']);
+
+  const broken = load();
+  broken.ctx.buildDashboard = () => { throw new Error('boom'); };
+  const res = broken.post(request());
+  assert.equal(res.ok, true, 'the visitor still gets their audit ID');
+  assert.equal(broken.sent.length, 2);
+  assert.match(broken.logs.join('\n'), /Dashboard not built: Error: boom/);
 });
 
 test('the editor test booking is a valid request', () => {

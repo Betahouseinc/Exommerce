@@ -9,7 +9,7 @@
 //     bookings" tab: one row per audit ID, with a timestamp for each funnel stage).
 //     The audit scanner reports later stages (form=audit_event, token-protected);
 //     buildDashboard() summarises the beta on the "Beta dashboard" tab, and
-//     remindDueScans() (daily, via installReminders()) flags recurring reviews due.
+//     remindDueScans() (daily, from a trigger added in the editor) flags reviews due.
 // Tests: node --test tests/case-study-mailer.test.mjs (runs this file with fake
 // Google services).
 //
@@ -273,6 +273,7 @@ function handleAuditBooking(p) {
   } catch (err) {
     return failed(String(err));
   }
+  ensureDashboard();
 
   // The request is safely logged and hello@ has it, so a failed confirmation
   // email must not turn into an error for the customer.
@@ -414,6 +415,7 @@ function handleAuditEvent(p) {
     if (NUMERIC_FIELDS[field] && isNaN(value)) return;
     set(EVENT_FIELDS[field], value);
   });
+  ensureDashboard();
   return json({ ok: true, reference: reference, status: values[r][col['Status']] });
 }
 
@@ -449,9 +451,18 @@ function bookingSheet() {
 }
 
 // ---- Beta dashboard ----------------------------------------------------------------------
-// Select buildDashboard → Run to create (or rebuild) the "Beta dashboard" tab. Every number
-// is a live formula over "Audit bookings", so it only ever shows real audits; until the first
+// The "Beta dashboard" tab builds itself the first time it's needed (see ensureDashboard);
+// select buildDashboard → Run to rebuild it after changing this section. Every number is a
+// live formula over "Audit bookings", so it only ever shows real audits; until the first
 // request arrives it says so instead of showing charts of zeros.
+function ensureDashboard() {
+  try {
+    if (!SpreadsheetApp.getActiveSpreadsheet().getSheetByName(DASHBOARD_SHEET)) buildDashboard();
+  } catch (err) {                  // a dashboard problem must never fail a visitor's request
+    Logger.log('Dashboard not built: ' + err);
+  }
+}
+
 // The scanner's labels for each kind of finding (exaudit/events.py PROBLEM_LABELS).
 var PROBLEMS = ['Unattached EBS volumes', 'gp2 volumes not on gp3', 'Old EBS snapshots', 'Unused Elastic IPs',
   'Idle EC2 instances', 'Long-stopped EC2 instances', 'Oversized EC2 instances', 'Idle NAT gateways',
@@ -553,7 +564,9 @@ function columnLetter(n) {
 }
 
 // ---- Recurring reviews ---------------------------------------------------------------------
-// Runs daily (install once: select installReminders → Run). For clients on Ongoing Cloud
+// Runs daily from a time-driven trigger added once in the editor (Triggers → Add trigger →
+// remindDueScans, Time-driven, Day timer). A trigger added there needs no extra permission,
+// unlike one created from code. For clients on Ongoing Cloud
 // Optimization & Support, put the next review date in "Next review"; when it arrives, hello@
 // gets one email listing everyone due, and "Last reminder" records that it was sent.
 function remindDueScans() {
@@ -593,15 +606,6 @@ function remindDueScans() {
   return due.length;
 }
 
-// Select installReminders → Run once. Safe to run again: it won't add a second trigger.
-function installReminders() {
-  var exists = ScriptApp.getProjectTriggers().some(function (t) {
-    return t.getHandlerFunction() === 'remindDueScans';
-  });
-  if (!exists) ScriptApp.newTrigger('remindDueScans').timeBased().everyDays(1).atHour(9).create();
-  return !exists;
-}
-
 function logTo(name, headers, values) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName(name) || ss.insertSheet(name);
@@ -620,8 +624,9 @@ function asText(v) {
 }
 
 // Visiting the /exec URL in a browser confirms the deployment is live, and
-// which forms this version handles.
+// which forms this version handles. It also creates the dashboard tab if it's missing.
 function doGet() {
+  ensureDashboard();
   return json({ ok: true, service: 'eXommerce case-study mailer',
                 forms: ['case_study', 'contact', 'audit_booking', 'audit_event'] });
 }
