@@ -151,6 +151,15 @@ td b{color:var(--ink)}
 .step h3{font-size:18px;font-weight:700;margin-bottom:8px}
 .step p{font-size:15px;color:var(--text2)}
 
+/* Sample report preview */
+.preview{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center;margin-top:64px}
+@media(max-width:860px){.preview{grid-template-columns:1fr;gap:28px;margin-top:48px}}
+.preview-shot{display:block;overflow:hidden;border:1px solid var(--border);border-radius:16px;background:var(--bg2);box-shadow:0 18px 50px rgba(11,13,12,.10);transition:transform .15s,box-shadow .15s}
+.preview-shot:hover{transform:translateY(-2px);box-shadow:0 22px 56px rgba(11,13,12,.14)}
+.preview-shot img{display:block;width:100%;height:auto}
+.preview h3{font-size:24px;font-weight:700;margin-bottom:10px}
+.preview p{color:var(--text2);font-size:16px;margin-bottom:18px}
+
 /* Checks grid */
 .alt{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:40px}
@@ -360,6 +369,23 @@ footer{background:var(--bg2);padding:40px 0 32px;border-top:1px solid var(--bord
       <div class="step"><div class="n">1</div><h3>Pay once</h3><p>Check out securely in USD or INR. You'll get setup instructions by email, usually within 15 minutes.</p></div>
       <div class="step"><div class="n">2</div><h3>Grant read-only access</h3><p>Create one read-only IAM role, locked to your order with a unique External ID. It takes about 5 minutes in AWS CloudShell. Your 24-hour clock starts once access works.</p></div>
       <div class="step"><div class="n">3</div><h3>Get your fixes</h3><p>Receive your report, ranked fix list and dry-run cleanup scripts. Book an optional 15-minute walkthrough. Then delete the role; we give you the commands.</p></div>
+    </div>
+    <div class="preview">
+      <a href="sample-report.html" class="preview-shot" data-track="preview_image" aria-label="Open the full sample report">
+        <img src="media/sample-report-preview.jpg" alt="Sample audit report for a fictional AWS account: $3,523/month in savings found on a $14,800 bill, with a chart of savings by cleanup, rightsizing and commitments" width="960" height="911" loading="lazy" />
+      </a>
+      <div>
+        <span class="eyebrow">What you receive</span>
+        <h3>See a real report format before you book</h3>
+        <p>This is the report from step 3, run on a fictional demo account. Every audit follows the same structure.</p>
+        <ul class="checks">
+          <li>Monthly and annual savings, checked against the guarantee</li>
+          <li>Savings by type: cleanup, rightsizing, commitments</li>
+          <li>Every finding ranked by $ impact, with risk and effort</li>
+          <li>Dry-run scripts and a week-by-week plan</li>
+        </ul>
+        <a href="sample-report.html" class="btn btn-ghost" data-track="preview_cta">Open the full sample report →</a>
+      </div>
     </div>
   </div>
 </section>
