@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sample Report — 24-Hour Cloud Cost Audit — eXommerce</title>
+<meta name="description" content="A sample 24-Hour Cloud Cost Audit report on a fictional demo AWS account: ranked findings, dollar savings, risk levels and dry-run cleanup scripts." />
+<link rel="canonical" href="https://exommerce.online/sample-report.html" />
+<meta name="robots" content="index, follow" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23109840'/%3E%3Ctext x='32' y='44' font-family='Sora,sans-serif' font-weight='700' font-size='34' fill='%23FFFFFF' text-anchor='middle'%3Ee%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#FFFFFF;--bg2:#F7FBF8;--bg-green:#EFF8F1;
+  --green:#109840;--green-dark:#087A32;--green-mid:#5DB97A;--green-light:#A8DBB6;--lime:#7BCF16;
+  --ink:#0B0D0C;--text2:#4B5560;--text3:#6B7280;
+  --border:#DDE8E0;--border-strong:#C9D9CE;
+  --low:#087A32;--low-bg:#E6F4EA;--med:#8A5A00;--med-bg:#FFF4DC;--rev:#1F4E9A;--rev-bg:#E7EEFA;
+  --ff:'Inter',system-ui,-apple-system,sans-serif;
+  --ff-display:'Sora',system-ui,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--ff);background:var(--bg2);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.55}
+a{color:var(--green);font-weight:600}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.wrap{max-width:980px;margin:0 auto;padding:0 24px}
+@media(max-width:560px){.wrap{padding:0 16px}}
+h1,h2,h3{font-family:var(--ff-display);letter-spacing:-.02em}
+
+/* Top bar */
+.topbar{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:62px}
+.topbar img{height:26px;width:auto;display:block}
+@media(max-width:420px){.topbar img{height:22px}}
+.topbar .actions{display:flex;gap:8px}
+.btn{display:inline-block;text-align:center;font:600 14px var(--ff);border-radius:9px;padding:10px 16px;cursor:pointer;border:0;text-decoration:none}
+.btn-primary{background:var(--green);color:#fff}
+.btn-primary:hover{background:var(--green-dark)}
+.btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--border-strong)}
+@media(max-width:560px){.btn-ghost{display:none}}
+
+.sample-banner{background:#FFF7E6;border-bottom:1px solid #F3DDAA;color:#6B4600;font-size:13px;text-align:center;padding:9px 16px}
+.sample-banner b{color:#4A3000}
+
+/* Report sheet */
+.sheet{background:#fff;border:1px solid var(--border);border-radius:16px;margin:28px 0;padding:40px;position:relative;overflow:hidden}
+@media(max-width:700px){.sheet{padding:24px 18px}}
+.sheet::after{content:"SAMPLE";position:absolute;right:-40px;top:34px;transform:rotate(35deg);background:#FFF4DC;color:#8A5A00;font:800 12px var(--ff-display);letter-spacing:.3em;padding:6px 60px;border:1px solid #F3DDAA}
+.eyebrow{display:inline-block;font:800 11px var(--ff-display);letter-spacing:.16em;text-transform:uppercase;color:var(--green);margin-bottom:8px}
+.cover h1{font-size:clamp(26px,4vw,38px);font-weight:800;line-height:1.12;margin-bottom:8px}
+.cover .who{color:var(--text2);font-size:15px}
+.meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);border-radius:12px;margin-top:24px;overflow:hidden}
+@media(max-width:700px){.meta-grid{grid-template-columns:repeat(2,1fr)}}
+.meta-grid div{padding:14px 16px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);margin:0 -1px -1px 0}
+.meta-grid span{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3)}
+.meta-grid b{font-size:14px}
+
+/* KPIs */
+h2{font-size:22px;font-weight:700;margin:0 0 6px}
+.section-sub{color:var(--text2);font-size:15px;margin-bottom:22px}
+.kpis{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:14px}
+@media(max-width:800px){.kpis{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.kpis{grid-template-columns:1fr}}
+.kpi{min-width:0}
+.kpi{border:1px solid var(--border);border-radius:12px;padding:18px}
+.kpi.hero{background:var(--ink);border-color:var(--ink);color:#fff}
+.kpi span{display:block;font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.kpi.hero span{color:#A9B5AE}
+.kpi b{font:800 30px var(--ff-display);letter-spacing:-.02em;display:block;line-height:1.1}
+.kpi.hero b{font-size:40px;color:var(--lime)}
+.kpi small{display:block;font-size:13px;color:var(--text2);margin-top:6px}
+.kpi.hero small{color:#C9D2CC}
+.verdict{display:flex;gap:10px;align-items:flex-start;background:var(--low-bg);border:1px solid #BFE3C9;color:#0F5A2A;border-radius:12px;padding:14px 16px;margin-top:16px;font-size:14px}
+.verdict svg{flex:0 0 auto;margin-top:1px}
+
+/* Bar chart (single series, magnitude) */
+.chart{margin-top:8px;position:relative}
+.bar-row{display:grid;grid-template-columns:210px 1fr 90px;align-items:center;gap:14px;padding:8px 0;position:relative}
+@media(max-width:640px){.bar-row{grid-template-columns:1fr 80px}.bar-row .track{grid-column:1/-1;order:3}}
+.bar-row .lbl{font-size:14px;font-weight:600}
+.bar-row .lbl small{display:block;font-weight:400;color:var(--text3);font-size:12px}
+.track{height:22px;position:relative;border-left:1px solid var(--border-strong)}
+.bar{height:100%;background:var(--green);border-radius:0 4px 4px 0;cursor:default;transition:filter .15s}
+.bar:hover,.bar:focus{filter:brightness(1.12);outline:none}
+.bar-row .val{font:700 15px var(--ff-display);text-align:right}
+.tip{position:absolute;z-index:5;background:var(--ink);color:#fff;font-size:12px;padding:7px 10px;border-radius:7px;pointer-events:none;white-space:nowrap;opacity:0;transform:translateY(-4px);transition:opacity .12s}
+.tip.show{opacity:1}
+
+/* Findings table */
+.tbl{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:760px}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--bg2);font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+td{color:var(--text2)}
+td b{color:var(--ink)}
+td.num{text-align:right;font-weight:700;color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums}
+th.num{text-align:right}
+tr:last-child td{border-bottom:0}
+tfoot td{background:var(--bg2);font-weight:700;color:var(--ink)}
+.rank{font:700 13px var(--ff-display);color:var(--text3)}
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:3px 8px;border-radius:6px;white-space:nowrap}
+.tag.low{background:var(--low-bg);color:var(--low)}
+.tag.med{background:var(--med-bg);color:var(--med)}
+.tag.rev{background:var(--rev-bg);color:var(--rev)}
+.cat{font-size:12px;color:var(--text3)}
+
+/* Deep dive */
+.dive{border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:16px}
+.dive-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.dive h3{font-size:17px;font-weight:700}
+.dive .save{font:800 20px var(--ff-display);color:var(--green)}
+.dive p{font-size:14px;color:var(--text2);margin-bottom:10px}
+.dive dl{display:grid;grid-template-columns:140px 1fr;gap:6px 14px;font-size:14px;margin-bottom:12px}
+@media(max-width:560px){.dive dl{grid-template-columns:1fr}}
+.dive dt{color:var(--text3);font-weight:600}
+.dive dd{color:var(--ink)}
+pre{background:#0F1512;color:#D7E4DB;border-radius:10px;padding:16px;font-size:12.5px;line-height:1.6;overflow-x:auto;white-space:pre}
+pre .c{color:#7E9486}
+pre .k{color:var(--lime)}
+
+/* Plan */
+.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:800px){.plan{grid-template-columns:1fr}}
+.phase{border:1px solid var(--border);border-radius:12px;padding:18px}
+.phase .when{font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.06em}
+.phase h3{font-size:16px;margin:4px 0 6px}
+.phase .amt{font:800 22px var(--ff-display);margin-bottom:6px}
+.phase p{font-size:14px;color:var(--text2)}
+
+.method{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){.method{grid-template-columns:1fr}}
+.method div{border:1px solid var(--border);border-radius:12px;padding:18px;font-size:14px;color:var(--text2)}
+.method h3{font-size:15px;color:var(--ink);margin-bottom:8px}
+.method ul{padding-left:18px}
+.method li{margin-bottom:4px}
+
+.cta{background:var(--bg-green);border:1px solid var(--border);border-radius:16px;padding:32px;text-align:center;margin:28px 0}
+.cta h2{font-size:24px;margin-bottom:8px}
+.cta p{color:var(--text2);margin-bottom:18px}
+.fine{font-size:12px;color:var(--text3);text-align:center;margin:0 0 40px}
+
+@media print{
+  .topbar,.sample-banner,.cta,.no-print{display:none!important}
+  body{background:#fff}
+  .sheet{border:0;margin:0 0 12px;padding:12px 0;break-inside:avoid-page}
+  .dive,.phase,.kpi{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a href="cloud-audit.html" aria-label="Back to the Cloud Audit"><img src="logo.png" alt="eXommerce.online" width="420" height="74" /></a>
+    <div class="actions">
+      <button class="btn btn-ghost" onclick="window.print()">Save as PDF</button>
+      <a class="btn btn-primary" href="cloud-audit.html#offer">Get your audit</a>
+    </div>
+  </div>
+</div>
+<div class="sample-banner"><b>Sample report.</b> This is a fictional demo account ("DemoCo") built to show the format and depth of a real audit. Figures are illustrative, based on AWS us-east-1 on-demand list prices.</div>
+
+<main class="wrap">
+
+  <!-- COVER -->
+  <section class="sheet cover">
+    <span class="eyebrow">24-Hour Cloud Cost Audit · Report</span>
+    <h1>$3,523/month in actionable AWS savings identified</h1>
+    <p class="who">Prepared for <b>DemoCo</b> (fictional) · Signed off by <b>Bhavin Chawla</b>, Founder &amp; Principal Consultant</p>
+    <div class="meta-grid">
+      <div><span>AWS account</span><b>123456789012</b></div>
+      <div><span>Regions scanned</span><b>us-east-1, ap-south-1</b></div>
+      <div><span>Monthly AWS bill</span><b>$14,800</b></div>
+      <div><span>Delivered in</span><b>19 hrs 40 min</b></div>
+    </div>
+  </section>
+
+  <!-- 1. SUMMARY -->
+  <section class="sheet">
+    <span class="eyebrow">1 · Executive summary</span>
+    <h2>The short version</h2>
+    <p class="section-sub">23.8% of the monthly bill is idle, oversized or uncommitted. About a third of it can be removed this week with near-zero risk.</p>
+    <div class="kpis">
+      <div class="kpi hero"><span>Monthly savings found</span><b>$3,523</b><small>23.8% of the $14,800 monthly bill</small></div>
+      <div class="kpi"><span>Annualized</span><b>$42,276</b><small>if all findings applied</small></div>
+      <div class="kpi"><span>Findings</span><b>11</b><small>ranked by $ impact</small></div>
+      <div class="kpi"><span>This week, low risk</span><b>$1,092</b><small>cleanup only, no resizing</small></div>
+    </div>
+    <div class="verdict">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+      <div><b>Guarantee check: met.</b> Actionable, code-free savings of $3,523/month exceed the $500/month threshold. None of the findings require application code changes.</div>
+    </div>
+  </section>
+
+  <!-- 2. BY CATEGORY -->
+  <section class="sheet">
+    <span class="eyebrow">2 · Where the money is</span>
+    <h2>Monthly savings by type of action</h2>
+    <p class="section-sub">Ordered from least to most effort. Hover a bar for details.</p>
+    <div class="chart" id="chart" role="img" aria-label="Monthly savings by action type: Cleanup $1,092, Rightsizing $1,381, Commitments $1,050">
+      <div class="bar-row"><div class="lbl">Cleanup<small>Delete idle &amp; orphaned resources · 7 findings</small></div><div class="track"><div class="bar" tabindex="0" data-v="1092" data-tip="Cleanup · $1,092/mo · 31% of savings · low risk"></div></div><div class="val">$1,092</div></div>
+      <div class="bar-row"><div class="lbl">Rightsizing<small>Resize oversized EC2, RDS &amp; EBS · 3 findings</small></div><div class="track"><div class="bar" tabindex="0" data-v="1381" data-tip="Rightsizing · $1,381/mo · 39% of savings · low–medium risk"></div></div><div class="val">$1,381</div></div>
+      <div class="bar-row"><div class="lbl">Commitments<small>Compute Savings Plan · 1 finding</small></div><div class="track"><div class="bar" tabindex="0" data-v="1050" data-tip="Commitments · $1,050/mo · 30% of savings · financial decision, no infra change"></div></div><div class="val">$1,050</div></div>
+      <div class="tip" id="tip" role="tooltip"></div>
+    </div>
+  </section>
+
+  <!-- 3. FINDINGS -->
+  <section class="sheet">
+    <span class="eyebrow">3 · All findings</span>
+    <h2>Ranked by monthly savings</h2>
+    <p class="section-sub">Each finding includes the resources affected, how we measured it, and a dry-run script in the delivery bundle.</p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>#</th><th>Finding</th><th>Action</th><th>Risk</th><th>Effort</th><th class="num">$/month</th></tr></thead>
+        <tbody>
+          <tr><td class="rank">1</td><td><b>Steady EC2 usage on on-demand pricing</b><br><span class="cat">Commitments · ~$4,200/mo of flat baseline usage</span></td><td>1-year no-upfront Compute Savings Plan at ~$4.30/hr commitment</td><td><span class="tag rev">◆ Review</span></td><td>15 min</td><td class="num">$1,050</td></tr>
+          <tr><td class="rank">2</td><td><b>Production RDS oversized</b><br><span class="cat">Rightsizing · db.r5.2xlarge Multi-AZ, avg CPU 9%</span></td><td>Downsize to db.r5.xlarge in the maintenance window</td><td><span class="tag med">▲ Medium</span></td><td>1 hr</td><td class="num">$730</td></tr>
+          <tr><td class="rank">3</td><td><b>4 app servers at 12% average CPU</b><br><span class="cat">Rightsizing · m5.2xlarge behind an ALB</span></td><td>Move to m5.xlarge, one instance at a time</td><td><span class="tag med">▲ Medium</span></td><td>1 hr</td><td class="num">$561</td></tr>
+          <tr><td class="rank">4</td><td><b>3 idle EC2 instances</b><br><span class="cat">Cleanup · m5.xlarge, CPU &lt;2% for 14 days, tagged env=staging</span></td><td>Snapshot, then stop or terminate</td><td><span class="tag low">● Low</span></td><td>10 min</td><td class="num">$420</td></tr>
+          <tr><td class="rank">5</td><td><b>380 snapshots older than 90 days</b><br><span class="cat">Cleanup · ~6.4 TB billed, source volumes deleted</span></td><td>Delete, keeping the latest per volume</td><td><span class="tag low">● Low</span></td><td>10 min</td><td class="num">$320</td></tr>
+          <tr><td class="rank">6</td><td><b>14 unattached EBS volumes</b><br><span class="cat">Cleanup · 2.1 TB gp2, detached 30–210 days</span></td><td>Snapshot, then delete</td><td><span class="tag low">● Low</span></td><td>10 min</td><td class="num">$210</td></tr>
+          <tr><td class="rank">7</td><td><b>9 volumes still on gp2</b><br><span class="cat">Rightsizing · 4.5 TB attached</span></td><td>Convert to gp3 live (no downtime)</td><td><span class="tag low">● Low</span></td><td>20 min</td><td class="num">$90</td></tr>
+          <tr><td class="rank">8</td><td><b>Log groups set to never expire</b><br><span class="cat">Cleanup · 1.8 TB in CloudWatch Logs</span></td><td>Set 30-day retention (export first if needed)</td><td><span class="tag low">● Low</span></td><td>5 min</td><td class="num">$54</td></tr>
+          <tr><td class="rank">9</td><td><b>2 load balancers with no targets</b><br><span class="cat">Cleanup · ALBs from a retired service</span></td><td>Delete</td><td><span class="tag low">● Low</span></td><td>5 min</td><td class="num">$33</td></tr>
+          <tr><td class="rank">10</td><td><b>NAT gateway in an unused dev VPC</b><br><span class="cat">Cleanup · 0 GB processed in 30 days</span></td><td>Delete</td><td><span class="tag low">● Low</span></td><td>5 min</td><td class="num">$33</td></tr>
+          <tr><td class="rank">11</td><td><b>6 unassociated Elastic IPs</b><br><span class="cat">Cleanup · $0.005/hr each</span></td><td>Release</td><td><span class="tag low">● Low</span></td><td>2 min</td><td class="num">$22</td></tr>
+        </tbody>
+        <tfoot><tr><td></td><td>Total</td><td></td><td></td><td>~3.5 hrs</td><td class="num">$3,523</td></tr></tfoot>
+      </table>
+    </div>
+    <p style="font-size:12px;color:var(--text3);margin-top:10px">Risk: <b>● Low</b> no service impact expected · <b>▲ Medium</b> brief restart or failover, schedule it · <b>◆ Review</b> financial commitment, no infrastructure change.</p>
+  </section>
+
+  <!-- 4. DEEP DIVE -->
+  <section class="sheet">
+    <span class="eyebrow">4 · Finding detail (example)</span>
+    <h2>What every finding looks like</h2>
+    <p class="section-sub">In the full report, each of the 11 findings gets this treatment. Two are shown here.</p>
+
+    <div class="dive">
+      <div class="dive-head"><h3>#6 · 14 unattached EBS volumes</h3><span class="save">$210/mo</span></div>
+      <dl>
+        <dt>Resources</dt><dd>14 gp2 volumes, 2,100 GB total (full list in the CSV bundle)</dd>
+        <dt>Evidence</dt><dd>State <code>available</code> (not attached) for 30–210 days. No attach events in CloudTrail over the last 90 days.</dd>
+        <dt>Calculation</dt><dd>2,100 GB × $0.10/GB-month (gp2, us-east-1) = $210/month</dd>
+        <dt>Risk</dt><dd><span class="tag low">● Low</span> Script snapshots each volume before deletion, so every one is recoverable.</dd>
+      </dl>
+      <pre><span class="c"># cleanup-ebs.sh — DRY RUN by default. Add --apply to execute.</span>
+<span class="k">$</span> ./cleanup-ebs.sh --region us-east-1
+[dry-run] vol-0a1b2c3d4e5f60001  200 GB  gp2  detached 210d  -> would snapshot + delete
+[dry-run] vol-0a1b2c3d4e5f60002  500 GB  gp2  detached 146d  -> would snapshot + delete
+...
+[dry-run] 14 volumes, 2,100 GB, est. saving $210.00/month. Nothing changed.</pre>
+    </div>
+
+    <div class="dive">
+      <div class="dive-head"><h3>#2 · Production RDS oversized</h3><span class="save">$730/mo</span></div>
+      <dl>
+        <dt>Resource</dt><dd><code>democo-prod-db</code>, db.r5.2xlarge, MySQL, Multi-AZ</dd>
+        <dt>Evidence</dt><dd>30-day average CPU 9% (peak 31%). Freeable memory never below 38 GB of 64 GB. Connections peak at 140.</dd>
+        <dt>Recommendation</dt><dd>db.r5.xlarge (4 vCPU, 32 GB). Projected peak CPU ~62%, still comfortable headroom.</dd>
+        <dt>Calculation</dt><dd>($2.00 − $1.00/hr, Multi-AZ on-demand) × 730 hrs = $730/month</dd>
+        <dt>Risk</dt><dd><span class="tag med">▲ Medium</span> Multi-AZ resize fails over with ~60 seconds of connection drops. Do it in the maintenance window; reversible the same way.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- 5. PLAN -->
+  <section class="sheet">
+    <span class="eyebrow">5 · Recommended plan</span>
+    <h2>Three steps to capture it</h2>
+    <p class="section-sub">Start with the safe wins, then resize, then commit to the new, smaller baseline.</p>
+    <div class="plan">
+      <div class="phase"><span class="when">This week</span><h3>Clean up</h3><div class="amt">$1,092/mo</div><p>Findings 4–6 and 8–11. Run the dry-run scripts, review, then apply. About 45 minutes total.</p></div>
+      <div class="phase"><span class="when">Next 2 weeks</span><h3>Resize</h3><div class="amt">$1,381/mo</div><p>Findings 2, 3 and 7. gp3 conversion is live; schedule the RDS and EC2 changes in maintenance windows.</p></div>
+      <div class="phase"><span class="when">After resizing</span><h3>Commit</h3><div class="amt">$1,050/mo</div><p>Finding 1. Buy the Savings Plan <b>after</b> resizing, so you commit to the smaller footprint, not today's.</p></div>
+    </div>
+  </section>
+
+  <!-- 6. METHOD -->
+  <section class="sheet">
+    <span class="eyebrow">6 · How this was produced</span>
+    <h2>Access used &amp; method</h2>
+    <div class="method">
+      <div>
+        <h3>Access (read-only)</h3>
+        <ul>
+          <li>One IAM role, External ID-locked to this order</li>
+          <li><code>ViewOnlyAccess</code>, <code>AWSBillingReadOnlyAccess</code>, <code>ComputeOptimizerReadOnlyAccess</code></li>
+          <li>No data access (S3 objects, database rows, secrets)</li>
+          <li>No changes made to the account</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Data sources</h3>
+        <ul>
+          <li>Cost Explorer: last 3 months by service and usage type</li>
+          <li>CloudWatch: 14–30 day utilization metrics</li>
+          <li>AWS Compute Optimizer recommendations</li>
+          <li>Resource inventory across scanned regions</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--text3);margin-top:14px">Delivery bundle: this report (PDF), findings CSV with every resource ID, dry-run cleanup scripts, and access-removal commands.</p>
+    <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--border);margin-top:22px;padding-top:18px">
+      <div style="flex:1;min-width:240px">
+        <span class="eyebrow" style="margin-bottom:4px">Engineer sign-off</span>
+        <p style="font-size:14px;color:var(--text2)">Every finding in this report was checked against the account's own cost and usage data by a senior cloud engineer before delivery.</p>
+      </div>
+      <div style="border:1px solid var(--border-strong);border-radius:12px;padding:14px 18px;min-width:240px">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3)">Reviewed &amp; signed off by</div>
+        <div style="font:700 16px var(--ff-display);margin-top:2px">Bhavin Chawla</div>
+        <div style="font-size:13px;color:var(--text2)">Founder &amp; Principal Consultant, eXommerce</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:4px">Signed off: 30 Sep 2026 · Report ID DEMO-0001</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta">
+    <h2>Want this for your AWS account?</h2>
+    <p>Your report in 24 hours. Under $500/month found means a 100% refund.</p>
+    <a class="btn btn-primary" style="padding:14px 26px;font-size:15px" href="cloud-audit.html#offer">Get your 24-Hour Audit →</a>
+  </div>
+  <p class="fine">Sample only. DemoCo is fictional and not an eXommerce client. Prices are AWS us-east-1 on-demand list prices and may differ from your account's pricing, region or discounts. © <span id="yr"></span> eXommerce LLP</p>
+</main>
+
+<script>
+(function () {
+  var bars = document.querySelectorAll('.bar');
+  var max = 0;
+  bars.forEach(function (b) { max = Math.max(max, +b.dataset.v); });
+  bars.forEach(function (b) { b.style.width = (b.dataset.v / max * 100) + '%'; });
+  var tip = document.getElementById('tip'), chart = document.getElementById('chart');
+  function show(b) {
+    tip.textContent = b.dataset.tip;
+    var cr = chart.getBoundingClientRect(), br = b.getBoundingClientRect();
+    var left = Math.min(br.right - cr.left + 8, cr.width - tip.offsetWidth);
+    if (left < br.left - cr.left) left = br.left - cr.left;
+    tip.style.left = Math.max(0, left) + 'px';
+    tip.style.top = (br.top - cr.top - tip.offsetHeight - 6) + 'px';
+    tip.classList.add('show');
+  }
+  bars.forEach(function (b) {
+    b.addEventListener('mouseenter', function () { show(b); });
+    b.addEventListener('focus', function () { show(b); });
+    b.addEventListener('mouseleave', function () { tip.classList.remove('show'); });
+    b.addEventListener('blur', function () { tip.classList.remove('show'); });
+  });
+  document.getElementById('yr').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

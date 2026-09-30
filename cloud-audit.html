@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>24-Hour Cloud Cost Audit — eXommerce</title>
+<meta name="description" content="Find $500+/month in wasted AWS spend within 24 hours, or get a full refund. Read-only access, fixed price, remediation playbook and dry-run cleanup scripts included." />
+<link rel="canonical" href="https://exommerce.online/cloud-audit.html" />
+<meta name="robots" content="index, follow" />
+<meta property="og:title" content="24-Hour Cloud Cost Audit — eXommerce" />
+<meta property="og:description" content="Find $500+/month in wasted cloud spend within 24 hours, or pay nothing. Read-only, fixed price." />
+<meta property="og:url" content="https://exommerce.online/cloud-audit.html" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://exommerce.online/og-image-2026.png" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23109840'/%3E%3Ctext x='32' y='44' font-family='Sora,sans-serif' font-weight='700' font-size='34' fill='%23FFFFFF' text-anchor='middle'%3Ee%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "24-Hour Cloud Cost Audit",
+  "serviceType": "Cloud cost optimization audit",
+  "provider": { "@type": "Organization", "name": "eXommerce LLP", "url": "https://exommerce.online" },
+  "areaServed": "Worldwide",
+  "offers": { "@type": "Offer", "price": "299", "priceCurrency": "USD", "description": "Founding client price" }
+}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#FFFFFF;--bg2:#F7FBF8;--bg-green:#EFF8F1;--surface:#FFFFFF;
+  --brand-green:#109840;--brand-green-dark:#087A32;--brand-lime:#7BCF16;
+  --ink:#0B0D0C;--text:#0B0D0C;--text2:#4B5560;--text3:#6B7280;
+  --border:#DDE8E0;--border-strong:#C9D9CE;
+  --radius:12px;
+  --ff:'Inter',system-ui,-apple-system,sans-serif;
+  --ff-display:'Sora',system-ui,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--ff);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.6}
+a{text-decoration:none;color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+.wrap-md{max-width:960px;margin:0 auto;padding:0 28px}
+@media(max-width:560px){.wrap,.wrap-md{padding:0 16px}}
+:focus-visible{outline:3px solid var(--brand-green);outline-offset:3px;border-radius:4px}
+
+/* Nav (matches site sub-pages) */
+#nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 28px;height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+@media(max-width:560px){.nav-inner{padding:0 16px}}
+.logo{display:inline-flex;align-items:center}
+.logo img{height:30px;width:auto;display:block}
+@media(max-width:480px){.logo img{height:24px}}
+.nav-links{display:flex;align-items:center;gap:2px}
+.nav-links a{font-size:14px;font-weight:500;color:var(--text2);padding:8px 14px;border-radius:7px;transition:all .15s}
+.nav-links a:hover{color:var(--brand-green);background:var(--bg-green)}
+.nav-cta{background:var(--brand-green);color:#fff;padding:11px 22px;border-radius:8px;font-size:14px;font-weight:600;transition:background .15s;min-height:44px;display:inline-flex;align-items:center}
+.nav-cta:hover{background:var(--brand-green-dark)}
+@media(max-width:900px){.nav-links{display:none}}
+
+/* Shared */
+section{padding:88px 0}
+@media(max-width:700px){section{padding:64px 0}}
+.eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--brand-green);margin-bottom:14px}
+h1,h2,h3{font-family:var(--ff-display);color:var(--ink);letter-spacing:-.025em}
+h2{font-size:clamp(26px,3.6vw,38px);font-weight:800;line-height:1.15;margin-bottom:14px}
+.lede{font-size:17px;color:var(--text2);max-width:640px}
+.center{text-align:center}.center .lede{margin:0 auto}
+.btn{display:inline-block;text-align:center;line-height:1.4;font-weight:600;font-size:15px;border-radius:10px;padding:14px 26px;min-height:50px;transition:all .15s;cursor:pointer;border:0;font-family:var(--ff)}
+.btn-primary{background:var(--brand-green);color:#fff;box-shadow:0 6px 20px rgba(16,152,64,.25)}
+.btn-primary:hover{background:var(--brand-green-dark);transform:translateY(-1px)}
+.btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--border-strong)}
+.btn-ghost:hover{border-color:var(--brand-green);color:var(--brand-green)}
+.btn-block{width:100%}
+
+/* Hero */
+.hero{padding:150px 0 80px;background:radial-gradient(1200px 500px at 80% -10%,rgba(123,207,22,.18),transparent 60%),var(--bg-green);border-bottom:1px solid var(--border)}
+@media(max-width:700px){.hero{padding:120px 0 56px}}
+.pill{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border-strong);color:var(--brand-green-dark);font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;margin-bottom:22px}
+.pill .dot{width:8px;height:8px;border-radius:50%;background:var(--brand-lime);box-shadow:0 0 0 4px rgba(123,207,22,.25)}
+.hero h1{font-size:clamp(34px,5.6vw,60px);font-weight:800;line-height:1.06;max-width:880px;margin-bottom:20px}
+.hero h1 em{font-style:normal;color:var(--brand-green)}
+.hero .lede{font-size:18px;max-width:700px;margin-bottom:32px}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.hero-note{font-size:13px;color:var(--text3);margin-bottom:36px}
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:960px}
+@media(max-width:800px){.trust{grid-template-columns:1fr}}
+.trust div{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;font-size:14px;color:var(--text2)}
+.trust strong{display:block;color:var(--ink);font-size:15px;margin-bottom:2px}
+
+/* Cloud strip */
+.clouds{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.cloud{font-size:13px;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid var(--border-strong);background:#fff;color:var(--text2)}
+.cloud.live{border-color:var(--brand-green);color:var(--brand-green-dark)}
+.cloud.live::before{content:"● ";color:var(--brand-lime)}
+
+/* Pricing */
+.cur-toggle{display:inline-flex;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:4px;margin:18px 0 36px}
+.cur-toggle button{border:0;background:transparent;font:600 14px var(--ff);color:var(--text2);padding:8px 18px;border-radius:7px;cursor:pointer;min-height:40px}
+.cur-toggle button[aria-pressed="true"]{background:#fff;color:var(--brand-green-dark);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.plans{display:grid;grid-template-columns:1.25fr 1fr;gap:22px;align-items:start}
+@media(max-width:860px){.plans{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:30px;position:relative}
+.card.featured{border:2px solid var(--brand-green);box-shadow:0 18px 50px rgba(16,152,64,.12)}
+.ribbon{position:absolute;top:-13px;left:28px;background:var(--brand-green);color:#fff;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+.card .label{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--brand-green)}
+.card h3{font-size:22px;font-weight:700;margin:8px 0 6px}
+.card .hook{color:var(--text2);font-size:15px;margin-bottom:18px}
+.price{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.price .now{font-family:var(--ff-display);font-size:46px;font-weight:800;color:var(--ink);letter-spacing:-.03em}
+.price .was{font-size:18px;color:var(--text3);text-decoration:line-through}
+.price .per{font-size:14px;color:var(--text3)}
+.meta{font-size:13px;color:var(--text3);margin-bottom:20px}
+.checks{list-style:none;margin:0 0 24px}
+.checks li{position:relative;padding-left:28px;font-size:15px;color:var(--text2);margin-bottom:9px}
+.checks li::before{content:"";position:absolute;left:0;top:4px;width:18px;height:18px;border-radius:50%;background:var(--bg-green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%23109840' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat}
+.micro{font-size:13px;color:var(--text3);margin-top:10px;text-align:center}
+.slots{display:inline-block;background:#FFF7E6;color:#8A5A00;border:1px solid #F3DDAA;font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;margin-bottom:14px}
+.soon{background:var(--bg2)}
+.soon .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:#fff;border:1px solid var(--border-strong);color:var(--text2);padding:4px 10px;border-radius:999px;margin-bottom:10px}
+.mini-tiers{border-top:1px solid var(--border);margin-top:18px;padding-top:16px}
+.mini-tiers div{display:flex;justify-content:space-between;gap:12px;font-size:14px;color:var(--text2);padding:5px 0}
+.mini-tiers b{color:var(--ink)}
+
+/* Regular pricing table */
+.table-wrap{margin-top:40px;overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius)}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+th,td{padding:14px 18px;text-align:left;border-bottom:1px solid var(--border)}
+th{background:var(--bg2);font-weight:600;color:var(--ink);font-size:13px}
+td{color:var(--text2)}
+tr:last-child td{border-bottom:0}
+td b{color:var(--ink)}
+.table-cap{font-size:13px;color:var(--text3);margin-top:10px}
+
+/* Guarantee */
+.guarantee{background:var(--ink);color:#fff;padding:56px 0}
+.g-inner{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+.shield{flex:0 0 72px;height:72px;border-radius:18px;background:rgba(123,207,22,.15);display:flex;align-items:center;justify-content:center}
+.g-inner h2{color:#fff;font-size:clamp(22px,3vw,30px);margin-bottom:8px}
+.g-inner p{color:#C9D2CC;font-size:16px;max-width:680px}
+.g-inner .g-text{flex:1;min-width:260px}
+.g-inner .btn-primary{box-shadow:none}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px}
+@media(max-width:860px){.steps{grid-template-columns:1fr}}
+.step{border:1px solid var(--border);border-radius:16px;padding:28px;background:#fff}
+.step .n{width:40px;height:40px;border-radius:10px;background:var(--bg-green);color:var(--brand-green);font:800 18px var(--ff-display);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.step h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.step p{font-size:15px;color:var(--text2)}
+
+/* Checks grid */
+.alt{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:40px}
+@media(max-width:800px){.grid2{grid-template-columns:1fr}}
+.panel{background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px}
+.panel h3{font-size:18px;font-weight:700;margin-bottom:14px}
+.xlist{list-style:none}
+.xlist li{position:relative;padding-left:28px;font-size:15px;color:var(--text2);margin-bottom:9px}
+.xlist li::before{content:"✕";position:absolute;left:3px;top:0;color:#C0392B;font-weight:700}
+
+/* Founder */
+.founder{display:grid;grid-template-columns:200px 1fr;gap:36px;align-items:center}
+@media(max-width:700px){.founder{grid-template-columns:1fr;gap:22px}}
+.founder img{width:200px;height:200px;object-fit:cover;border-radius:20px;border:1px solid var(--border)}
+.founder h3{font-size:22px;font-weight:700}
+.founder .role{color:var(--brand-green);font-weight:600;font-size:14px;margin-bottom:12px}
+.founder p{color:var(--text2);font-size:16px;margin-bottom:12px}
+.founder a.li{color:var(--brand-green);font-weight:600;font-size:14px}
+
+/* Benchmarks */
+.bench{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:40px}
+@media(max-width:800px){.bench{grid-template-columns:1fr}}
+.bcard{border:1px solid var(--border);border-radius:16px;padding:26px;background:#fff}
+.bcard .co{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3)}
+.bcard h3{font-size:19px;font-weight:700;margin:6px 0 8px}
+.bcard p{font-size:15px;color:var(--text2);margin-bottom:12px}
+.bcard .built{font-size:14px;color:var(--brand-green-dark);background:var(--bg-green);border-radius:8px;padding:10px 12px}
+.disclaimer{font-size:13px;color:var(--text3);margin-top:10px}
+
+/* FAQ */
+.faq{max-width:820px;margin:40px auto 0}
+details{border:1px solid var(--border);border-radius:12px;background:#fff;margin-bottom:12px}
+summary{cursor:pointer;list-style:none;padding:18px 22px;font-weight:600;color:var(--ink);font-size:16px;display:flex;justify-content:space-between;gap:16px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:22px;color:var(--brand-green);font-weight:400}
+details[open] summary::after{content:"–"}
+details .a{padding:0 22px 20px;color:var(--text2);font-size:15px}
+details .a code{background:var(--bg2);padding:1px 6px;border-radius:4px;font-size:13px}
+
+/* Terms */
+.terms{max-width:820px;margin:0 auto}
+.terms ol{padding-left:20px}
+.terms li{font-size:14px;color:var(--text2);margin-bottom:10px;line-height:1.7}
+.terms li strong{color:var(--ink)}
+
+/* Final CTA */
+.final{background:var(--bg-green);border-top:1px solid var(--border)}
+.final .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+
+footer{background:var(--bg2);padding:40px 0 32px;border-top:1px solid var(--border)}
+.ft-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.ft-bottom p{font-size:13px;color:var(--text3)}
+.ft-links{display:flex;gap:22px;flex-wrap:wrap}
+.ft-links a{font-size:13px;color:var(--text3)}
+.ft-links a:hover{color:var(--brand-green)}
+
+/* Sticky mobile CTA */
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:90;background:#fff;border-top:1px solid var(--border);padding:10px 16px;display:none;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -6px 20px rgba(0,0,0,.06)}
+.sticky span{font-size:13px;color:var(--text2)}
+.sticky b{color:var(--ink)}
+.sticky .btn{min-height:44px;padding:10px 18px;font-size:14px}
+@media(max-width:700px){.sticky{display:flex}body{padding-bottom:70px}}
+</style>
+<!-- Analytics: GA4 loads only after cookie consent -->
+<script defer src="/analytics.js"></script>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo" aria-label="eXommerce home"><img src="logo.png" alt="eXommerce.online" width="420" height="74" /></a>
+    <nav class="nav-links" aria-label="Page">
+      <a href="#pricing">Pricing</a>
+      <a href="#how">How it works</a>
+      <a href="#security">Security</a>
+      <a href="#faq">FAQ</a>
+      <a href="index.html">Main site</a>
+    </nav>
+    <a href="#pricing" class="nav-cta" data-track="nav_cta">Get the Audit</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <span class="pill"><span class="dot"></span>24-Hour Express Cloud Cost Audit</span>
+    <h1>Find <em>$500+/month</em> in wasted cloud spend by tomorrow. Or pay nothing.</h1>
+    <p class="lede">We run a read-only scan of your cloud account. No agents to install, no changes to production, no meetings. Within 24 hours you get a ranked list of fixes, the scripts to apply them, and the dollar figure each one saves.</p>
+    <div class="hero-ctas">
+      <a href="#pricing" class="btn btn-primary" data-track="hero_primary">Get the 24-Hour Audit — <span data-price="founding">$299</span> →</a>
+      <a href="#how" class="btn btn-ghost" data-track="hero_secondary">See how it works</a>
+    </div>
+    <p class="hero-note">Founding client price · Report in 24 hours · Full refund if we find less than $500/month</p>
+    <div class="trust">
+      <div><strong>🔒 Read-only access</strong>We can see configuration and cost data. We can't change anything. Revoke in one click.</div>
+      <div><strong>💰 Pays for itself or it's free</strong>Less than $500/month in savings found? Full refund.</div>
+      <div><strong>🛡️ Least privilege by design</strong>Minimum permissions, no access to your data, access removed on delivery.</div>
+    </div>
+    <div class="clouds" aria-label="Supported clouds">
+      <span class="cloud live">AWS — available now</span>
+      <span class="cloud">Azure — waitlist</span>
+      <span class="cloud">Google Cloud — waitlist</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ PRICING ============ -->
+<section id="pricing">
+  <div class="wrap-md center">
+    <span class="eyebrow">Fixed price · Fixed scope</span>
+    <h2>Pay once. Get the fixes in 24 hours.</h2>
+    <p class="lede">No discovery calls. No statements of work. No retainers.</p>
+    <div class="cur-toggle" role="group" aria-label="Currency">
+      <button type="button" data-cur="USD" aria-pressed="true">USD $</button>
+      <button type="button" data-cur="INR" aria-pressed="false">INR ₹</button>
+    </div>
+  </div>
+
+  <div class="wrap-md">
+    <div class="plans">
+      <!-- Founding audit -->
+      <article class="card featured">
+        <span class="ribbon">Founding client offer</span>
+        <p class="label">Pays for itself or it's free</p>
+        <h3>24-Hour Cloud Waste Audit</h3>
+        <p class="hook">We find $500+/month in idle and oversized AWS spend within 24 hours, or you get a full refund.</p>
+        <span class="slots">Limited to 10 founding clients · max 2 audits per day</span>
+        <div class="price">
+          <span class="now" data-price="founding">$299</span>
+          <span class="was" data-price="regular">$790</span>
+          <span class="per">one-time</span>
+        </div>
+        <p class="meta">For AWS accounts spending $3,000+/month · Report within 24 hours of access</p>
+        <ul class="checks">
+          <li>Read-only scan of your AWS account (no agents, no changes)</li>
+          <li>Idle / zombie instances, unattached EBS volumes, old snapshots, unused Elastic IPs</li>
+          <li>Over-provisioned RDS and EC2 rightsizing</li>
+          <li>Savings Plan &amp; Reserved Instance coverage gaps</li>
+          <li>Remediation playbook, ranked by $ saved</li>
+          <li>Cleanup scripts: dry-run by default, snapshot before delete</li>
+          <li>Optional 15-minute walkthrough call</li>
+        </ul>
+        <a href="#" class="btn btn-primary btn-block" data-buy="audit" data-track="buy_audit">Buy 24-Hour Audit — <span data-price="founding">$299</span></a>
+        <p class="micro">In return for founding pricing, we'll ask for a short testimonial if you're happy.</p>
+      </article>
+
+      <!-- Stress test (coming soon) -->
+      <article class="card soon">
+        <span class="tag">Coming soon</span>
+        <p class="label">Before your next launch</p>
+        <h3>Peak Load Stress Test</h3>
+        <p class="hook">Know whether your stack survives Black Friday before your customers find out it doesn't.</p>
+        <ul class="checks">
+          <li>Scripted load test (k6) modeled on your real user flows</li>
+          <li>Bottleneck map: DB connections, slow queries, autoscaling lag</li>
+          <li>Prioritized fix list</li>
+          <li>Pass/fail capacity certificate</li>
+          <li>Runs on staging or an approved window</li>
+        </ul>
+        <div class="mini-tiers">
+          <div><span>Launch Check · 3 flows, 2,000 users</span><b data-price="stress1">$1,200</b></div>
+          <div><span>Peak Ready · 8 flows, 10,000 users + retest</span><b data-price="stress2">$2,400</b></div>
+        </div>
+        <a href="#" class="btn btn-ghost btn-block" style="margin-top:18px" data-waitlist="Stress Test" data-track="waitlist_stress">Join the waitlist</a>
+      </article>
+    </div>
+
+    <!-- Regular pricing -->
+    <div class="table-wrap" role="region" aria-label="Regular pricing" tabindex="0">
+      <table>
+        <thead><tr><th>Regular pricing (after founding spots)</th><th>Monthly cloud bill</th><th>Price</th><th>Guarantee</th></tr></thead>
+        <tbody>
+          <tr><td><b>Starter</b></td><td>$3k–$10k</td><td><b data-price="starter">$499</b></td><td>Find $500+/mo or full refund</td></tr>
+          <tr><td><b>Growth</b></td><td>$10k–$50k</td><td><b data-price="regular">$790</b></td><td>Find $1,000+/mo or full refund</td></tr>
+          <tr><td><b>Scale</b></td><td>$50k+</td><td><b data-price="scale">$1,490</b></td><td>Find $3,000+/mo or full refund</td></tr>
+          <tr><td><b>Add-on: we apply the fixes</b></td><td>Any</td><td><b data-price="fixes">+$490</b></td><td>Done in 48 hours</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-cap">INR prices include all taxes. Azure &amp; Google Cloud audits: <a href="#" data-waitlist="Azure / GCP Audit" data-track="waitlist_multicloud" style="color:var(--brand-green);text-decoration:underline">join the waitlist</a>.</p>
+  </div>
+</section>
+
+<!-- ============ GUARANTEE ============ -->
+<div class="guarantee">
+  <div class="wrap-md g-inner">
+    <div class="shield" aria-hidden="true">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#7BCF16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+    </div>
+    <div class="g-text">
+      <h2>The "pays for itself" guarantee</h2>
+      <p>If our audit doesn't find at least $500/month in actionable cloud savings, you get a 100% refund. No forms, no arguments. You risk 24 hours. We risk our fee.</p>
+    </div>
+    <a href="#pricing" class="btn btn-primary" data-track="guarantee_cta">Start risk-free</a>
+  </div>
+</div>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="how">
+  <div class="wrap center">
+    <span class="eyebrow">How it works</span>
+    <h2>From checkout to fix scripts in 3 steps</h2>
+    <p class="lede">No kickoff call. No project manager. No waiting.</p>
+  </div>
+  <div class="wrap">
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Pay once</h3><p>Check out securely in USD or INR. You'll get setup instructions by email, usually within 15 minutes.</p></div>
+      <div class="step"><div class="n">2</div><h3>Grant read-only access</h3><p>Create one read-only IAM role, locked to your order with a unique External ID. It takes about 5 minutes in AWS CloudShell. Your 24-hour clock starts once access works.</p></div>
+      <div class="step"><div class="n">3</div><h3>Get your fixes</h3><p>Receive your report, ranked fix list and dry-run cleanup scripts. Book an optional 15-minute walkthrough. Then delete the role; we give you the commands.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECURITY ============ -->
+<section id="security" class="alt">
+  <div class="wrap center">
+    <span class="eyebrow">Security &amp; access</span>
+    <h2>Exactly what we can and can't see</h2>
+    <p class="lede">We use AWS-managed read-only policies: <code style="font-size:14px">ViewOnlyAccess</code>, <code style="font-size:14px">AWSBillingReadOnlyAccess</code> and <code style="font-size:14px">ComputeOptimizerReadOnlyAccess</code>. We deliberately avoid the broader <code style="font-size:14px">ReadOnlyAccess</code> policy, which can read S3 data.</p>
+  </div>
+  <div class="wrap-md">
+    <div class="grid2">
+      <div class="panel">
+        <h3>✅ What we can see</h3>
+        <ul class="checks">
+          <li>Resource configuration (instance types, volumes, IPs, databases)</li>
+          <li>Cost &amp; usage data from AWS Cost Explorer</li>
+          <li>AWS Compute Optimizer recommendations</li>
+          <li>Utilization metrics needed to spot idle resources</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>What we can't do</h3>
+        <ul class="xlist">
+          <li>Read your data: S3 objects, database rows, secrets</li>
+          <li>Create, modify or delete anything</li>
+          <li>Access anything after you delete the role</li>
+          <li>Keep your data: deleted within 30 days of delivery</li>
+        </ul>
+      </div>
+    </div>
+    <p class="disclaimer center" style="margin-top:22px">Our own audit account is protected with MFA and CloudTrail logging, and is used only for client audits. NDA or data-processing agreement available on request: <a href="mailto:hello@exommerce.online?subject=NDA%20request%20-%20Cloud%20Audit" style="color:var(--brand-green);text-decoration:underline">hello@exommerce.online</a>.</p>
+  </div>
+</section>
+
+<!-- ============ FOUNDER ============ -->
+<section id="founder">
+  <div class="wrap-md">
+    <div class="founder">
+      <img src="team/bhavin.jpg" alt="Bhavin Chawla, founder of eXommerce" width="200" height="200" />
+      <div>
+        <span class="eyebrow">Who runs your audit</span>
+        <h3>Bhavin Chawla</h3>
+        <p class="role">Founder &amp; Principal Consultant · Bengaluru</p>
+        <p>15+ years in technology and business transformation. Previously a Solutions Engineer at CData Software, architecting enterprise data pipelines into cloud platforms like Snowflake, Databricks and Azure. PMP &amp; ITIL certified.</p>
+        <p>Every founding-client audit is reviewed personally before it reaches you.</p>
+        <a class="li" href="https://www.linkedin.com/in/bhavinchawla/" target="_blank" rel="noopener">Connect on LinkedIn ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BENCHMARKS ============ -->
+<section id="benchmarks" class="alt">
+  <div class="wrap center">
+    <span class="eyebrow">Industry benchmarks</span>
+    <h2>What the best engineering teams proved</h2>
+    <p class="lede">Lessons from public engineering case studies that we build into our 24-hour audit blueprints.</p>
+    <p class="disclaimer">Etsy, Netflix, Capital One and 37signals are not eXommerce clients. These are publicly documented industry examples that inform our methodology.</p>
+  </div>
+  <div class="wrap-md">
+    <div class="bench">
+      <div class="bcard"><span class="co">37signals · Cloud cost</span><h3>A $3.2M/year cloud bill, cut down to size</h3><p>37signals (Basecamp, HEY) was spending about $3.2M a year on cloud. After moving off, they reported roughly $2M saved in the first full year, with $10M+ projected over five years.</p><div class="built">→ In our audit: we flag where you pay on-demand premiums for steady workloads that don't need elastic pricing.</div></div>
+      <div class="bcard"><span class="co">Etsy · Release velocity</span><h3>50+ production deploys a day</h3><p>Etsy scaled to 50+ deploys a day by making releases small, automated and boring, so shipping stopped being a risk event.</p><div class="built">→ In our blueprints: we flag the release and capacity risks that stop teams from shipping with confidence.</div></div>
+      <div class="bcard"><span class="co">Netflix · Resilience</span><h3>Break it on purpose, before customers do</h3><p>Netflix pioneered chaos engineering (Chaos Monkey), deliberately killing production instances to prove the system survives failure.</p><div class="built">→ In our Stress Test: we push your stack to its limit on your schedule, not on Black Friday.</div></div>
+      <div class="bcard"><span class="co">Capital One · Cloud security</span><h3>All-in on cloud, locked down by least privilege</h3><p>Capital One closed its data centers and went all-in on AWS. Its public lessons on IAM misconfiguration became an industry benchmark for cloud permissions.</p><div class="built">→ In our access model: read-only, minimum-scope roles, removed on delivery.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="wrap center">
+    <span class="eyebrow">FAQ</span>
+    <h2>Questions CTOs ask us</h2>
+  </div>
+  <div class="wrap">
+    <div class="faq">
+      <details><summary>What exactly do you get access to?</summary><div class="a">A single IAM role with three AWS-managed read-only policies (<code>ViewOnlyAccess</code>, <code>AWSBillingReadOnlyAccess</code>, <code>ComputeOptimizerReadOnlyAccess</code>). The role can only be assumed by our audit account using an External ID unique to your order. We can't read S3 objects, database contents or secrets, and we can't change anything.</div></details>
+      <details><summary>When does the 24-hour clock start?</summary><div class="a">When your read-only access is working, not at payment. We confirm by email the moment we've verified access, with your delivery deadline.</div></details>
+      <details><summary>Who runs the cleanup scripts?</summary><div class="a">You do. Scripts run in dry-run mode by default (they only list what they would change) and take a snapshot before any deletion. You review, you decide, you execute. Want us to do it? Add the "we apply the fixes" option.</div></details>
+      <details><summary>How does the refund work?</summary><div class="a">If the report shows less than $500/month in estimated savings achievable without application code changes, based on AWS's own cost and usage data, email us within 7 days of delivery for a full refund. If we miss the 24-hour window, you can request a 25% refund.</div></details>
+      <details><summary>Do you support Azure and Google Cloud?</summary><div class="a">AWS is live today. Azure and Google Cloud are in final testing. <a href="#" data-waitlist="Azure / GCP Audit" style="color:var(--brand-green);text-decoration:underline">Join the waitlist</a> and we'll notify you first.</div></details>
+      <details><summary>What if our account spends less than $3,000/month?</summary><div class="a">There's usually not enough waste to guarantee $500/month in savings, so we don't want to take your money. Email us and we'll suggest a lighter option.</div></details>
+      <details><summary>Can you sign an NDA or DPA?</summary><div class="a">Yes. Email <a href="mailto:hello@exommerce.online" style="color:var(--brand-green);text-decoration:underline">hello@exommerce.online</a> before or after checkout.</div></details>
+      <details><summary>How do we remove access afterwards?</summary><div class="a">Delete the IAM role. We include the exact commands with your report. Access ends immediately.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AUDIT TERMS ============ -->
+<section id="audit-terms" class="alt">
+  <div class="wrap">
+    <div class="terms">
+      <span class="eyebrow">Service terms</span>
+      <h2 style="font-size:26px">24-Hour Cloud Audit — Terms</h2>
+      <p style="color:var(--text3);font-size:14px;margin-bottom:18px">These terms apply to purchases made on this page, in addition to our general <a href="terms.html" style="color:var(--brand-green);text-decoration:underline">Terms of Service</a>. By paying, you agree to them.</p>
+      <ol>
+        <li><strong>Service.</strong> eXommerce LLP ("we") performs a read-only review of the customer's cloud account and delivers a written report and optional cleanup scripts.</li>
+        <li><strong>Access &amp; authorization.</strong> The customer confirms they are authorized to grant access to the account. Access is read-only through a role the customer creates and can revoke at any time.</li>
+        <li><strong>Delivery time.</strong> The 24-hour delivery window starts when working read-only access has been granted and verified, not at payment.</li>
+        <li><strong>No changes by us.</strong> We do not modify, delete or create resources in the customer's account. Scripts we provide are recommendations, default to dry-run mode, and are executed solely at the customer's discretion and risk. The customer is responsible for reviewing scripts and taking backups before running them.</li>
+        <li><strong>Guarantee &amp; refunds.</strong> If the report identifies less than the guaranteed monthly savings for the purchased tier (USD 500/month for founding and Starter purchases), estimated as savings achievable without application code changes and calculated from the cloud provider's own cost and usage data, the customer receives a full refund on request within 7 days of delivery. If we miss the 24-hour window, the customer may request a 25% refund.</li>
+        <li><strong>Confidentiality &amp; data.</strong> We treat all account data as confidential, use it only to deliver the service, and delete it within 30 days of delivery. The customer should delete the access role after delivery.</li>
+        <li><strong>Liability.</strong> Our total liability is limited to the fee paid for the service. We are not liable for indirect or consequential losses, or for outcomes of actions the customer takes based on the report.</li>
+        <li><strong>Testimonials.</strong> Founding-price customers agree to consider providing a short testimonial. Any published result is anonymized unless the customer approves otherwise.</li>
+        <li><strong>Governing law.</strong> These terms are governed by the laws of India, with exclusive jurisdiction of the courts in Bengaluru, Karnataka.</li>
+        <li><strong>Contact.</strong> hello@exommerce.online · +91 98442 65267</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final">
+  <div class="wrap center">
+    <h2>Your cloud bill renews next month. Fix it tomorrow.</h2>
+    <p class="lede">Every day you wait, idle resources keep billing. Start the audit now and have your savings report by this time tomorrow.</p>
+    <div class="btns">
+      <a href="#" class="btn btn-primary" data-buy="audit" data-track="final_buy">Buy the 24-Hour Audit — <span data-price="founding">$299</span></a>
+      <a href="#" class="btn btn-ghost" data-waitlist="Stress Test" data-track="final_waitlist">Launching soon? Join the Stress Test waitlist</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="ft-bottom">
+      <p>© <span id="yr"></span> eXommerce LLP · Bengaluru, India · <a href="mailto:hello@exommerce.online">hello@exommerce.online</a></p>
+      <div class="ft-links">
+        <a href="index.html">Main site</a>
+        <a href="#audit-terms">Audit terms</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="sticky" aria-hidden="false">
+  <span><b data-price="founding">$299</b> audit · results in 24h</span>
+  <a href="#" class="btn btn-primary" data-buy="audit" data-track="sticky_buy">Buy</a>
+</div>
+
+<script>
+/* ================= CONFIG — edit these before going live =================
+   Paste your payment links here. While a link is empty, the Buy button opens
+   a pre-filled email so you can still take orders manually. */
+var CONFIG = {
+  payUSD: '',   // PayPal payment link for $299, e.g. 'https://www.paypal.com/ncp/payment/XXXX'
+  payINR: '',   // Razorpay Payment Page for ₹19,999, e.g. 'https://rzp.io/l/XXXX'
+  email: 'hello@exommerce.online'
+};
+
+var PRICES = {
+  USD: { founding:'$299', regular:'$790', starter:'$499', scale:'$1,490', fixes:'+$490', stress1:'$1,200', stress2:'$2,400' },
+  INR: { founding:'₹19,999', regular:'₹49,999', starter:'₹29,999', scale:'₹99,999', fixes:'+₹29,999', stress1:'₹69,999', stress2:'₹1,49,999' }
+};
+
+var currency = 'USD';
+try { if ((Intl.DateTimeFormat().resolvedOptions().timeZone || '') === 'Asia/Calcutta' || (Intl.DateTimeFormat().resolvedOptions().timeZone || '') === 'Asia/Kolkata') currency = 'INR'; } catch (e) {}
+
+function track(name, params) {
+  if (typeof window.gtag === 'function') window.gtag('event', name, params || {});
+}
+
+function setCurrency(cur) {
+  currency = cur;
+  document.querySelectorAll('[data-price]').forEach(function (el) {
+    var v = PRICES[cur][el.getAttribute('data-price')];
+    if (v) el.textContent = v;
+  });
+  document.querySelectorAll('.cur-toggle button').forEach(function (b) {
+    b.setAttribute('aria-pressed', b.getAttribute('data-cur') === cur ? 'true' : 'false');
+  });
+}
+
+document.querySelectorAll('.cur-toggle button').forEach(function (b) {
+  b.addEventListener('click', function () { setCurrency(b.getAttribute('data-cur')); track('currency_toggle', { currency: b.getAttribute('data-cur') }); });
+});
+
+document.querySelectorAll('[data-buy]').forEach(function (el) {
+  el.addEventListener('click', function (e) {
+    e.preventDefault();
+    var link = currency === 'INR' ? CONFIG.payINR : CONFIG.payUSD;
+    track('begin_checkout', { item: 'cloud_audit_founding', currency: currency, location: el.getAttribute('data-track') });
+    if (link) { window.location.href = link; return; }
+    var price = PRICES[currency].founding;
+    var subject = 'Order: 24-Hour Cloud Audit (' + price + ')';
+    var body = 'Hi eXommerce,%0D%0A%0D%0AI\'d like to order the 24-Hour Cloud Audit at the founding price (' + encodeURIComponent(price) + ').%0D%0A%0D%0AName:%0D%0ACompany:%0D%0ACloud: AWS%0D%0AApprox. monthly cloud spend:%0D%0APhone/WhatsApp:%0D%0A%0D%0AThanks';
+    window.location.href = 'mailto:' + CONFIG.email + '?subject=' + encodeURIComponent(subject) + '&body=' + body;
+  });
+});
+
+document.querySelectorAll('[data-waitlist]').forEach(function (el) {
+  el.addEventListener('click', function (e) {
+    e.preventDefault();
+    var what = el.getAttribute('data-waitlist');
+    track('join_waitlist', { item: what });
+    var body = 'Please add me to the ' + what + ' waitlist.%0D%0A%0D%0AName:%0D%0ACompany:%0D%0ACloud (AWS/Azure/GCP):%0D%0ATarget date (if any):';
+    window.location.href = 'mailto:' + CONFIG.email + '?subject=' + encodeURIComponent('Waitlist: ' + what) + '&body=' + body;
+  });
+});
+
+document.querySelectorAll('[data-track]').forEach(function (el) {
+  if (el.hasAttribute('data-buy') || el.hasAttribute('data-waitlist')) return;
+  el.addEventListener('click', function () { track('cta_click', { location: el.getAttribute('data-track') }); });
+});
+
+setCurrency(currency);
+document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
