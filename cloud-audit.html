@@ -92,9 +92,11 @@ h2{font-size:clamp(26px,3.6vw,38px);font-weight:800;line-height:1.15;margin-bott
 
 /* Cloud strip */
 .clouds{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
-.cloud{font-size:13px;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid var(--border-strong);background:#fff;color:var(--text2)}
+.cloud{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;padding:7px 12px;border-radius:8px;border:1px solid var(--border-strong);background:#fff;color:var(--text2);min-height:38px}
+.cloud img{display:block;flex:0 0 auto}
+.cloud:not(.live) img{filter:grayscale(1);opacity:.55}
 .cloud.live{border-color:var(--brand-green);color:var(--brand-green-dark)}
-.cloud.live::before{content:"● ";color:var(--brand-lime)}
+.cloud.live::after{content:"";order:-1;width:8px;height:8px;border-radius:50%;background:var(--brand-lime)}
 
 /* Pricing */
 .cur-toggle{display:inline-flex;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:4px;margin:18px 0 36px}
@@ -259,9 +261,9 @@ footer{background:var(--bg2);padding:40px 0 32px;border-top:1px solid var(--bord
       <div><strong>🛡️ Least privilege by design</strong>Minimum permissions, no access to your data, access removed on delivery.</div>
     </div>
     <div class="clouds" aria-label="Supported clouds">
-      <span class="cloud live">AWS — available now</span>
-      <span class="cloud">Azure — waitlist</span>
-      <span class="cloud">Google Cloud — waitlist</span>
+      <span class="cloud live"><img src="media/clouds/aws.png" alt="AWS" width="37" height="22" />available now</span>
+      <span class="cloud"><img src="media/clouds/azure.svg" alt="" width="18" height="18" />Azure — waitlist</span>
+      <span class="cloud"><img src="media/clouds/googlecloud.svg" alt="" width="20" height="20" />Google Cloud — waitlist</span>
     </div>
   </div>
 </header>
