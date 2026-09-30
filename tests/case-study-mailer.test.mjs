@@ -469,6 +469,23 @@ test('the editor test booking is a valid request', () => {
   assert.equal(JSON.parse(logs[0]).ok, true);
 });
 
+test('waitlist sign-ups from cloud-audit.html go through the contact handler', () => {
+  const { post, sheets, sent } = load();
+  // exactly what the page's waitlist form sends
+  const res = post({ form: 'contact', first_name: 'Test Person', last_name: '', email: 'test@acme.example',
+    company: 'Acme', need: 'Waitlist: Stress Test', message: 'Please add me to the Stress Test waitlist.',
+    page: 'https://exommerce.online/cloud-audit.html' });
+  assert.equal(res.ok, true);
+  assert.equal(sent.length, 1);
+  assert.equal(sent[0].subject, 'Waitlist: Stress Test · Test Person · Acme');
+  assert.equal(sent[0].replyTo, 'test@acme.example');
+  const row = sheets['Contact enquiries'][1];
+  assert.equal(row[sheets['Contact enquiries'][0].indexOf('Area')], 'Waitlist: Stress Test');
+  const enquiry = load();
+  enquiry.post({ form: 'contact', first_name: 'A', last_name: 'B', email: 'a@b.co', company: 'C', message: 'Hi' });
+  assert.equal(enquiry.sent[0].subject, 'New enquiry: A B · C', 'homepage enquiries keep their subject');
+});
+
 test('existing flows still route correctly', () => {
   const { post, sheets } = load();
   const contact = post({ form: 'contact', first_name: 'A', email: 'a@b.co', company: 'C', message: 'Hi' });

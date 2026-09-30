@@ -674,6 +674,38 @@ html:has(.bk[open]){overflow:hidden}
   </div>
 </dialog>
 
+<!-- Waitlist dialog: sent to the same Apps Script's contact handler. -->
+<dialog id="waitDialog" class="bk" aria-labelledby="wlTitle">
+  <div class="bk-in">
+    <button type="button" class="bk-close" data-close aria-label="Close">&times;</button>
+
+    <div id="wlForm">
+      <span class="eyebrow" style="padding-right:40px">Waitlist</span>
+      <h2 id="wlTitle">Join the <span class="wl-what">waitlist</span> waitlist</h2>
+      <p class="sub">We'll email you when it's ready. Nothing else.</p>
+      <form id="waitForm" novalidate>
+        <label for="wlName">Your name</label>
+        <input id="wlName" name="first_name" autocomplete="name" required maxlength="60" />
+        <div class="row2">
+          <div><label for="wlEmail">Work email</label><input id="wlEmail" name="email" type="email" autocomplete="email" required maxlength="120" /></div>
+          <div><label for="wlCompany">Company</label><input id="wlCompany" name="company" autocomplete="organization" required maxlength="120" /></div>
+        </div>
+        <div class="hp" aria-hidden="true"><label for="wlWebsite">Website</label><input id="wlWebsite" name="website" tabindex="-1" autocomplete="off" /></div>
+        <p class="err" id="wlErr" role="alert" hidden></p>
+        <button type="submit" class="btn btn-primary btn-block" id="wlSubmit" style="margin-top:18px">Join the waitlist</button>
+        <p class="fine">We only use this to tell you when it's ready. <a href="privacy.html">Privacy policy</a>.</p>
+      </form>
+    </div>
+
+    <div id="wlDone" class="bk-done" hidden>
+      <div class="ok" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#109840" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <h2 id="wlDoneTitle" tabindex="-1">You're on the list</h2>
+      <p>We'll email <b id="wlDoneEmail"></b> as soon as the <span class="wl-what">waitlist</span> is ready.</p>
+      <button type="button" class="btn btn-ghost" data-close>Close</button>
+    </div>
+  </div>
+</dialog>
+
 <script>
 /* ================= CONFIG =================
    Every "Get my free audit" button opens the request form. Requests go to the Apps
@@ -800,38 +832,90 @@ if (bookDialog) {
     var data = new URLSearchParams(d);
     data.set('form', 'audit_booking');
     data.set('page', location.href);
-    // A dropped connection gets one automatic retry. It can't double-book: the server
-    // returns the same audit ID for the same email and company within 10 minutes.
-    function send(attempt) {
-      var ctl = typeof AbortController === 'function' ? new AbortController() : null;
-      var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 20000);
-      fetch(CONFIG.bookingEndpoint, { method: 'POST', body: data, signal: ctl ? ctl.signal : undefined })
-        .then(function (r) { return r.json(); })
-        .then(function (res) {
-          clearTimeout(timer);
-          if (res && res.ok && res.reference) { booked(res.reference); return; }
-          // Show the server's own wording ("Please check the website address."), never a raw error.
-          notSent(res && /^(Please|We could not)/.test(res.error || '') ? res.error : '');
-        })
-        .catch(function () {
-          clearTimeout(timer);
-          if (attempt < 2) setTimeout(function () { send(attempt + 1); }, 1500);
-          else notSent();
-        });
-    }
-    send(1);
+    postForm(data, function (res) { if (res.reference) booked(res.reference); else notSent(); }, notSent);
   });
 }
+
+// POST a form to the Apps Script. A dropped connection gets one automatic retry; the server
+// ignores a repeat of the same request within 10 minutes (an audit request gets the same ID
+// back), so a retry can't submit anything twice. fail() gets the server's own message when it
+// has one ("Please check the website address."), never a raw error.
+function postForm(data, done, fail, attempt) {
+  attempt = attempt || 1;
+  var ctl = typeof AbortController === 'function' ? new AbortController() : null;
+  var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 20000);
+  fetch(CONFIG.bookingEndpoint, { method: 'POST', body: data, signal: ctl ? ctl.signal : undefined })
+    .then(function (r) { return r.json(); })
+    .then(function (res) {
+      clearTimeout(timer);
+      if (res && res.ok) done(res);
+      else fail(res && /^(Please|We could not)/.test(res.error || '') ? res.error : '');
+    })
+    .catch(function () {
+      clearTimeout(timer);
+      if (attempt < 2) setTimeout(function () { postForm(data, done, fail, attempt + 1); }, 1500);
+      else fail('');
+    });
+}
+
+/* ================= Waitlists (Stress Test, Azure / GCP) =================
+   A short form, sent through the contact handler: hello@ gets an email and the
+   "Contact enquiries" tab a row whose Area says which waitlist. */
+var waitDialog = document.getElementById('waitDialog');
+var waitItem = '';
 
 document.querySelectorAll('[data-waitlist]').forEach(function (el) {
   el.addEventListener('click', function (e) {
     e.preventDefault();
-    var what = el.getAttribute('data-waitlist');
-    track('join_waitlist', { item: what });
-    var body = 'Please add me to the ' + what + ' waitlist.%0D%0A%0D%0AName:%0D%0ACompany:%0D%0ACloud (AWS/Azure/GCP):%0D%0ATarget date (if any):';
-    window.location.href = 'mailto:' + CONFIG.email + '?subject=' + encodeURIComponent('Waitlist: ' + what) + '&body=' + body;
+    waitItem = el.getAttribute('data-waitlist');
+    track('join_waitlist', { item: waitItem });
+    if (!waitDialog || typeof waitDialog.showModal !== 'function') { if (waitDialog) waitDialog.scrollIntoView(); return; }
+    document.querySelectorAll('.wl-what').forEach(function (s) { s.textContent = waitItem; });
+    document.getElementById('wlForm').hidden = false;
+    document.getElementById('wlDone').hidden = true;
+    document.getElementById('wlErr').hidden = true;
+    if (!waitDialog.open) waitDialog.showModal();
   });
 });
+
+if (waitDialog) {
+  waitDialog.addEventListener('click', function (e) {
+    if (e.target === waitDialog || e.target.closest('[data-close]')) waitDialog.close();
+  });
+  document.getElementById('wlEmail').addEventListener('input', function () { this.setCustomValidity(''); });
+
+  document.getElementById('waitForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var form = this;
+    var val = function (id) { return document.getElementById(id).value.trim(); };
+    var emailEl = document.getElementById('wlEmail');
+    emailEl.setCustomValidity(!emailEl.value.trim() || EMAIL_RE.test(emailEl.value.trim()) ? '' : 'Please enter a full email address, like name@company.com');
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    if (document.getElementById('wlWebsite').value) return;   // honeypot
+
+    var btn = document.getElementById('wlSubmit');
+    var label = btn.textContent;
+    var err = document.getElementById('wlErr');
+    var email = val('wlEmail').toLowerCase();
+    btn.disabled = true; btn.textContent = 'Sending…'; err.hidden = true;
+
+    var data = new URLSearchParams({ form: 'contact', first_name: val('wlName'), last_name: '', email: email,
+      company: val('wlCompany'), need: 'Waitlist: ' + waitItem,
+      message: 'Please add me to the ' + waitItem + ' waitlist.', page: location.href });
+    postForm(data, function () {
+      btn.disabled = false; btn.textContent = label;
+      track('waitlist_signup', { item: waitItem });
+      document.getElementById('wlDoneEmail').textContent = email;
+      document.getElementById('wlForm').hidden = true;
+      document.getElementById('wlDone').hidden = false;
+      document.getElementById('wlDoneTitle').focus();
+    }, function (message) {
+      btn.disabled = false; btn.textContent = label;
+      err.textContent = message || "We couldn't add you just now. Please try again in a moment; your details are still filled in.";
+      err.hidden = false;
+    });
+  });
+}
 
 document.querySelectorAll('[data-track]').forEach(function (el) {
   if (el.hasAttribute('data-buy') || el.hasAttribute('data-waitlist')) return;

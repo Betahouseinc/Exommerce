@@ -187,7 +187,7 @@ function handleContact(p) {
       to: NOTIFY_TO,
       replyTo: email,
       name: SENDER_NAME + ' website',
-      subject: 'New enquiry: ' + first + ' ' + last + ' · ' + company,
+      subject: (/^Waitlist:/.test(need) ? need + ' · ' : 'New enquiry: ') + (first + ' ' + last).trim() + ' · ' + company,
       body: 'Name:    ' + (first + ' ' + last).trim() + '\n'
           + 'Email:   ' + email + '\n'
           + 'Company: ' + company + '\n'
