@@ -15,3 +15,10 @@ recovery-codes.txt
 *api*key*.txt
 *secret*.txt
 supabase*.txt
+
+# Cloud Audit scanner: local env, caches, and customer scan output
+# (customer data must never be committed)
+scanner/.venv/
+scanner/out/
+__pycache__/
+.pytest_cache/

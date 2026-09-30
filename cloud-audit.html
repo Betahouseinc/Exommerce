@@ -224,6 +224,39 @@ footer{background:var(--bg2);padding:40px 0 32px;border-top:1px solid var(--bord
 .sticky b{color:var(--ink)}
 .sticky .btn{min-height:44px;padding:10px 18px;font-size:14px}
 @media(max-width:700px){.sticky{display:flex}body{padding-bottom:70px}}
+
+/* Booking dialog */
+html:has(.bk[open]){overflow:hidden}
+.bk{margin:auto;border:0;padding:0;border-radius:18px;width:min(540px,calc(100% - 24px));max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow:auto;box-shadow:0 30px 80px rgba(11,13,12,.28);color:var(--text);background:#fff}
+.bk::backdrop{background:rgba(11,13,12,.55)}
+.bk-in{padding:30px 30px 24px;position:relative}
+@media(max-width:560px){.bk-in{padding:24px 18px 18px}}
+.bk-close{position:absolute;top:10px;right:10px;width:44px;height:44px;border:0;background:transparent;border-radius:10px;font-size:26px;line-height:1;color:var(--text3);cursor:pointer}
+.bk-close:hover{background:var(--bg2);color:var(--ink)}
+.bk h2{font-size:clamp(22px,4vw,26px);margin:0 0 6px;padding-right:40px}
+.bk .sub{font-size:15px;color:var(--text2);margin-bottom:6px}
+.bk label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin:14px 0 6px}
+.bk label .opt{font-weight:400;color:var(--text3)}
+.bk input,.bk select,.bk textarea{width:100%;font:16px var(--ff);padding:11px 12px;border:1px solid var(--border-strong);border-radius:9px;background:#fff;color:var(--ink);min-height:46px}
+.bk textarea{min-height:80px;resize:vertical}
+.bk input:focus,.bk select:focus,.bk textarea:focus{outline:2px solid var(--brand-green);outline-offset:0;border-color:var(--brand-green)}
+.bk .row2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+@media(max-width:560px){.bk .row2{grid-template-columns:1fr}}
+.bk .hint{font-size:13px;color:#6B4600;background:#FFF7E6;border:1px solid #F3DDAA;border-radius:8px;padding:8px 10px;margin-top:8px}
+.bk .summary{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--bg-green);border-radius:10px;padding:12px 14px;margin-top:18px;font-size:14px;color:var(--text2)}
+.bk .summary b{font:800 18px var(--ff-display);color:var(--ink)}
+.bk .err{font-size:14px;color:#6B4600;background:#FFF7E6;border:1px solid #F3DDAA;border-radius:8px;padding:10px 12px;margin-top:14px}
+.bk .err a{color:#6B4600;text-decoration:underline;font-weight:600}
+.bk .fine{font-size:12px;color:var(--text3);margin-top:10px;text-align:center}
+.bk .fine a{color:var(--text2);text-decoration:underline}
+.bk .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.bk-done{text-align:center;padding:8px 0 4px}
+.bk-done h2{padding:0}
+.bk-done .ok{width:56px;height:56px;border-radius:50%;background:var(--bg-green);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.bk-done .ref{display:inline-block;font:800 20px var(--ff-display);letter-spacing:.04em;color:var(--brand-green-dark);background:var(--bg-green);border:1px dashed var(--brand-green);border-radius:10px;padding:8px 16px;margin:8px 0 14px}
+.bk-done p{font-size:15px;color:var(--text2);margin-bottom:10px}
+.bk-done ol{text-align:left;max-width:400px;margin:4px auto 18px;padding-left:20px;font-size:14px;color:var(--text2)}
+.bk-done li{margin-bottom:6px}
 </style>
 <!-- Analytics: GA4 loads only after cookie consent -->
 <script defer src="/analytics.js"></script>
@@ -533,14 +566,72 @@ footer{background:var(--bg2);padding:40px 0 32px;border-top:1px solid var(--bord
   <a href="#" class="btn btn-primary" data-buy="audit" data-track="sticky_buy">Book now</a>
 </div>
 
+<!-- Booking dialog: sent to the Apps Script mailer (case-study-mailer.gs), which
+     logs it to the "Audit bookings" tab, emails hello@ and confirms to the customer. -->
+<dialog id="bookDialog" class="bk" aria-labelledby="bkTitle">
+  <div class="bk-in">
+    <button type="button" class="bk-close" data-close aria-label="Close">&times;</button>
+
+    <div id="bkForm">
+      <span class="eyebrow">24-Hour Cloud Audit</span>
+      <h2 id="bkTitle">Book your audit</h2>
+      <p class="sub">No payment now. We reply with payment details and setup instructions, usually the same day.</p>
+      <form id="bookForm" novalidate>
+        <label for="bkName">Your name</label>
+        <input id="bkName" name="name" autocomplete="name" required maxlength="100" autofocus />
+        <div class="row2">
+          <div><label for="bkEmail">Work email</label><input id="bkEmail" name="email" type="email" autocomplete="email" required maxlength="120" /></div>
+          <div><label for="bkCompany">Company</label><input id="bkCompany" name="company" autocomplete="organization" required maxlength="120" /></div>
+        </div>
+        <label for="bkSpend">Monthly AWS spend</label>
+        <select id="bkSpend" name="spend" required>
+          <option value="" selected disabled>Choose a range</option>
+          <option>Under $3k</option>
+          <option>$3k–$10k</option>
+          <option>$10k–$50k</option>
+          <option>$50k+</option>
+          <option>Not sure</option>
+        </select>
+        <p class="hint" id="bkLow" hidden>Under $3,000/month there's usually not enough waste to guarantee $500 in savings. You can still book, and we'll suggest a lighter option if it fits better.</p>
+        <label for="bkPhone">Phone / WhatsApp <span class="opt">(optional)</span></label>
+        <input id="bkPhone" name="phone" type="tel" autocomplete="tel" maxlength="40" />
+        <label for="bkNotes">Anything we should know? <span class="opt">(optional)</span></label>
+        <textarea id="bkNotes" name="notes" maxlength="2000" placeholder="Regions you use, a deadline, an NDA request…"></textarea>
+        <div class="hp" aria-hidden="true"><label for="bkWebsite">Website</label><input id="bkWebsite" name="website" tabindex="-1" autocomplete="off" /></div>
+        <div class="summary"><span>Founding price, one-time</span><b data-price="founding">$299</b></div>
+        <p class="err" id="bkErr" role="alert" hidden></p>
+        <button type="submit" class="btn btn-primary btn-block" id="bkSubmit" style="margin-top:16px">Send booking</button>
+        <p class="fine">By booking you agree to the <a href="#audit-terms" data-close>audit terms</a> and our <a href="privacy.html">privacy policy</a>.</p>
+      </form>
+    </div>
+
+    <div id="bkDone" class="bk-done" hidden>
+      <div class="ok" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#109840" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <h2 id="bkDoneTitle" tabindex="-1">You're booked</h2>
+      <p>Your reference</p>
+      <div class="ref" id="bkRef"></div>
+      <p>We've sent a confirmation to <b id="bkDoneEmail"></b>. If it isn't there in a few minutes, check spam.</p>
+      <ol>
+        <li>We reply with payment details and setup instructions, usually the same day.</li>
+        <li>You create one read-only IAM role. It takes about 5 minutes.</li>
+        <li>Your report arrives within 24 hours of access working.</li>
+      </ol>
+      <button type="button" class="btn btn-ghost" data-close>Close</button>
+    </div>
+  </div>
+</dialog>
+
 <script>
 /* ================= CONFIG — edit these before going live =================
-   Paste your payment links here. While a link is empty, the Buy button opens
-   a pre-filled email so you can still take orders manually. */
+   Paste your payment links here. While a link is empty, "Book now" opens the
+   booking form instead. Bookings go to the Apps Script mailer (the same one as
+   the homepage contact form); if it can't be reached, the visitor's email app
+   opens with the booking filled in, so nothing is lost. */
 var CONFIG = {
   payUSD: '',   // PayPal payment link for $299, e.g. 'https://www.paypal.com/ncp/payment/XXXX'
   payINR: '',   // Razorpay Payment Page for ₹19,999, e.g. 'https://rzp.io/l/XXXX'
-  email: 'hello@exommerce.online'
+  email: 'hello@exommerce.online',
+  bookingEndpoint: 'https://script.google.com/macros/s/AKfycbyo6QASQ4wgBQxCiKid3dJZsCpRupRTFbisglyGsBHZuIRTFVBxv9trJx8xSjLScPgNEQ/exec'
 };
 
 var PRICES = {
@@ -576,12 +667,108 @@ document.querySelectorAll('[data-buy]').forEach(function (el) {
     var link = currency === 'INR' ? CONFIG.payINR : CONFIG.payUSD;
     track('begin_checkout', { item: 'cloud_audit_founding', currency: currency, location: el.getAttribute('data-track') });
     if (link) { window.location.href = link; return; }
-    var price = PRICES[currency].founding;
-    var subject = 'Booking: 24-Hour Cloud Audit (' + price + ')';
-    var body = 'Hi eXommerce,%0D%0A%0D%0AI\'d like to book the 24-Hour Cloud Audit at the founding price (' + encodeURIComponent(price) + ').%0D%0A%0D%0AName:%0D%0ACompany:%0D%0ACloud: AWS%0D%0AApprox. monthly cloud spend:%0D%0APhone/WhatsApp:%0D%0A%0D%0AThanks';
-    window.location.href = 'mailto:' + CONFIG.email + '?subject=' + encodeURIComponent(subject) + '&body=' + body;
+    openBooking(el.getAttribute('data-track'));
   });
 });
+
+/* ================= Booking form ================= */
+var bookDialog = document.getElementById('bookDialog');
+var bookTrigger = '';
+var EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;   // same rules as the Apps Script
+var PHONE_RE = /^[0-9+()\-.\s]{6,40}$/;
+
+function bookingMailto(d) {
+  var price = PRICES[currency].founding;
+  var lines = ['Hi eXommerce,', '', "I'd like to book the 24-Hour Cloud Audit at the founding price (" + price + ').', '',
+    'Name:      ' + (d.name || ''),
+    'Company:   ' + (d.company || ''),
+    'Cloud:     AWS',
+    'AWS spend: ' + (d.spend || ''),
+    'Phone:     ' + (d.phone || '')];
+  if (d.notes) lines.push('', d.notes);
+  lines.push('', 'Thanks');
+  return 'mailto:' + CONFIG.email + '?subject=' + encodeURIComponent('Booking: 24-Hour Cloud Audit (' + price + ')')
+    + '&body=' + encodeURIComponent(lines.join('\r\n'));
+}
+
+function openBooking(trigger) {
+  // Very old browsers without <dialog>: straight to email, as before.
+  if (!bookDialog || typeof bookDialog.showModal !== 'function') { window.location.href = bookingMailto({}); return; }
+  bookTrigger = trigger || '';
+  document.getElementById('bkErr').hidden = true;
+  if (!bookDialog.open) bookDialog.showModal();
+}
+
+if (bookDialog) {
+  bookDialog.addEventListener('click', function (e) {
+    if (e.target === bookDialog || e.target.closest('[data-close]')) bookDialog.close();   // backdrop, ×, Close, terms link
+  });
+
+  document.getElementById('bkSpend').addEventListener('change', function () {
+    document.getElementById('bkLow').hidden = this.value !== 'Under $3k';
+  });
+
+  // cloud-audit.html#book opens the form straight away, for links in emails and WhatsApp.
+  if (location.hash === '#book') openBooking('link');
+
+  // The form is novalidate so this handler always runs and checks it itself;
+  // a custom error is cleared as soon as the visitor edits that field.
+  ['bkEmail', 'bkPhone'].forEach(function (id) {
+    document.getElementById(id).addEventListener('input', function () { this.setCustomValidity(''); });
+  });
+
+  document.getElementById('bookForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var form = this;
+    var val = function (id) { return document.getElementById(id).value.trim(); };
+    var emailEl = document.getElementById('bkEmail');
+    var phoneEl = document.getElementById('bkPhone');
+    emailEl.setCustomValidity(!emailEl.value.trim() || EMAIL_RE.test(emailEl.value.trim()) ? '' : 'Please enter a full email address, like name@company.com');
+    phoneEl.setCustomValidity(!phoneEl.value.trim() || PHONE_RE.test(phoneEl.value.trim()) ? '' : 'Use digits, spaces and + ( ) - only');
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+
+    var d = { name: val('bkName'), email: val('bkEmail').toLowerCase(), company: val('bkCompany'),
+              spend: document.getElementById('bkSpend').value, phone: val('bkPhone'), notes: val('bkNotes') };
+    if (document.getElementById('bkWebsite').value) return;   // honeypot: bots fill hidden fields
+
+    var btn = document.getElementById('bkSubmit');
+    var label = btn.textContent;
+    var err = document.getElementById('bkErr');
+    btn.disabled = true; btn.textContent = 'Sending…'; err.hidden = true;
+
+    function booked(reference) {
+      btn.disabled = false; btn.textContent = label;
+      track('generate_lead', { form: 'audit_booking', currency: currency, value: currency === 'INR' ? 19999 : 299, location: bookTrigger });
+      document.getElementById('bkRef').textContent = reference;
+      document.getElementById('bkDoneEmail').textContent = d.email;
+      document.getElementById('bkForm').hidden = true;
+      document.getElementById('bkDone').hidden = false;
+      document.getElementById('bkDoneTitle').focus();
+    }
+    function viaEmailApp() {
+      var href = bookingMailto(d);
+      btn.disabled = false; btn.textContent = label;
+      err.textContent = 'One more step: your email app is opening with your booking filled in. Just press Send. If nothing opened, ';
+      var a = document.createElement('a');
+      a.href = href; a.textContent = 'email us your booking';
+      err.appendChild(a); err.appendChild(document.createTextNode('.'));
+      err.hidden = false;
+      track('booking_fallback', { currency: currency, location: bookTrigger });
+      window.location.href = href;
+    }
+
+    var data = new URLSearchParams(d);
+    data.set('form', 'audit_booking');
+    data.set('currency', currency);
+    data.set('page', location.href);
+    var ctl = typeof AbortController === 'function' ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 20000);
+    fetch(CONFIG.bookingEndpoint, { method: 'POST', body: data, signal: ctl ? ctl.signal : undefined })
+      .then(function (r) { return r.json(); })
+      .then(function (res) { clearTimeout(timer); if (res && res.ok && res.reference) booked(res.reference); else viaEmailApp(); })
+      .catch(function () { clearTimeout(timer); viaEmailApp(); });
+  });
+}
 
 document.querySelectorAll('[data-waitlist]').forEach(function (el) {
   el.addEventListener('click', function (e) {
