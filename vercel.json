@@ -1,5 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/free-scan", "destination": "/cloud-audit.html?book=1&utm_source=share&utm_medium=link&utm_campaign=free-scan", "permanent": false },
+    { "source": "/free-audit", "destination": "/cloud-audit.html?book=1&utm_source=share&utm_medium=link&utm_campaign=free-scan", "permanent": false }
+  ],
   "headers": [
     {
       "source": "/(.*)",

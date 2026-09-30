@@ -738,8 +738,9 @@ if (bookDialog) {
     document.getElementById('bkLow').hidden = this.value !== 'Under $3k';
   });
 
-  // cloud-audit.html#book opens the form straight away, for links in emails and WhatsApp.
-  if (location.hash === '#book') openBooking('link');
+  // cloud-audit.html#book (or ?book=1, which /free-scan redirects to) opens the form
+  // straight away, for links shared in emails, WhatsApp and LinkedIn.
+  if (location.hash === '#book' || /[?&]book=1(&|$)/.test(location.search)) openBooking('link');
 
   // The form is novalidate so this handler always runs and checks it itself;
   // a custom error is cleared as soon as the visitor edits that field.
