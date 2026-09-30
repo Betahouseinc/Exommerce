@@ -293,7 +293,7 @@ footer{background:var(--bg2);padding:40px 0 32px;border-top:1px solid var(--bord
           <li>Cleanup scripts: dry-run by default, snapshot before delete</li>
           <li>Optional 15-minute walkthrough call</li>
         </ul>
-        <a href="#" class="btn btn-primary btn-block" data-buy="audit" data-track="buy_audit">Buy 24-Hour Audit — <span data-price="founding">$299</span></a>
+        <a href="#" class="btn btn-primary btn-block" data-buy="audit" data-track="buy_audit">Book now —<span data-price="founding">$299</span></a>
         <p class="micro">In return for founding pricing, we'll ask for a short testimonial if you're happy.</p>
       </article>
 
@@ -480,7 +480,7 @@ footer{background:var(--bg2);padding:40px 0 32px;border-top:1px solid var(--bord
     <h2>Your cloud bill renews next month. Fix it tomorrow.</h2>
     <p class="lede">Every day you wait, idle resources keep billing. Start the audit now and have your savings report by this time tomorrow.</p>
     <div class="btns">
-      <a href="#" class="btn btn-primary" data-buy="audit" data-track="final_buy">Buy the 24-Hour Audit — <span data-price="founding">$299</span></a>
+      <a href="#" class="btn btn-primary" data-buy="audit" data-track="final_buy">Book now —<span data-price="founding">$299</span></a>
       <a href="#" class="btn btn-ghost" data-waitlist="Stress Test" data-track="final_waitlist">Launching soon? Join the Stress Test waitlist</a>
     </div>
   </div>
@@ -502,7 +502,7 @@ footer{background:var(--bg2);padding:40px 0 32px;border-top:1px solid var(--bord
 
 <div class="sticky" aria-hidden="false">
   <span><b data-price="founding">$299</b> audit · results in 24h</span>
-  <a href="#" class="btn btn-primary" data-buy="audit" data-track="sticky_buy">Buy</a>
+  <a href="#" class="btn btn-primary" data-buy="audit" data-track="sticky_buy">Book now</a>
 </div>
 
 <script>
@@ -549,8 +549,8 @@ document.querySelectorAll('[data-buy]').forEach(function (el) {
     track('begin_checkout', { item: 'cloud_audit_founding', currency: currency, location: el.getAttribute('data-track') });
     if (link) { window.location.href = link; return; }
     var price = PRICES[currency].founding;
-    var subject = 'Order: 24-Hour Cloud Audit (' + price + ')';
-    var body = 'Hi eXommerce,%0D%0A%0D%0AI\'d like to order the 24-Hour Cloud Audit at the founding price (' + encodeURIComponent(price) + ').%0D%0A%0D%0AName:%0D%0ACompany:%0D%0ACloud: AWS%0D%0AApprox. monthly cloud spend:%0D%0APhone/WhatsApp:%0D%0A%0D%0AThanks';
+    var subject = 'Booking: 24-Hour Cloud Audit (' + price + ')';
+    var body = 'Hi eXommerce,%0D%0A%0D%0AI\'d like to book the 24-Hour Cloud Audit at the founding price (' + encodeURIComponent(price) + ').%0D%0A%0D%0AName:%0D%0ACompany:%0D%0ACloud: AWS%0D%0AApprox. monthly cloud spend:%0D%0APhone/WhatsApp:%0D%0A%0D%0AThanks';
     window.location.href = 'mailto:' + CONFIG.email + '?subject=' + encodeURIComponent(subject) + '&body=' + body;
   });
 });
