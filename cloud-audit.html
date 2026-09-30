@@ -678,9 +678,9 @@ html:has(.bk[open]){overflow:hidden}
 /* ================= CONFIG =================
    Every "Get my free audit" button opens the request form. Requests go to the Apps
    Script mailer (the same one as the homepage contact form), which gives each one an
-   audit ID; if it can't be reached, the visitor's email app opens with the request
-   filled in, so nothing is lost. The paid engagement is arranged by email after the
-   initial findings. */
+   audit ID. If it can't be reached, the form tries once more, then asks the visitor to
+   try again with their details still filled in. It never opens their email app. The
+   paid engagement is arranged after the initial findings. */
 var CONFIG = {
   email: 'hello@exommerce.online',
   bookingEndpoint: 'https://script.google.com/macros/s/AKfycbyo6QASQ4wgBQxCiKid3dJZsCpRupRTFbisglyGsBHZuIRTFVBxv9trJx8xSjLScPgNEQ/exec'
@@ -724,21 +724,9 @@ var SITE_RE = /^(https?:\/\/)?[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}(\/\S*)?$/i;
 var REF_SOURCES = { linkedin: 'LinkedIn', li: 'LinkedIn', whatsapp: 'WhatsApp', wa: 'WhatsApp', email: 'Email',
                     google: 'Google search', referral: 'Referred by someone', event: 'Event or meetup' };
 
-function bookingMailto(d) {
-  var lines = ['Hi eXommerce,', '', "I'd like a free Cloud Cost & Infrastructure Audit.", '',
-    'Name:       ' + (d.name || '') + (d.role ? ' (' + d.role + ')' : ''),
-    'Company:    ' + (d.company || '') + (d.company_site ? ' · ' + d.company_site : ''),
-    'Industry:   ' + (d.industry || '') + (d.company_size ? ' · ' + d.company_size + ' people' : ''),
-    'Cloud:      ' + (d.provider || '') + (d.spend ? ' · ' + d.spend + '/month' : ''),
-    'Heard via:  ' + (d.source || ''),
-    '', 'Thanks'];
-  return 'mailto:' + CONFIG.email + '?subject=' + encodeURIComponent('Free cloud audit request: ' + (d.company || 'new request'))
-    + '&body=' + encodeURIComponent(lines.join('\r\n'));
-}
-
 function openBooking(trigger) {
-  // Very old browsers without <dialog>: straight to email, as before.
-  if (!bookDialog || typeof bookDialog.showModal !== 'function') { window.location.href = bookingMailto({}); return; }
+  // Very old browsers without <dialog> show the form at the foot of the page: take them there.
+  if (!bookDialog || typeof bookDialog.showModal !== 'function') { if (bookDialog) bookDialog.scrollIntoView(); return; }
   bookTrigger = trigger || '';
   document.getElementById('bkErr').hidden = true;
   if (!bookDialog.open) bookDialog.showModal();
@@ -801,27 +789,37 @@ if (bookDialog) {
       document.getElementById('bkDone').hidden = false;
       document.getElementById('bkDoneTitle').focus();
     }
-    function viaEmailApp() {
-      var href = bookingMailto(d);
+    function notSent(message) {
       btn.disabled = false; btn.textContent = label;
-      err.textContent = 'One more step: your email app is opening with your request filled in. Just press Send. If nothing opened, ';
-      var a = document.createElement('a');
-      a.href = href; a.textContent = 'email us your request';
-      err.appendChild(a); err.appendChild(document.createTextNode('.'));
+      err.textContent = message || "We couldn't send your request just now. Please try again in a moment; "
+        + 'your details are still filled in.';
       err.hidden = false;
       track('booking_fallback', { currency: currency, location: bookTrigger });
-      window.location.href = href;
     }
 
     var data = new URLSearchParams(d);
     data.set('form', 'audit_booking');
     data.set('page', location.href);
-    var ctl = typeof AbortController === 'function' ? new AbortController() : null;
-    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 20000);
-    fetch(CONFIG.bookingEndpoint, { method: 'POST', body: data, signal: ctl ? ctl.signal : undefined })
-      .then(function (r) { return r.json(); })
-      .then(function (res) { clearTimeout(timer); if (res && res.ok && res.reference) booked(res.reference); else viaEmailApp(); })
-      .catch(function () { clearTimeout(timer); viaEmailApp(); });
+    // A dropped connection gets one automatic retry. It can't double-book: the server
+    // returns the same audit ID for the same email and company within 10 minutes.
+    function send(attempt) {
+      var ctl = typeof AbortController === 'function' ? new AbortController() : null;
+      var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 20000);
+      fetch(CONFIG.bookingEndpoint, { method: 'POST', body: data, signal: ctl ? ctl.signal : undefined })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          clearTimeout(timer);
+          if (res && res.ok && res.reference) { booked(res.reference); return; }
+          // Show the server's own wording ("Please check the website address."), never a raw error.
+          notSent(res && /^(Please|We could not)/.test(res.error || '') ? res.error : '');
+        })
+        .catch(function () {
+          clearTimeout(timer);
+          if (attempt < 2) setTimeout(function () { send(attempt + 1); }, 1500);
+          else notSent();
+        });
+    }
+    send(1);
   });
 }
 
