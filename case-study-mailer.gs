@@ -4,8 +4,10 @@
 // Google Sheet this script is attached to:
 //   • "Get the full case study": emails the PDF to the visitor (first tab)
 //   • homepage contact form: emails hello@ ("Contact enquiries" tab)
-//   • 24-Hour Cloud Audit booking on cloud-audit.html: emails hello@ and sends
-//     the customer a confirmation with their reference ("Audit bookings" tab)
+//   • free AWS cost scan booking on cloud-audit.html: emails hello@ and sends
+//     the customer a confirmation with their reference ("Audit bookings" tab).
+//     remindDueScans() runs daily (installReminders() sets that up) and tells
+//     hello@ which customers are due their quarterly/yearly re-scan.
 // Tests: node --test tests/case-study-mailer.test.mjs (runs this file with fake
 // Google services).
 //
@@ -46,11 +48,15 @@ var CONTACT_HEADERS = ['Timestamp', 'First name', 'Last name', 'Email', 'Company
 
 var BOOKING_SHEET   = 'Audit bookings';
 var BOOKING_HEADERS = ['Timestamp', 'Reference', 'Name', 'Email', 'Company', 'Monthly AWS spend',
-                       'Phone / WhatsApp', 'Currency', 'Price shown', 'Notes', 'Page', 'Status'];
+                       'Re-scan', 'Next scan', 'Phone / WhatsApp', 'Currency', 'Full report price',
+                       'Notes', 'Page', 'Status', 'Last reminder'];
 
 // Only these values are accepted from the booking form.
 var SPEND_BANDS = ['Under $3k', '$3k–$10k', '$10k–$50k', '$50k+', 'Not sure'];
-var PRICES      = { USD: '$299', INR: '₹19,999' };
+var PRICES      = { USD: '$299', INR: '₹19,999' };     // full report, founding price
+var CADENCES    = { once:      { label: 'Just once',     months: 0 },
+                    quarterly: { label: 'Every quarter', months: 3 },
+                    yearly:    { label: 'Every year',    months: 12 } };
 
 function doPost(e) {
   var p = (e && e.parameter) || {};
@@ -162,9 +168,9 @@ function handleContact(p) {
   }
 }
 
-// 24-Hour Cloud Audit booking (cloud-audit.html): log it, email hello@ with the
-// details (reply-to the customer), and send the customer a confirmation with
-// their booking reference. Payment details are sent by hand from hello@.
+// Free AWS cost scan booking (cloud-audit.html): log it, email hello@ with the
+// details (reply-to the customer), and confirm to the customer with their
+// reference. Setup instructions and, later, the free summary go out from hello@.
 function handleAuditBooking(p) {
   var name     = clean(p.name, 100);
   var email    = clean(p.email, 120).toLowerCase();
@@ -174,6 +180,8 @@ function handleAuditBooking(p) {
   var notes    = clean(p.notes, 2000);
   var currency = p.currency === 'INR' ? 'INR' : 'USD';
   var price    = PRICES[currency];   // never trust a price sent by the browser
+  var cadence  = CADENCES[p.cadence] || CADENCES.once;
+  var nextScan = cadence.months ? addMonths(new Date(), cadence.months) : '';
 
   if (!name || !company) return json({ ok: false, error: 'Please fill in your name and company.' });
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ ok: false, error: 'Please enter a valid email.' });
@@ -187,8 +195,8 @@ function handleAuditBooking(p) {
   if (existing) return json({ ok: true, reference: existing, duplicate: true });
 
   var reference = bookingReference();
-  var row = [new Date(), reference, name, email, company, spend, phone, currency, price, notes,
-             clean(p.page, 200)];
+  var row = [new Date(), reference, name, email, company, spend, cadence.label, nextScan, phone,
+             currency, price, notes, clean(p.page, 200)];
 
   if (MailApp.getRemainingDailyQuota() < 2) {
     logTo(BOOKING_SHEET, BOOKING_HEADERS, row.concat('failed: daily email quota reached'));
@@ -200,18 +208,21 @@ function handleAuditBooking(p) {
       to: NOTIFY_TO,
       replyTo: email,
       name: SENDER_NAME + ' website',
-      subject: 'Audit booking ' + reference + ': ' + company + ' (' + spend + ')',
-      body: 'New 24-Hour Cloud Audit booking.\n\n'
+      subject: 'Free scan booking ' + reference + ': ' + company + ' (' + spend + ')',
+      body: 'New free AWS cost scan booking.\n\n'
           + 'Reference: ' + reference + '\n'
           + 'Name:      ' + name + '\n'
           + 'Email:     ' + email + '\n'
           + 'Company:   ' + company + '\n'
           + 'AWS spend: ' + spend + '/month\n'
+          + 'Re-scan:   ' + cadence.label + '\n'
           + 'Phone:     ' + (phone || '—') + '\n'
-          + 'Price:     ' + price + ' (' + currency + ', founding)\n\n'
+          + 'Currency:  ' + currency + ' (full report ' + price + ' at the founding price)\n\n'
           + (notes ? 'Notes:\n' + notes + '\n\n' : '')
-          + (spend === 'Under $3k' ? 'NOTE: under the $3k/month minimum. The FAQ says we suggest a lighter option.\n\n' : '')
-          + 'Next: reply to this email with payment details and setup instructions.'
+          + (spend === 'Under $3k' ? 'Small account (under $3k/month): the summary may say the full report isn\'t worth it.\n\n' : '')
+          + 'Next: send the setup instructions. In the scanner folder:\n'
+          + '  python -m exaudit setup --reference ' + reference + ' --customer "' + company.replace(/"/g, "'") + '" --auditor <our account ID>\n'
+          + 'then reply to this email with out/' + reference + '/onboarding/setup-instructions.md.'
     });
     logTo(BOOKING_SHEET, BOOKING_HEADERS, row.concat('new'));
   } catch (err) {
@@ -226,9 +237,9 @@ function handleAuditBooking(p) {
       to: email,
       replyTo: NOTIFY_TO,
       name: SENDER_NAME,
-      subject: 'Your 24-Hour Cloud Audit booking (' + reference + ')',
-      body: bookingPlain(name, reference, price),
-      htmlBody: bookingHtml(name, reference, price)
+      subject: 'Your free AWS cost scan (' + reference + ')',
+      body: bookingPlain(name, reference, price, cadence),
+      htmlBody: bookingHtml(name, reference, price, cadence)
     });
   } catch (err) {
     Logger.log('Booking ' + reference + ' confirmation failed: ' + err);
@@ -248,40 +259,116 @@ function bookingReference() {
 
 function firstName(name) { return String(name).split(/\s+/)[0]; }
 
-function bookingPlain(name, reference, price) {
+function addMonths(date, months) {
+  return new Date(date.getFullYear(), date.getMonth() + months, date.getDate());
+}
+
+var NEXT_STEPS = [
+  'We send your setup instructions from hello@exommerce.online, usually the same day.',
+  'You create one read-only IAM role. It takes about 5 minutes.',
+  'Within 24 hours of access working, you get your free summary: how much you could save each month, and where.'
+];
+
+function cadenceLine(cadence) {
+  return cadence.months
+    ? 'You asked us to check again ' + cadence.label.toLowerCase() + '; we\'ll get in touch when it\'s due.'
+    : '';
+}
+
+function bookingPlain(name, reference, price, cadence) {
+  var again = cadenceLine(cadence);
   return 'Hi ' + firstName(name) + ',\n\n'
-    + 'Thanks for booking the 24-Hour Cloud Audit. Your reference is ' + reference + '.\n\n'
+    + 'Thanks for booking a free AWS cost scan. Your reference is ' + reference + '.\n\n'
     + 'What happens next:\n'
-    + '1. We reply from hello@exommerce.online with payment details (' + price + ') and setup instructions, usually the same day.\n'
-    + '2. You create one read-only IAM role. It takes about 5 minutes.\n'
-    + '3. Your report arrives within 24 hours of access working.\n\n'
-    + 'If we find less than $500/month in savings, you get a full refund.\n\n'
+    + NEXT_STEPS.map(function (s, i) { return (i + 1) + '. ' + s; }).join('\n') + '\n\n'
+    + 'The full fix list, scripts and plan are optional (' + price + ' at the founding price). '
+    + 'You decide after you\'ve seen your summary.\n\n'
+    + (again ? again + '\n\n' : '')
     + 'Questions? Just reply to this email.\n\n'
     + '— Bhavin Chawla, eXommerce\n' + SITE + '/cloud-audit.html';
 }
 
-function bookingHtml(name, reference, price) {
+function bookingHtml(name, reference, price, cadence) {
   var li = 'margin:0 0 8px;font-size:15px;line-height:1.6';
+  var again = cadenceLine(cadence);
   return '<div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;color:#3F4852">'
     + '<div style="background:#109840;padding:18px 26px;border-radius:10px 10px 0 0">'
     + '<span style="color:#fff;font-size:19px;font-weight:700">eXommerce.online</span></div>'
     + '<div style="border:1px solid #DDE8E0;border-top:0;padding:26px;border-radius:0 0 10px 10px">'
     + '<p style="margin:0 0 14px;font-size:15px">Hi ' + esc(firstName(name)) + ',</p>'
-    + '<p style="margin:0 0 16px;font-size:15px;line-height:1.6">Thanks for booking the 24-Hour Cloud Audit. '
+    + '<p style="margin:0 0 16px;font-size:15px;line-height:1.6">Thanks for booking a free AWS cost scan. '
     + 'Your reference is <b style="color:#0B0D0C">' + esc(reference) + '</b>.</p>'
     + '<p style="margin:0 0 8px;font-size:15px;font-weight:700;color:#0B0D0C">What happens next</p>'
     + '<ol style="margin:0 0 18px;padding-left:20px">'
-    + '<li style="' + li + '">We reply from hello@exommerce.online with payment details (' + esc(price) + ') and setup instructions, usually the same day.</li>'
-    + '<li style="' + li + '">You create one read-only IAM role. It takes about 5 minutes.</li>'
-    + '<li style="' + li + '">Your report arrives within 24 hours of access working.</li></ol>'
+    + NEXT_STEPS.map(function (s) { return '<li style="' + li + '">' + esc(s) + '</li>'; }).join('')
+    + '</ol>'
     + '<p style="margin:0 0 20px;font-size:14px;line-height:1.6;background:#EFF8F1;padding:12px 14px;border-radius:8px">'
-    + 'If we find less than $500/month in savings, you get a full refund.</p>'
+    + 'The full fix list, scripts and plan are optional (' + esc(price) + ' at the founding price). '
+    + 'You decide after you\'ve seen your summary.</p>'
+    + (again ? '<p style="margin:0 0 14px;font-size:14px">' + esc(again) + '</p>' : '')
     + '<p style="margin:0;font-size:14px">Questions? Just reply to this email.</p>'
     + '<p style="margin:18px 0 0;font-size:14px">— Bhavin Chawla, eXommerce</p>'
     + '</div>'
     + '<p style="font-size:11px;color:#9CA3AF;padding:12px 4px">eXommerce LLP · Bengaluru · '
-    + '<a href="' + SITE + '/cloud-audit.html#audit-terms" style="color:#9CA3AF">Audit terms</a> · '
+    + '<a href="' + SITE + '/cloud-audit.html#audit-terms" style="color:#9CA3AF">Scan terms</a> · '
     + '<a href="' + SITE + '/privacy.html" style="color:#9CA3AF">Privacy</a></p></div>';
+}
+
+// ---- Scheduled re-scans --------------------------------------------------------------
+// Runs daily (install once: select installReminders → Run). Emails hello@ a list of
+// customers whose "Next scan" date has arrived, then moves each date on by their
+// schedule, so every customer comes round again without anyone keeping track.
+function remindDueScans() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(BOOKING_SHEET);
+  if (!sheet || sheet.getLastRow() < 2) return 0;
+  var values = sheet.getDataRange().getValues();
+  var col = {};
+  values[0].forEach(function (h, i) { col[h] = i; });
+  var endOfToday = new Date();
+  endOfToday.setHours(23, 59, 59, 999);
+  var due = [];
+  for (var r = 1; r < values.length; r++) {
+    var next = values[r][col['Next scan']];
+    if (Object.prototype.toString.call(next) === '[object Date]' && next <= endOfToday) due.push(r);
+  }
+  if (!due.length) return 0;
+
+  var tz = Session.getScriptTimeZone();
+  var lines = due.map(function (r) {
+    var v = values[r];
+    return '- ' + v[col['Reference']] + ' · ' + v[col['Company']] + ' · ' + v[col['Name']]
+      + ' <' + v[col['Email']] + '> · ' + v[col['Re-scan']] + ' · was due '
+      + Utilities.formatDate(v[col['Next scan']], tz, 'd MMM yyyy');
+  });
+  MailApp.sendEmail({
+    to: NOTIFY_TO,
+    name: SENDER_NAME + ' website',
+    subject: due.length + ' re-scan' + (due.length === 1 ? '' : 's') + ' due',
+    body: 'These customers asked for a regular scan and are due one:\n\n' + lines.join('\n') + '\n\n'
+        + 'Invite each to book again (' + SITE + '/cloud-audit.html#book) and ask them to send the '
+        + 'findings.json from their last report, so the new one shows what changed.\n'
+        + 'Their "Next scan" dates have moved on by their schedule.'
+  });
+
+  var now = new Date();
+  due.forEach(function (r) {
+    var label = values[r][col['Re-scan']];
+    var months = 0;
+    Object.keys(CADENCES).forEach(function (k) { if (CADENCES[k].label === label) months = CADENCES[k].months; });
+    var nextCell = sheet.getRange(r + 1, col['Next scan'] + 1);
+    nextCell.setValue(months ? addMonths(values[r][col['Next scan']], months) : '');
+    sheet.getRange(r + 1, col['Last reminder'] + 1).setValue(now);
+  });
+  return due.length;
+}
+
+// Select installReminders → Run once. Safe to run again: it won't add a second trigger.
+function installReminders() {
+  var exists = ScriptApp.getProjectTriggers().some(function (t) {
+    return t.getHandlerFunction() === 'remindDueScans';
+  });
+  if (!exists) ScriptApp.newTrigger('remindDueScans').timeBased().everyDays(1).atHour(9).create();
+  return !exists;
 }
 
 function logTo(name, headers, values) {
@@ -364,7 +451,8 @@ function testSend() {
 function testBooking() {
   var out = doPost({ parameter: {
     form: 'audit_booking', name: 'Test Booking', email: NOTIFY_TO, company: 'eXommerce test',
-    spend: '$10k–$50k', phone: '+91 98442 65267', currency: 'INR', notes: 'editor test', page: 'editor test'
+    spend: '$10k–$50k', cadence: 'quarterly', phone: '+91 98442 65267', currency: 'INR',
+    notes: 'editor test', page: 'editor test'
   }});
   Logger.log(out.getContent());
 }

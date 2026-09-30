@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>24-Hour Cloud Cost Audit — eXommerce</title>
-<meta name="description" content="Find $500+/month in wasted AWS spend within 24 hours, or get a full refund. Read-only access, fixed price, remediation playbook and dry-run cleanup scripts included." />
+<title>Free AWS Cost Scan — eXommerce</title>
+<meta name="description" content="A free, read-only scan of your AWS account. Within 24 hours, see how much you could save each month and where. The full fix list and plan is optional, and you decide after seeing the numbers." />
 <link rel="canonical" href="https://exommerce.online/cloud-audit.html" />
 <meta name="robots" content="index, follow" />
-<meta property="og:title" content="24-Hour Cloud Cost Audit — eXommerce" />
-<meta property="og:description" content="Find $500+/month in wasted cloud spend within 24 hours, or pay nothing. Read-only, fixed price." />
+<meta property="og:title" content="Free AWS Cost Scan — eXommerce" />
+<meta property="og:description" content="See how much of your AWS bill is waste, free, within 24 hours. Read-only, no agents, no payment details." />
 <meta property="og:url" content="https://exommerce.online/cloud-audit.html" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="https://exommerce.online/og-image-2026.png" />
@@ -20,11 +20,14 @@
 {
   "@context": "https://schema.org",
   "@type": "Service",
-  "name": "24-Hour Cloud Cost Audit",
+  "name": "AWS Cost Scan",
   "serviceType": "Cloud cost optimization audit",
   "provider": { "@type": "Organization", "name": "eXommerce LLP", "url": "https://exommerce.online" },
   "areaServed": "Worldwide",
-  "offers": { "@type": "Offer", "price": "299", "priceCurrency": "USD", "description": "Founding client price" }
+  "offers": [
+    { "@type": "Offer", "name": "Scan and summary", "price": "0", "priceCurrency": "USD" },
+    { "@type": "Offer", "name": "Full report and fix plan", "price": "299", "priceCurrency": "USD", "description": "Founding client price" }
+  ]
 }
 </script>
 <style>
@@ -102,8 +105,16 @@ h2{font-size:clamp(26px,3.6vw,38px);font-weight:800;line-height:1.15;margin-bott
 .cur-toggle{display:inline-flex;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:4px;margin:18px 0 36px}
 .cur-toggle button{border:0;background:transparent;font:600 14px var(--ff);color:var(--text2);padding:8px 18px;border-radius:7px;cursor:pointer;min-height:40px}
 .cur-toggle button[aria-pressed="true"]{background:#fff;color:var(--brand-green-dark);box-shadow:0 1px 4px rgba(0,0,0,.08)}
-.plans{display:grid;grid-template-columns:1.25fr 1fr;gap:22px;align-items:start}
-@media(max-width:860px){.plans{grid-template-columns:1fr}}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch;text-align:left}
+@media(max-width:900px){.plans{grid-template-columns:1fr;max-width:560px;margin:0 auto}}
+.plans .card{padding:26px;display:flex;flex-direction:column}
+.plans .card .checks{flex:1}
+.step-tag{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.price .word{font-family:var(--ff-display);font-size:40px;font-weight:800;color:var(--ink);letter-spacing:-.03em}
+.price .small{font-family:var(--ff-display);font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.02em;line-height:1.3}
+.soon-row{display:flex;gap:14px 20px;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1px solid var(--border);background:var(--bg2);border-radius:14px;padding:18px 22px;margin-top:22px}
+.soon-row p{font-size:14px;color:var(--text2);max-width:620px}
+.soon-row b{color:var(--ink)}
 .card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:30px;position:relative}
 .card.featured{border:2px solid var(--brand-green);box-shadow:0 18px 50px rgba(16,152,64,.12)}
 .ribbon{position:absolute;top:-13px;left:28px;background:var(--brand-green);color:#fff;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
@@ -273,25 +284,25 @@ html:has(.bk[open]){overflow:hidden}
       <a href="#faq">FAQ</a>
       <a href="index.html">Main site</a>
     </nav>
-    <a href="#pricing" class="nav-cta" data-track="nav_cta">Get the Audit</a>
+    <a href="#book" class="nav-cta" data-buy="scan" data-track="nav_cta">Get a free scan</a>
   </div>
 </nav>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
   <div class="wrap">
-    <span class="pill"><span class="dot"></span>24-Hour Express Cloud Cost Audit</span>
-    <h1>Find <em>$500+/month</em> in wasted cloud spend by tomorrow. Or pay nothing.</h1>
-    <p class="lede">We run a read-only scan of your cloud account. No agents to install, no changes to production, no meetings. Within 24 hours you get a ranked list of fixes, the scripts to apply them, and the dollar figure each one saves.</p>
+    <span class="pill"><span class="dot"></span>Free AWS cost scan · summary in 24 hours</span>
+    <h1>See how much of your AWS bill is waste. <em>The scan is free.</em></h1>
+    <p class="lede">We run a read-only scan of your AWS account: no agents, no changes, no meetings. Within 24 hours of access you get a summary of how much you could save each month, and where. The full fix list, scripts and plan are a paid report, and you decide after you've seen the number.</p>
     <div class="hero-ctas">
-      <a href="#pricing" class="btn btn-primary" data-track="hero_primary">Get the 24-Hour Audit — <span data-price="founding">$299</span> →</a>
+      <a href="#book" class="btn btn-primary" data-buy="scan" data-track="hero_primary">Get my free scan →</a>
       <a href="#how" class="btn btn-ghost" data-track="hero_secondary">See how it works</a>
     </div>
-    <p class="hero-note">Founding client price · Report in 24 hours · Full refund if we find less than $500/month · <a href="sample-report.html" data-track="hero_sample_report" style="color:var(--brand-green);text-decoration:underline">See a sample report</a></p>
+    <p class="hero-note">Free summary in 24 hours · Full report <span data-price="founding">$299</span> at the founding price, only if you want it · <a href="sample-report.html" data-track="hero_sample_report" style="color:var(--brand-green);text-decoration:underline">See a sample report</a></p>
     <div class="trust">
       <div><strong>🔒 Read-only access</strong>We can see configuration and cost data. We can't change anything. Revoke in one click.</div>
-      <div><strong>💰 Pays for itself or it's free</strong>Less than $500/month in savings found? Full refund.</div>
-      <div><strong>🛡️ Least privilege by design</strong>Minimum permissions, no access to your data, access removed on delivery.</div>
+      <div><strong>👀 See the number first</strong>Your savings figure is free. Pay only if you want the full fix list and plan.</div>
+      <div><strong>🛡️ Least privilege by design</strong>Minimum permissions, no access to your data. Remove our access once your summary arrives.</div>
     </div>
     <div class="clouds" aria-label="Supported clouds">
       <span class="cloud live"><img src="media/clouds/aws.png" alt="AWS" width="37" height="22" />available now</span>
@@ -304,9 +315,9 @@ html:has(.bk[open]){overflow:hidden}
 <!-- ============ PRICING ============ -->
 <section id="pricing">
   <div class="wrap-md center">
-    <span class="eyebrow">Fixed price · Fixed scope</span>
-    <h2>One fixed price. Your fixes in 24 hours.</h2>
-    <p class="lede">No discovery calls. No statements of work. No retainers.</p>
+    <span class="eyebrow">Free to start · Fixed price to finish</span>
+    <h2>Start free. Pay only for the fixes you want.</h2>
+    <p class="lede">No discovery calls, no statements of work, no retainers, and no payment details to get started.</p>
     <div class="cur-toggle" role="group" aria-label="Currency">
       <button type="button" data-cur="USD" aria-pressed="true">USD $</button>
       <button type="button" data-cur="INR" aria-pressed="false">INR ₹</button>
@@ -315,80 +326,94 @@ html:has(.bk[open]){overflow:hidden}
 
   <div class="wrap-md">
     <div class="plans">
-      <!-- Founding audit -->
+      <!-- Step 1: free scan -->
+      <article class="card">
+        <p class="step-tag">Step 1</p>
+        <h3>AWS cost scan &amp; summary</h3>
+        <p class="hook">How much you could save each month, and where it is.</p>
+        <div class="price"><span class="word">Free</span></div>
+        <p class="meta">Summary within 24 hours of access</p>
+        <ul class="checks">
+          <li>Read-only scan of every region (no agents, no changes)</li>
+          <li>Your monthly savings figure, split into cleanup, resizing and commitments</li>
+          <li>The biggest items we found</li>
+          <li>No payment details needed</li>
+        </ul>
+        <a href="#book" class="btn btn-primary btn-block" data-buy="scan" data-track="plan_free">Get my free scan</a>
+      </article>
+
+      <!-- Step 2: full report (paid, after the summary) -->
       <article class="card featured">
         <span class="ribbon">Founding client offer</span>
-        <p class="label">Pays for itself or it's free</p>
-        <h3>24-Hour Cloud Waste Audit</h3>
-        <p class="hook">We find $500+/month in idle and oversized AWS spend within 24 hours, or you get a full refund.</p>
-        <span class="slots">Limited to 10 founding clients · max 2 audits per day</span>
+        <p class="step-tag">Step 2 · only if you want it</p>
+        <h3>Full report &amp; fix plan</h3>
+        <p class="hook">Everything you need to act on the summary.</p>
         <div class="price">
           <span class="now" data-price="founding">$299</span>
           <span class="was" data-price="regular">$790</span>
           <span class="per">one-time</span>
         </div>
-        <p class="meta">For AWS accounts spending $3,000+/month · Report within 24 hours of access</p>
+        <p class="meta">Ordered after your summary · sent the same day</p>
         <ul class="checks">
-          <li>Read-only scan of your AWS account (no agents, no changes)</li>
-          <li>Idle / zombie instances, unattached EBS volumes, old snapshots, unused Elastic IPs</li>
-          <li>Over-provisioned RDS and EC2 rightsizing</li>
-          <li>Savings Plan &amp; Reserved Instance coverage gaps</li>
-          <li>Remediation playbook, ranked by $ saved</li>
+          <li>Every resource by ID, with the evidence and calculation behind each figure</li>
           <li>Cleanup scripts: dry-run by default, snapshot before delete</li>
-          <li>Optional 15-minute walkthrough call</li>
+          <li>Resizing targets and Savings Plan sizing</li>
+          <li>A step-by-step plan, ranked by $ saved</li>
+          <li>15-minute walkthrough call</li>
         </ul>
-        <a href="#" class="btn btn-primary btn-block" data-buy="audit" data-track="buy_audit">Book now —<span data-price="founding">$299</span></a>
-        <p class="micro">In return for founding pricing, we'll ask for a short testimonial if you're happy.</p>
+        <span class="slots">Founding price for the first 10 clients</span>
+        <p class="micro">In return, we'll ask for a short testimonial if you're happy.</p>
       </article>
 
-      <!-- Stress test (coming soon) -->
-      <article class="card soon">
-        <span class="tag">Coming soon</span>
-        <p class="label">Before your next launch</p>
-        <h3>Peak Load Stress Test</h3>
-        <p class="hook">Know whether your stack survives Black Friday before your customers find out it doesn't.</p>
+      <!-- Step 3: recurring re-scans -->
+      <article class="card">
+        <p class="step-tag">Step 3</p>
+        <h3>Re-scan every quarter or year</h3>
+        <p class="hook">Cloud waste grows back. Catch it on a schedule.</p>
+        <div class="price"><span class="small">Returning-client price</span></div>
+        <p class="meta">You choose the schedule when you book</p>
         <ul class="checks">
-          <li>Scripted load test (k6) modeled on your real user flows</li>
-          <li>Bottleneck map: DB connections, slow queries, autoscaling lag</li>
-          <li>Prioritized fix list</li>
-          <li>Pass/fail capacity certificate</li>
-          <li>Runs on staging or an approved window</li>
+          <li>The same read-only scan and free summary</li>
+          <li>What you fixed since last time, and what's new</li>
+          <li>Savings Plan sizing checked against your new baseline</li>
+          <li>We remind you when it's due</li>
         </ul>
-        <div class="mini-tiers">
-          <div><span>Launch Check · 3 flows, 2,000 users</span><b data-price="stress1">$1,200</b></div>
-          <div><span>Peak Ready · 8 flows, 10,000 users + retest</span><b data-price="stress2">$2,400</b></div>
-        </div>
-        <a href="#" class="btn btn-ghost btn-block" style="margin-top:18px" data-waitlist="Stress Test" data-track="waitlist_stress">Join the waitlist</a>
+        <a href="#book" class="btn btn-ghost btn-block" data-buy="scan" data-track="plan_rescan">Start with a free scan</a>
       </article>
     </div>
 
-    <!-- Regular pricing -->
-    <div class="table-wrap" role="region" aria-label="Regular pricing" tabindex="0">
+    <!-- Full report pricing after the founding spots -->
+    <div class="table-wrap" role="region" aria-label="Full report pricing" tabindex="0">
       <table>
-        <thead><tr><th>Regular pricing (after founding spots)</th><th>Monthly cloud bill</th><th>Price</th><th>Guarantee</th></tr></thead>
+        <thead><tr><th>Full report, after the founding spots</th><th>Monthly AWS bill</th><th>Price</th></tr></thead>
         <tbody>
-          <tr><td><b>Starter</b></td><td>$3k–$10k</td><td><b data-price="starter">$499</b></td><td>Find $500+/mo or full refund</td></tr>
-          <tr><td><b>Growth</b></td><td>$10k–$50k</td><td><b data-price="regular">$790</b></td><td>Find $1,000+/mo or full refund</td></tr>
-          <tr><td><b>Scale</b></td><td>$50k+</td><td><b data-price="scale">$1,490</b></td><td>Find $3,000+/mo or full refund</td></tr>
-          <tr><td><b>Add-on: we apply the fixes</b></td><td>Any</td><td><b data-price="fixes">+$490</b></td><td>Done in 48 hours</td></tr>
+          <tr><td><b>Starter</b></td><td>$3k–$10k</td><td><b data-price="starter">$499</b></td></tr>
+          <tr><td><b>Growth</b></td><td>$10k–$50k</td><td><b data-price="regular">$790</b></td></tr>
+          <tr><td><b>Scale</b></td><td>$50k+</td><td><b data-price="scale">$1,490</b></td></tr>
+          <tr><td><b>Add-on: we apply the fixes</b> (done in 48 hours)</td><td>Any</td><td><b data-price="fixes">+$490</b></td></tr>
         </tbody>
       </table>
     </div>
-    <p class="table-cap">INR prices include all taxes. Azure &amp; Google Cloud audits: <a href="#" data-waitlist="Azure / GCP Audit" data-track="waitlist_multicloud" style="color:var(--brand-green);text-decoration:underline">join the waitlist</a>.</p>
+    <p class="table-cap">The scan and summary are always free. INR prices include all taxes. Azure &amp; Google Cloud: <a href="#" data-waitlist="Azure / GCP Audit" data-track="waitlist_multicloud" style="color:var(--brand-green);text-decoration:underline">join the waitlist</a>.</p>
+
+    <div class="soon-row">
+      <p><b>Coming soon: Peak Load Stress Test</b> (from <span data-price="stress1">$1,200</span>). Know whether your stack survives your busiest day before your customers find out it doesn't.</p>
+      <a href="#" class="btn btn-ghost" data-waitlist="Stress Test" data-track="waitlist_stress">Join the waitlist</a>
+    </div>
   </div>
 </section>
 
-<!-- ============ GUARANTEE ============ -->
+<!-- ============ SEE THE NUMBER FIRST ============ -->
 <div class="guarantee">
   <div class="wrap-md g-inner">
     <div class="shield" aria-hidden="true">
       <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#7BCF16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
     </div>
     <div class="g-text">
-      <h2>The "pays for itself" guarantee</h2>
-      <p>If our audit doesn't find at least $500/month in actionable cloud savings, you get a 100% refund. No forms, no arguments. You risk 24 hours. We risk our fee.</p>
+      <h2>You see the number before you pay anything</h2>
+      <p>The scan and summary are free. If the savings aren't worth it to you, you owe nothing, and we delete the scan data within 30 days.</p>
     </div>
-    <a href="#pricing" class="btn btn-primary" data-track="guarantee_cta">Start risk-free</a>
+    <a href="#book" class="btn btn-primary" data-buy="scan" data-track="band_cta">Get my free scan</a>
   </div>
 </div>
 
@@ -396,25 +421,25 @@ html:has(.bk[open]){overflow:hidden}
 <section id="how">
   <div class="wrap center">
     <span class="eyebrow">How it works</span>
-    <h2>From booking to fix scripts in 3 steps</h2>
-    <p class="lede">No kickoff call. No project manager. No waiting.</p>
+    <h2>From booking to your savings figure in 3 steps</h2>
+    <p class="lede">No kickoff call. No project manager. No payment up front.</p>
   </div>
   <div class="wrap">
     <div class="steps">
-      <div class="step"><div class="n">1</div><h3>Book your audit</h3><p>Send a short booking email with a few details. We reply with payment details in USD or INR and your setup instructions, usually the same day.</p></div>
-      <div class="step"><div class="n">2</div><h3>Grant read-only access</h3><p>Create one read-only IAM role, locked to your order with a unique External ID. It takes about 5 minutes in AWS CloudShell. Your 24-hour clock starts once access works.</p></div>
-      <div class="step"><div class="n">3</div><h3>Get your fixes</h3><p>Receive your report, ranked fix list and dry-run cleanup scripts. Book an optional 15-minute walkthrough. Then delete the role; we give you the commands.</p></div>
+      <div class="step"><div class="n">1</div><h3>Book a free scan</h3><p>Tell us your company and rough AWS spend. We send your setup instructions, usually the same day.</p></div>
+      <div class="step"><div class="n">2</div><h3>Grant read-only access</h3><p>Create one read-only IAM role, locked to your scan with a unique External ID. It takes about 5 minutes in AWS CloudShell. Your summary arrives within 24 hours of access working.</p></div>
+      <div class="step"><div class="n">3</div><h3>See your savings, then decide</h3><p>Your free summary shows what you could save and where. Want the fix list, scripts and plan? Order the full report and get it the same day. Then remove our access with one command.</p></div>
     </div>
     <div class="preview">
       <a href="sample-report.html" class="preview-shot" data-track="preview_image" aria-label="Open the full sample report">
         <img src="media/sample-report-preview.jpg" alt="Sample audit report for a fictional AWS account: $3,523/month in savings found on a $14,800 bill, with a chart of savings by cleanup, rightsizing and commitments" width="960" height="911" loading="lazy" />
       </a>
       <div>
-        <span class="eyebrow">What you receive</span>
-        <h3>See a real report format before you book</h3>
-        <p>This is the report from step 3, run on a fictional demo account. Every audit follows the same structure.</p>
+        <span class="eyebrow">What the full report looks like</span>
+        <h3>See the report format before you book</h3>
+        <p>This is the full report, run on a fictional demo account. Your free summary shows its headline figures; the full report adds the detail.</p>
         <ul class="checks">
-          <li>Monthly and annual savings, checked against the guarantee</li>
+          <li>Monthly and annual savings, with the basis for every figure</li>
           <li>Savings by type: cleanup, rightsizing, commitments</li>
           <li>Every finding ranked by $ impact, with risk and effort</li>
           <li>Dry-run scripts and a week-by-week plan</li>
@@ -501,13 +526,15 @@ html:has(.bk[open]){overflow:hidden}
   <div class="wrap">
     <div class="faq">
       <details><summary>What exactly do you get access to?</summary><div class="a">A single IAM role with three AWS-managed read-only policies (<code>ViewOnlyAccess</code>, <code>AWSBillingReadOnlyAccess</code>, <code>ComputeOptimizerReadOnlyAccess</code>). The role can only be assumed by our audit account using an External ID unique to your order. We can't read S3 objects, database contents or secrets, and we can't change anything.</div></details>
-      <details><summary>When does the 24-hour clock start?</summary><div class="a">When your read-only access is working, not at payment. We confirm by email the moment we've verified access, with your delivery deadline.</div></details>
+      <details><summary>What's free, and what do I pay for?</summary><div class="a">The scan and the summary are free: your monthly savings figure, how it splits between cleanup, resizing and commitments, and the biggest items we found. The full report (every resource, the evidence behind each figure, dry-run scripts, the plan and a walkthrough call) is <span data-price="founding">$299</span> at the founding price. You decide after you've seen the summary.</div></details>
+      <details><summary>When do I get my summary?</summary><div class="a">Within 24 hours of your read-only access working, not from when you book. We email you as soon as we've confirmed access.</div></details>
+      <details><summary>Can you check again next quarter or next year?</summary><div class="a">Yes. Choose "every quarter" or "every year" when you book and we'll remind you when it's due. Keep the findings file from your report, and the next one shows what you fixed and what's new. Returning clients pay less for the full report.</div></details>
       <details><summary>Who runs the cleanup scripts?</summary><div class="a">You do. Scripts run in dry-run mode by default (they only list what they would change) and take a snapshot before any deletion. You review, you decide, you execute. Want us to do it? Add the "we apply the fixes" option.</div></details>
-      <details><summary>How does the refund work?</summary><div class="a">If the report shows less than $500/month in estimated savings achievable without application code changes, based on AWS's own cost and usage data, email us within 7 days of delivery for a full refund. If we miss the 24-hour window, you can request a 25% refund.</div></details>
+      <details><summary>What if some resources are idle on purpose?</summary><div class="a">Tag them <code>Environment=DR</code>, <code>CostScope=Exclude</code> or <code>exommerce:skip</code> and the scan leaves them out: a disaster-recovery standby isn't waste. Tell us about any other tags you already use for this.</div></details>
       <details><summary>Do you support Azure and Google Cloud?</summary><div class="a">AWS is live today. Azure and Google Cloud are in final testing. <a href="#" data-waitlist="Azure / GCP Audit" style="color:var(--brand-green);text-decoration:underline">Join the waitlist</a> and we'll notify you first.</div></details>
-      <details><summary>What if our account spends less than $3,000/month?</summary><div class="a">There's usually not enough waste to guarantee $500/month in savings, so we don't want to take your money. Email us and we'll suggest a lighter option.</div></details>
+      <details><summary>What if our account spends less than $3,000/month?</summary><div class="a">The free scan still works. Below about $3,000 a month there's often too little waste for the full report to be worth it, and we'll tell you so.</div></details>
       <details><summary>Can you sign an NDA or DPA?</summary><div class="a">Yes. Email <a href="mailto:hello@exommerce.online" style="color:var(--brand-green);text-decoration:underline">hello@exommerce.online</a> before or after booking.</div></details>
-      <details><summary>How do we remove access afterwards?</summary><div class="a">Delete the IAM role. We include the exact commands with your report. Access ends immediately.</div></details>
+      <details><summary>How do we remove access afterwards?</summary><div class="a">Delete the IAM role; your summary email includes the one command. You can do it as soon as the summary arrives, because the scan is done by then.</div></details>
     </div>
   </div>
 </section>
@@ -517,15 +544,15 @@ html:has(.bk[open]){overflow:hidden}
   <div class="wrap">
     <div class="terms">
       <span class="eyebrow">Service terms</span>
-      <h2 style="font-size:26px">24-Hour Cloud Audit — Terms</h2>
-      <p style="color:var(--text3);font-size:14px;margin-bottom:18px">These terms apply to audits booked through this page, in addition to our general <a href="terms.html" style="color:var(--brand-green);text-decoration:underline">Terms of Service</a>. By paying, you agree to them.</p>
+      <h2 style="font-size:26px">AWS Cost Scan — Terms</h2>
+      <p style="color:var(--text3);font-size:14px;margin-bottom:18px">These terms apply to scans and reports booked through this page, in addition to our general <a href="terms.html" style="color:var(--brand-green);text-decoration:underline">Terms of Service</a>. By booking a scan, you agree to them.</p>
       <ol>
-        <li><strong>Service.</strong> eXommerce LLP ("we") performs a read-only review of the customer's cloud account and delivers a written report and optional cleanup scripts.</li>
+        <li><strong>Service.</strong> eXommerce LLP ("we") performs a read-only review of the customer's AWS account and sends a free summary of the savings found. The customer may then order a full report (resource-level findings, cleanup scripts and a plan) at the price shown when they order.</li>
         <li><strong>Access &amp; authorization.</strong> The customer confirms they are authorized to grant access to the account. Access is read-only through a role the customer creates and can revoke at any time.</li>
-        <li><strong>Delivery time.</strong> The 24-hour delivery window starts when working read-only access has been granted and verified, not at payment.</li>
+        <li><strong>Delivery time.</strong> The summary is sent within 24 hours of working read-only access being granted and verified. A full report is sent within one business day of payment.</li>
         <li><strong>No changes by us.</strong> We do not modify, delete or create resources in the customer's account. Scripts we provide are recommendations, default to dry-run mode, and are executed solely at the customer's discretion and risk. The customer is responsible for reviewing scripts and taking backups before running them.</li>
-        <li><strong>Guarantee &amp; refunds.</strong> If the report identifies less than the guaranteed monthly savings for the purchased tier (USD 500/month for founding and Starter purchases), estimated as savings achievable without application code changes and calculated from the cloud provider's own cost and usage data, the customer receives a full refund on request within 7 days of delivery. If we miss the 24-hour window, the customer may request a 25% refund.</li>
-        <li><strong>Confidentiality &amp; data.</strong> We treat all account data as confidential, use it only to deliver the service, and delete it within 30 days of delivery. The customer should delete the access role after delivery.</li>
+        <li><strong>Payment &amp; refunds.</strong> The scan and summary are free; nothing is charged unless the customer orders a full report. If a full report doesn't reflect the findings in the summary, or we don't deliver it within two business days of payment, the customer receives a full refund on request.</li>
+        <li><strong>Confidentiality &amp; data.</strong> We treat all account data as confidential, use it only to deliver the service, and delete it within 30 days of sending the summary or the full report, whichever is later. For scheduled re-scans we keep only contact details and the schedule. The customer should delete the access role once the summary arrives.</li>
         <li><strong>Liability.</strong> Our total liability is limited to the fee paid for the service. We are not liable for indirect or consequential losses, or for outcomes of actions the customer takes based on the report.</li>
         <li><strong>Testimonials.</strong> Founding-price customers agree to consider providing a short testimonial. Any published result is anonymized unless the customer approves otherwise.</li>
         <li><strong>Governing law.</strong> These terms are governed by the laws of India, with exclusive jurisdiction of the courts in Bengaluru, Karnataka.</li>
@@ -538,10 +565,10 @@ html:has(.bk[open]){overflow:hidden}
 <!-- ============ FINAL CTA ============ -->
 <section class="final">
   <div class="wrap center">
-    <h2>Your cloud bill renews next month. Fix it tomorrow.</h2>
-    <p class="lede">Every day you wait, idle resources keep billing. Start the audit now and have your savings report by this time tomorrow.</p>
+    <h2>See what you could cut from your next AWS bill. Free.</h2>
+    <p class="lede">Idle resources are billed every hour they run. Book a scan now and have your summary within 24 hours of access.</p>
     <div class="btns">
-      <a href="#" class="btn btn-primary" data-buy="audit" data-track="final_buy">Book now —<span data-price="founding">$299</span></a>
+      <a href="#book" class="btn btn-primary" data-buy="scan" data-track="final_buy">Get my free scan</a>
       <a href="#" class="btn btn-ghost" data-waitlist="Stress Test" data-track="final_waitlist">Launching soon? Join the Stress Test waitlist</a>
     </div>
   </div>
@@ -553,7 +580,7 @@ html:has(.bk[open]){overflow:hidden}
       <p>© <span id="yr"></span> eXommerce LLP · Bengaluru, India · <a href="mailto:hello@exommerce.online">hello@exommerce.online</a></p>
       <div class="ft-links">
         <a href="index.html">Main site</a>
-        <a href="#audit-terms">Audit terms</a>
+        <a href="#audit-terms">Scan terms</a>
         <a href="privacy.html">Privacy Policy</a>
         <a href="terms.html">Terms of Service</a>
       </div>
@@ -562,8 +589,8 @@ html:has(.bk[open]){overflow:hidden}
 </footer>
 
 <div class="sticky" aria-hidden="false">
-  <span><b data-price="founding">$299</b> audit · results in 24h</span>
-  <a href="#" class="btn btn-primary" data-buy="audit" data-track="sticky_buy">Book now</a>
+  <span><b>Free</b> AWS cost scan · summary in 24h</span>
+  <a href="#book" class="btn btn-primary" data-buy="scan" data-track="sticky_buy">Get free scan</a>
 </div>
 
 <!-- Booking dialog: sent to the Apps Script mailer (case-study-mailer.gs), which
@@ -573,9 +600,9 @@ html:has(.bk[open]){overflow:hidden}
     <button type="button" class="bk-close" data-close aria-label="Close">&times;</button>
 
     <div id="bkForm">
-      <span class="eyebrow">24-Hour Cloud Audit</span>
-      <h2 id="bkTitle">Book your audit</h2>
-      <p class="sub">No payment now. We reply with payment details and setup instructions, usually the same day.</p>
+      <span class="eyebrow">Free AWS cost scan</span>
+      <h2 id="bkTitle">Get your free scan</h2>
+      <p class="sub">No payment details. We send setup instructions, usually the same day, and your summary within 24 hours of access.</p>
       <form id="bookForm" novalidate>
         <label for="bkName">Your name</label>
         <input id="bkName" name="name" autocomplete="name" required maxlength="100" autofocus />
@@ -592,16 +619,23 @@ html:has(.bk[open]){overflow:hidden}
           <option>$50k+</option>
           <option>Not sure</option>
         </select>
-        <p class="hint" id="bkLow" hidden>Under $3,000/month there's usually not enough waste to guarantee $500 in savings. You can still book, and we'll suggest a lighter option if it fits better.</p>
+        <p class="hint" id="bkLow" hidden>Under $3,000/month there's often little to find, but the free scan will tell you for sure.</p>
+        <label for="bkCadence">Check again later?</label>
+        <select id="bkCadence" name="cadence">
+          <option value="once" selected>Just this once</option>
+          <option value="quarterly">Every quarter</option>
+          <option value="yearly">Every year</option>
+        </select>
         <label for="bkPhone">Phone / WhatsApp <span class="opt">(optional)</span></label>
         <input id="bkPhone" name="phone" type="tel" autocomplete="tel" maxlength="40" />
         <label for="bkNotes">Anything we should know? <span class="opt">(optional)</span></label>
         <textarea id="bkNotes" name="notes" maxlength="2000" placeholder="Regions you use, a deadline, an NDA request…"></textarea>
         <div class="hp" aria-hidden="true"><label for="bkWebsite">Website</label><input id="bkWebsite" name="website" tabindex="-1" autocomplete="off" /></div>
-        <div class="summary"><span>Founding price, one-time</span><b data-price="founding">$299</b></div>
+        <div class="summary"><span>Scan and summary</span><b>Free</b></div>
+        <p class="fine" style="margin-top:8px">The full report is optional, <span data-price="founding">$299</span> at the founding price, and you decide after seeing your summary.</p>
         <p class="err" id="bkErr" role="alert" hidden></p>
-        <button type="submit" class="btn btn-primary btn-block" id="bkSubmit" style="margin-top:16px">Send booking</button>
-        <p class="fine">By booking you agree to the <a href="#audit-terms" data-close>audit terms</a> and our <a href="privacy.html">privacy policy</a>.</p>
+        <button type="submit" class="btn btn-primary btn-block" id="bkSubmit" style="margin-top:14px">Request my free scan</button>
+        <p class="fine">By booking you agree to the <a href="#audit-terms" data-close>scan terms</a> and our <a href="privacy.html">privacy policy</a>.</p>
       </form>
     </div>
 
@@ -612,9 +646,9 @@ html:has(.bk[open]){overflow:hidden}
       <div class="ref" id="bkRef"></div>
       <p>We've sent a confirmation to <b id="bkDoneEmail"></b>. If it isn't there in a few minutes, check spam.</p>
       <ol>
-        <li>We reply with payment details and setup instructions, usually the same day.</li>
+        <li>We send your setup instructions, usually the same day.</li>
         <li>You create one read-only IAM role. It takes about 5 minutes.</li>
-        <li>Your report arrives within 24 hours of access working.</li>
+        <li>Your free summary arrives within 24 hours of access working.</li>
       </ol>
       <button type="button" class="btn btn-ghost" data-close>Close</button>
     </div>
@@ -622,17 +656,16 @@ html:has(.bk[open]){overflow:hidden}
 </dialog>
 
 <script>
-/* ================= CONFIG — edit these before going live =================
-   Paste your payment links here. While a link is empty, "Book now" opens the
-   booking form instead. Bookings go to the Apps Script mailer (the same one as
-   the homepage contact form); if it can't be reached, the visitor's email app
-   opens with the booking filled in, so nothing is lost. */
+/* ================= CONFIG =================
+   Every "Get my free scan" button opens the booking form. Bookings go to the Apps
+   Script mailer (the same one as the homepage contact form); if it can't be reached,
+   the visitor's email app opens with the booking filled in, so nothing is lost.
+   Payment for the full report is arranged by email after the free summary. */
 var CONFIG = {
-  payUSD: '',   // PayPal payment link for $299, e.g. 'https://www.paypal.com/ncp/payment/XXXX'
-  payINR: '',   // Razorpay Payment Page for ₹19,999, e.g. 'https://rzp.io/l/XXXX'
   email: 'hello@exommerce.online',
   bookingEndpoint: 'https://script.google.com/macros/s/AKfycbyo6QASQ4wgBQxCiKid3dJZsCpRupRTFbisglyGsBHZuIRTFVBxv9trJx8xSjLScPgNEQ/exec'
 };
+var CADENCE_LABELS = { once: 'just this once', quarterly: 'every quarter', yearly: 'every year' };
 
 var PRICES = {
   USD: { founding:'$299', regular:'$790', starter:'$499', scale:'$1,490', fixes:'+$490', stress1:'$1,200', stress2:'$2,400' },
@@ -664,9 +697,7 @@ document.querySelectorAll('.cur-toggle button').forEach(function (b) {
 document.querySelectorAll('[data-buy]').forEach(function (el) {
   el.addEventListener('click', function (e) {
     e.preventDefault();
-    var link = currency === 'INR' ? CONFIG.payINR : CONFIG.payUSD;
-    track('begin_checkout', { item: 'cloud_audit_founding', currency: currency, location: el.getAttribute('data-track') });
-    if (link) { window.location.href = link; return; }
+    track('cta_click', { location: el.getAttribute('data-track'), action: 'open_free_scan' });
     openBooking(el.getAttribute('data-track'));
   });
 });
@@ -678,16 +709,15 @@ var EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;   // same rules as the Apps Script
 var PHONE_RE = /^[0-9+()\-.\s]{6,40}$/;
 
 function bookingMailto(d) {
-  var price = PRICES[currency].founding;
-  var lines = ['Hi eXommerce,', '', "I'd like to book the 24-Hour Cloud Audit at the founding price (" + price + ').', '',
+  var lines = ['Hi eXommerce,', '', "I'd like a free AWS cost scan.", '',
     'Name:      ' + (d.name || ''),
     'Company:   ' + (d.company || ''),
-    'Cloud:     AWS',
     'AWS spend: ' + (d.spend || ''),
+    'Re-scan:   ' + (CADENCE_LABELS[d.cadence] || CADENCE_LABELS.once),
     'Phone:     ' + (d.phone || '')];
   if (d.notes) lines.push('', d.notes);
   lines.push('', 'Thanks');
-  return 'mailto:' + CONFIG.email + '?subject=' + encodeURIComponent('Booking: 24-Hour Cloud Audit (' + price + ')')
+  return 'mailto:' + CONFIG.email + '?subject=' + encodeURIComponent('Free AWS cost scan: ' + (d.company || 'booking'))
     + '&body=' + encodeURIComponent(lines.join('\r\n'));
 }
 
@@ -728,7 +758,8 @@ if (bookDialog) {
     if (!form.checkValidity()) { form.reportValidity(); return; }
 
     var d = { name: val('bkName'), email: val('bkEmail').toLowerCase(), company: val('bkCompany'),
-              spend: document.getElementById('bkSpend').value, phone: val('bkPhone'), notes: val('bkNotes') };
+              spend: document.getElementById('bkSpend').value, cadence: document.getElementById('bkCadence').value,
+              phone: val('bkPhone'), notes: val('bkNotes') };
     if (document.getElementById('bkWebsite').value) return;   // honeypot: bots fill hidden fields
 
     var btn = document.getElementById('bkSubmit');
@@ -738,7 +769,7 @@ if (bookDialog) {
 
     function booked(reference) {
       btn.disabled = false; btn.textContent = label;
-      track('generate_lead', { form: 'audit_booking', currency: currency, value: currency === 'INR' ? 19999 : 299, location: bookTrigger });
+      track('generate_lead', { form: 'free_scan', cadence: d.cadence, location: bookTrigger });
       document.getElementById('bkRef').textContent = reference;
       document.getElementById('bkDoneEmail').textContent = d.email;
       document.getElementById('bkForm').hidden = true;

