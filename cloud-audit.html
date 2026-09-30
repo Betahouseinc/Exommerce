@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Free AWS Cost Scan — eXommerce</title>
-<meta name="description" content="A free, read-only scan of your AWS account. Within 24 hours, see how much you could save each month and where. The full fix list and plan is optional, and you decide after seeing the numbers." />
+<title>Free Cloud Cost &amp; Infrastructure Audit — eXommerce</title>
+<meta name="description" content="A free, read-only audit of your AWS account. Setup takes about 5 minutes, and you receive your initial audit findings within 24 hours of successful AWS access. Reviewed by the eXommerce cloud optimization team." />
 <link rel="canonical" href="https://exommerce.online/cloud-audit.html" />
 <meta name="robots" content="index, follow" />
-<meta property="og:title" content="Free AWS Cost Scan — eXommerce" />
-<meta property="og:description" content="See how much of your AWS bill is waste, free, within 24 hours. Read-only, no agents, no payment details." />
+<meta property="og:title" content="Free Cloud Cost &amp; Infrastructure Audit — eXommerce" />
+<meta property="og:description" content="See how much of your AWS bill is waste. Initial audit findings within 24 hours of successful AWS access. Read-only, no agents, no payment details." />
 <meta property="og:url" content="https://exommerce.online/cloud-audit.html" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="https://exommerce.online/og-image-2026.png" />
@@ -20,13 +20,13 @@
 {
   "@context": "https://schema.org",
   "@type": "Service",
-  "name": "AWS Cost Scan",
+  "name": "eXommerce Cloud Cost & Infrastructure Audit",
   "serviceType": "Cloud cost optimization audit",
   "provider": { "@type": "Organization", "name": "eXommerce LLP", "url": "https://exommerce.online" },
   "areaServed": "Worldwide",
   "offers": [
-    { "@type": "Offer", "name": "Scan and summary", "price": "0", "priceCurrency": "USD" },
-    { "@type": "Offer", "name": "Full report and fix plan", "price": "299", "priceCurrency": "USD", "description": "Founding client price" }
+    { "@type": "Offer", "name": "Cloud Cost & Infrastructure Audit", "price": "0", "priceCurrency": "INR", "description": "Initial audit findings within 24 hours of successful AWS access" },
+    { "@type": "Offer", "name": "Cloud Optimization Engagement", "price": "25000", "priceCurrency": "INR", "description": "Validate, prioritize and implement approved optimization opportunities" }
   ]
 }
 </script>
@@ -102,9 +102,6 @@ h2{font-size:clamp(26px,3.6vw,38px);font-weight:800;line-height:1.15;margin-bott
 .cloud.live::after{content:"";order:-1;width:8px;height:8px;border-radius:50%;background:var(--brand-lime)}
 
 /* Pricing */
-.cur-toggle{display:inline-flex;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:4px;margin:18px 0 36px}
-.cur-toggle button{border:0;background:transparent;font:600 14px var(--ff);color:var(--text2);padding:8px 18px;border-radius:7px;cursor:pointer;min-height:40px}
-.cur-toggle button[aria-pressed="true"]{background:#fff;color:var(--brand-green-dark);box-shadow:0 1px 4px rgba(0,0,0,.08)}
 .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch;text-align:left}
 @media(max-width:900px){.plans{grid-template-columns:1fr;max-width:560px;margin:0 auto}}
 .plans .card{padding:26px;display:flex;flex-direction:column}
@@ -122,29 +119,19 @@ h2{font-size:clamp(26px,3.6vw,38px);font-weight:800;line-height:1.15;margin-bott
 .card h3{font-size:22px;font-weight:700;margin:8px 0 6px}
 .card .hook{color:var(--text2);font-size:15px;margin-bottom:18px}
 .price{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
-.price .now{font-family:var(--ff-display);font-size:46px;font-weight:800;color:var(--ink);letter-spacing:-.03em}
-.price .was{font-size:18px;color:var(--text3);text-decoration:line-through}
+.price .now{font-family:var(--ff-display);font-size:46px;font-weight:800;color:var(--ink);letter-spacing:-.03em;line-height:1.2}
 .price .per{font-size:14px;color:var(--text3)}
 .meta{font-size:13px;color:var(--text3);margin-bottom:20px}
 .checks{list-style:none;margin:0 0 24px}
 .checks li{position:relative;padding-left:28px;font-size:15px;color:var(--text2);margin-bottom:9px}
 .checks li::before{content:"";position:absolute;left:0;top:4px;width:18px;height:18px;border-radius:50%;background:var(--bg-green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%23109840' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat}
 .micro{font-size:13px;color:var(--text3);margin-top:10px;text-align:center}
-.slots{display:inline-block;background:#FFF7E6;color:#8A5A00;border:1px solid #F3DDAA;font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;margin-bottom:14px}
 .soon{background:var(--bg2)}
 .soon .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:#fff;border:1px solid var(--border-strong);color:var(--text2);padding:4px 10px;border-radius:999px;margin-bottom:10px}
 .mini-tiers{border-top:1px solid var(--border);margin-top:18px;padding-top:16px}
 .mini-tiers div{display:flex;justify-content:space-between;gap:12px;font-size:14px;color:var(--text2);padding:5px 0}
 .mini-tiers b{color:var(--ink)}
 
-/* Regular pricing table */
-.table-wrap{margin-top:40px;overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius)}
-table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
-th,td{padding:14px 18px;text-align:left;border-bottom:1px solid var(--border)}
-th{background:var(--bg2);font-weight:600;color:var(--ink);font-size:13px}
-td{color:var(--text2)}
-tr:last-child td{border-bottom:0}
-td b{color:var(--ink)}
 .table-cap{font-size:13px;color:var(--text3);margin-top:10px}
 
 /* Guarantee */
@@ -183,14 +170,10 @@ td b{color:var(--ink)}
 .xlist li{position:relative;padding-left:28px;font-size:15px;color:var(--text2);margin-bottom:9px}
 .xlist li::before{content:"✕";position:absolute;left:3px;top:0;color:#C0392B;font-weight:700}
 
-/* Founder */
-.founder{display:grid;grid-template-columns:200px 1fr;gap:36px;align-items:center}
-@media(max-width:700px){.founder{grid-template-columns:1fr;gap:22px}}
-.founder img{width:200px;height:200px;object-fit:cover;border-radius:20px;border:1px solid var(--border)}
-.founder h3{font-size:22px;font-weight:700}
-.founder .role{color:var(--brand-green);font-weight:600;font-size:14px;margin-bottom:12px}
-.founder p{color:var(--text2);font-size:16px;margin-bottom:12px}
-.founder a.li{color:var(--brand-green);font-weight:600;font-size:14px}
+/* Team review */
+.review h3{font-size:22px;margin-bottom:8px}
+.review p{color:var(--text2);font-size:16px;margin-bottom:16px}
+.review .checks{margin-bottom:0}
 
 /* Benchmarks */
 .bench{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:40px}
@@ -245,6 +228,7 @@ html:has(.bk[open]){overflow:hidden}
 .bk-close{position:absolute;top:10px;right:10px;width:44px;height:44px;border:0;background:transparent;border-radius:10px;font-size:26px;line-height:1;color:var(--text3);cursor:pointer}
 .bk-close:hover{background:var(--bg2);color:var(--ink)}
 .bk h2{font-size:clamp(22px,4vw,26px);margin:0 0 6px;padding-right:40px}
+#bkForm > .eyebrow{padding-right:40px}
 .bk .sub{font-size:15px;color:var(--text2);margin-bottom:6px}
 .bk label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin:14px 0 6px}
 .bk label .opt{font-weight:400;color:var(--text3)}
@@ -284,25 +268,25 @@ html:has(.bk[open]){overflow:hidden}
       <a href="#faq">FAQ</a>
       <a href="index.html">Main site</a>
     </nav>
-    <a href="#book" class="nav-cta" data-buy="scan" data-track="nav_cta">Get a free scan</a>
+    <a href="#book" class="nav-cta" data-buy="scan" data-track="nav_cta">Get a free audit</a>
   </div>
 </nav>
 
 <!-- ============ HERO ============ -->
 <header class="hero">
   <div class="wrap">
-    <span class="pill"><span class="dot"></span>Free AWS cost scan · summary in 24 hours</span>
-    <h1>See how much of your AWS bill is waste. <em>The scan is free.</em></h1>
-    <p class="lede">We run a read-only scan of your AWS account: no agents, no changes, no meetings. Within 24 hours of access you get a summary of how much you could save each month, and where. The full fix list, scripts and plan are a paid report, and you decide after you've seen the number.</p>
+    <span class="pill"><span class="dot"></span>Free Cloud Cost &amp; Infrastructure Audit</span>
+    <h1>See how much of your AWS bill is waste. <em>The audit is free.</em></h1>
+    <p class="lede">A read-only audit of your AWS account: no agents, no changes, no meetings. Setup takes about 5 minutes, and you receive your initial audit findings within 24 hours of successful AWS access. We work from the cost and usage history AWS already keeps, so there's no observation period.</p>
     <div class="hero-ctas">
-      <a href="#book" class="btn btn-primary" data-buy="scan" data-track="hero_primary">Get my free scan →</a>
+      <a href="#book" class="btn btn-primary" data-buy="scan" data-track="hero_primary">Get my free audit →</a>
       <a href="#how" class="btn btn-ghost" data-track="hero_secondary">See how it works</a>
     </div>
-    <p class="hero-note">Free summary in 24 hours · Full report <span data-price="founding">$299</span> at the founding price, only if you want it · <a href="sample-report.html" data-track="hero_sample_report" style="color:var(--brand-green);text-decoration:underline">See a sample report</a></p>
+    <p class="hero-note">Every audit is reviewed by the eXommerce cloud optimization team before results are shared · <a href="sample-report.html" data-track="hero_sample_report" style="color:var(--brand-green);text-decoration:underline">See a sample report</a></p>
     <div class="trust">
       <div><strong>🔒 Read-only access</strong>We can see configuration and cost data. We can't change anything. Revoke in one click.</div>
-      <div><strong>👀 See the number first</strong>Your savings figure is free. Pay only if you want the full fix list and plan.</div>
-      <div><strong>🛡️ Least privilege by design</strong>Minimum permissions, no access to your data. Remove our access once your summary arrives.</div>
+      <div><strong>👀 See the number first</strong>Your findings are free. The paid engagement is optional, and you decide after seeing them.</div>
+      <div><strong>🛡️ Least privilege by design</strong>Minimum permissions, no access to your data. Remove our access once your findings arrive.</div>
     </div>
     <div class="clouds" aria-label="Supported clouds">
       <span class="cloud live"><img src="media/clouds/aws.png" alt="AWS" width="37" height="22" />available now</span>
@@ -315,86 +299,69 @@ html:has(.bk[open]){overflow:hidden}
 <!-- ============ PRICING ============ -->
 <section id="pricing">
   <div class="wrap-md center">
-    <span class="eyebrow">Free to start · Fixed price to finish</span>
+    <span class="eyebrow">Free audit · Fixed-price engagement · Ongoing support</span>
     <h2>Start free. Pay only for the fixes you want.</h2>
-    <p class="lede">No discovery calls, no statements of work, no retainers, and no payment details to get started.</p>
-    <div class="cur-toggle" role="group" aria-label="Currency">
-      <button type="button" data-cur="USD" aria-pressed="true">USD $</button>
-      <button type="button" data-cur="INR" aria-pressed="false">INR ₹</button>
-    </div>
+    <p class="lede" style="margin-bottom:36px">No discovery calls, no statements of work, and no payment details to get started.</p>
   </div>
 
   <div class="wrap-md">
     <div class="plans">
-      <!-- Step 1: free scan -->
+      <!-- Step 1: free audit -->
       <article class="card">
-        <p class="step-tag">Step 1</p>
-        <h3>AWS cost scan &amp; summary</h3>
+        <p class="step-tag">Step 1 · free</p>
+        <h3>Cloud Cost &amp; Infrastructure Audit</h3>
         <p class="hook">How much you could save each month, and where it is.</p>
         <div class="price"><span class="word">Free</span></div>
-        <p class="meta">Summary within 24 hours of access</p>
+        <p class="meta">Initial findings within 24 hours of successful AWS access</p>
         <ul class="checks">
-          <li>Read-only scan of every region (no agents, no changes)</li>
-          <li>Your monthly savings figure, split into cleanup, resizing and commitments</li>
-          <li>The biggest items we found</li>
+          <li>Read-only review of every region (no agents, no changes)</li>
+          <li>Potential monthly savings, split into cleanup, rightsizing and commitments</li>
+          <li>The biggest opportunities, with their severity</li>
+          <li>A snapshot of your stack: regions, environments and the services you run</li>
           <li>No payment details needed</li>
         </ul>
-        <a href="#book" class="btn btn-primary btn-block" data-buy="scan" data-track="plan_free">Get my free scan</a>
+        <p class="micro" style="margin:0 0 14px;text-align:left">Findings only: making changes is part of the paid engagement.</p>
+        <a href="#book" class="btn btn-primary btn-block" data-buy="scan" data-track="plan_free">Get my free audit</a>
       </article>
 
-      <!-- Step 2: full report (paid, after the summary) -->
+      <!-- Step 2: paid engagement (after the findings) -->
       <article class="card featured">
-        <span class="ribbon">Founding client offer</span>
+        <span class="ribbon">After your findings</span>
         <p class="step-tag">Step 2 · only if you want it</p>
-        <h3>Full report &amp; fix plan</h3>
-        <p class="hook">Everything you need to act on the summary.</p>
+        <h3>Cloud Optimization Engagement</h3>
+        <p class="hook">Validate, prioritize and implement the optimization opportunities you approve.</p>
         <div class="price">
-          <span class="now" data-price="founding">$299</span>
-          <span class="was" data-price="regular">$790</span>
-          <span class="per">one-time</span>
+          <span class="now">₹25,000</span>
+          <span class="per">per engagement</span>
         </div>
-        <p class="meta">Ordered after your summary · sent the same day</p>
+        <p class="meta">Covers the opportunities from your audit that you approve</p>
         <ul class="checks">
-          <li>Every resource by ID, with the evidence and calculation behind each figure</li>
-          <li>Cleanup scripts: dry-run by default, snapshot before delete</li>
-          <li>Resizing targets and Savings Plan sizing</li>
-          <li>A step-by-step plan, ranked by $ saved</li>
-          <li>15-minute walkthrough call</li>
+          <li>Each opportunity validated against DR standbys, scheduled jobs, auto-scaling, DNS and vendor dependencies</li>
+          <li>A prioritized plan: savings, risk and effort for every item</li>
+          <li>Implementation of the items you approve, with a rollback step for each</li>
+          <li>Savings Plans sized on your post-cleanup usage, not today's bill</li>
         </ul>
-        <span class="slots">Founding price for the first 10 clients</span>
-        <p class="micro">In return, we'll ask for a short testimonial if you're happy.</p>
+        <p class="micro">Work beyond your approved audit findings is scoped separately.</p>
       </article>
 
-      <!-- Step 3: recurring re-scans -->
+      <!-- Step 3: recurring -->
       <article class="card">
-        <p class="step-tag">Step 3</p>
-        <h3>Re-scan every quarter or year</h3>
-        <p class="hook">Cloud waste grows back. Catch it on a schedule.</p>
-        <div class="price"><span class="small">Returning-client price</span></div>
-        <p class="meta">You choose the schedule when you book</p>
+        <p class="step-tag">Step 3 · ongoing</p>
+        <h3>Ongoing Cloud Optimization &amp; Support</h3>
+        <p class="hook">Cloud waste grows back. Keep it in check.</p>
+        <div class="price"><span class="small">Scoped with you</span></div>
+        <p class="meta">Quarterly or yearly, as you prefer</p>
         <ul class="checks">
-          <li>The same read-only scan and free summary</li>
-          <li>What you fixed since last time, and what's new</li>
-          <li>Savings Plan sizing checked against your new baseline</li>
-          <li>We remind you when it's due</li>
+          <li>Recurring cost reviews, compared with your last audit</li>
+          <li>Ongoing optimization as your usage changes</li>
+          <li>Infrastructure efficiency across compute, storage, network and commitments</li>
+          <li>Implementation support for the changes you approve</li>
         </ul>
-        <a href="#book" class="btn btn-ghost btn-block" data-buy="scan" data-track="plan_rescan">Start with a free scan</a>
+        <a href="#book" class="btn btn-ghost btn-block" data-buy="scan" data-track="plan_rescan">Start with a free audit</a>
       </article>
     </div>
 
-    <!-- Full report pricing after the founding spots -->
-    <div class="table-wrap" role="region" aria-label="Full report pricing" tabindex="0">
-      <table>
-        <thead><tr><th>Full report, after the founding spots</th><th>Monthly AWS bill</th><th>Price</th></tr></thead>
-        <tbody>
-          <tr><td><b>Starter</b></td><td>$3k–$10k</td><td><b data-price="starter">$499</b></td></tr>
-          <tr><td><b>Growth</b></td><td>$10k–$50k</td><td><b data-price="regular">$790</b></td></tr>
-          <tr><td><b>Scale</b></td><td>$50k+</td><td><b data-price="scale">$1,490</b></td></tr>
-          <tr><td><b>Add-on: we apply the fixes</b> (done in 48 hours)</td><td>Any</td><td><b data-price="fixes">+$490</b></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="table-cap">The scan and summary are always free. INR prices include all taxes. Azure &amp; Google Cloud: <a href="#" data-waitlist="Azure / GCP Audit" data-track="waitlist_multicloud" style="color:var(--brand-green);text-decoration:underline">join the waitlist</a>.</p>
+    <p class="table-cap" style="margin-top:22px">The audit is always free. Azure &amp; Google Cloud: <a href="#" data-waitlist="Azure / GCP Audit" data-track="waitlist_multicloud" style="color:var(--brand-green);text-decoration:underline">join the waitlist</a>.</p>
 
     <div class="soon-row">
       <p><b>Coming soon: Peak Load Stress Test</b> (from <span data-price="stress1">$1,200</span>). Know whether your stack survives your busiest day before your customers find out it doesn't.</p>
@@ -411,9 +378,9 @@ html:has(.bk[open]){overflow:hidden}
     </div>
     <div class="g-text">
       <h2>You see the number before you pay anything</h2>
-      <p>The scan and summary are free. If the savings aren't worth it to you, you owe nothing, and we delete the scan data within 30 days.</p>
+      <p>The audit is free. If the savings aren't worth acting on, you owe nothing, and we delete the detailed audit data within 30 days.</p>
     </div>
-    <a href="#book" class="btn btn-primary" data-buy="scan" data-track="band_cta">Get my free scan</a>
+    <a href="#book" class="btn btn-primary" data-buy="scan" data-track="band_cta">Get my free audit</a>
   </div>
 </div>
 
@@ -421,28 +388,28 @@ html:has(.bk[open]){overflow:hidden}
 <section id="how">
   <div class="wrap center">
     <span class="eyebrow">How it works</span>
-    <h2>From booking to your savings figure in 3 steps</h2>
+    <h2>From request to initial findings in 3 steps</h2>
     <p class="lede">No kickoff call. No project manager. No payment up front.</p>
   </div>
   <div class="wrap">
     <div class="steps">
-      <div class="step"><div class="n">1</div><h3>Book a free scan</h3><p>Tell us your company and rough AWS spend. We send your setup instructions, usually the same day.</p></div>
-      <div class="step"><div class="n">2</div><h3>Grant read-only access</h3><p>Create one read-only IAM role, locked to your scan with a unique External ID. It takes about 5 minutes in AWS CloudShell. Your summary arrives within 24 hours of access working.</p></div>
-      <div class="step"><div class="n">3</div><h3>See your savings, then decide</h3><p>Your free summary shows what you could save and where. Want the fix list, scripts and plan? Order the full report and get it the same day. Then remove our access with one command.</p></div>
+      <div class="step"><div class="n">1</div><h3>Request your free audit</h3><p>Tell us about your company and cloud spend. We send your setup instructions, usually the same day.</p></div>
+      <div class="step"><div class="n">2</div><h3>Grant read-only access</h3><p>Create one read-only IAM role, locked to your audit with a unique External ID. It takes about 5 minutes in AWS CloudShell. Your initial findings arrive within 24 hours of successful AWS access.</p></div>
+      <div class="step"><div class="n">3</div><h3>See your findings, then decide</h3><p>Reviewed by our team, your findings show what you could save, where, and how much each item matters. Want help acting on them? That's the paid engagement. Either way, remove our access with one command.</p></div>
     </div>
     <div class="preview">
       <a href="sample-report.html" class="preview-shot" data-track="preview_image" aria-label="Open the full sample report">
-        <img src="media/sample-report-preview.jpg" alt="Sample audit report for a fictional AWS account: $3,523/month in savings found on a $14,800 bill, with a chart of savings by cleanup, rightsizing and commitments" width="960" height="911" loading="lazy" />
+        <img src="media/sample-report-preview.jpg" alt="Sample audit report for a fictional AWS account: $3,523/month in potential savings on a $14,800 bill, with a chart of savings by cleanup, rightsizing and commitments" width="960" height="911" loading="lazy" />
       </a>
       <div>
-        <span class="eyebrow">What the full report looks like</span>
-        <h3>See the report format before you book</h3>
-        <p>This is the full report, run on a fictional demo account. Your free summary shows its headline figures; the full report adds the detail.</p>
+        <span class="eyebrow">What an audit report looks like</span>
+        <h3>See the report format before you start</h3>
+        <p>This is a full audit report on a fictional demo account. Your free initial findings cover its headline figures; the resource-level detail and the plan come with the engagement.</p>
         <ul class="checks">
           <li>Monthly and annual savings, with the basis for every figure</li>
           <li>Savings by type: cleanup, rightsizing, commitments</li>
-          <li>Every finding ranked by $ impact, with risk and effort</li>
-          <li>Dry-run scripts and a week-by-week plan</li>
+          <li>Every finding ranked by $ impact, with severity, risk and effort</li>
+          <li>Checks to run before each change, and dry-run scripts</li>
         </ul>
         <a href="sample-report.html" class="btn btn-ghost" data-track="preview_cta">Open the full sample report →</a>
       </div>
@@ -466,6 +433,7 @@ html:has(.bk[open]){overflow:hidden}
           <li>Cost &amp; usage data from AWS Cost Explorer</li>
           <li>AWS Compute Optimizer recommendations</li>
           <li>Utilization metrics needed to spot idle resources</li>
+          <li>Which services, regions and environments you use</li>
         </ul>
       </div>
       <div class="panel">
@@ -474,7 +442,8 @@ html:has(.bk[open]){overflow:hidden}
           <li>Read your data: S3 objects, database rows, secrets</li>
           <li>Create, modify or delete anything</li>
           <li>Access anything after you delete the role</li>
-          <li>Keep your data: deleted within 30 days of delivery</li>
+          <li>Hold access keys or passwords: access is a role you control</li>
+          <li>Keep your account details: deleted within 30 days of delivery</li>
         </ul>
       </div>
     </div>
@@ -482,19 +451,18 @@ html:has(.bk[open]){overflow:hidden}
   </div>
 </section>
 
-<!-- ============ FOUNDER ============ -->
-<section id="founder">
+<!-- ============ REVIEW ============ -->
+<section id="review">
   <div class="wrap-md">
-    <div class="founder">
-      <img src="team/bhavin.jpg" alt="Bhavin Chawla, founder of eXommerce" width="200" height="200" />
-      <div>
-        <span class="eyebrow">Who runs your audit</span>
-        <h3>Bhavin Chawla</h3>
-        <p class="role">Founder &amp; Principal Consultant · Bengaluru</p>
-        <p>15+ years in technology and business transformation. Previously a Solutions Engineer at CData Software, architecting enterprise data pipelines into cloud platforms like Snowflake, Databricks and Azure. PMP &amp; ITIL certified.</p>
-        <p>Every founding-client audit is reviewed personally before it reaches you.</p>
-        <a class="li" href="https://www.linkedin.com/in/bhavinchawla/" target="_blank" rel="noopener">Connect on LinkedIn ↗</a>
-      </div>
+    <div class="panel review">
+      <span class="eyebrow">Who reviews your audit</span>
+      <h3>The eXommerce cloud optimization team</h3>
+      <p>Every audit is reviewed by the eXommerce cloud optimization team before results are shared.</p>
+      <ul class="checks">
+        <li>Each figure is checked against your own cost and usage data</li>
+        <li>Disaster-recovery standbys, scheduled jobs and auto-scaled capacity are kept out of the savings</li>
+        <li>Anything with a dependency to check first (DNS records, partner allowlists, backup retention) is marked for validation, not removal</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -504,7 +472,7 @@ html:has(.bk[open]){overflow:hidden}
   <div class="wrap center">
     <span class="eyebrow">Industry benchmarks</span>
     <h2>What the best engineering teams proved</h2>
-    <p class="lede">Lessons from public engineering case studies that we build into our 24-hour audit blueprints.</p>
+    <p class="lede">Lessons from public engineering case studies that we build into our audits.</p>
     <p class="disclaimer">Etsy, Netflix, Capital One and 37signals are not eXommerce clients. These are publicly documented industry examples that inform our methodology.</p>
   </div>
   <div class="wrap-md">
@@ -525,16 +493,17 @@ html:has(.bk[open]){overflow:hidden}
   </div>
   <div class="wrap">
     <div class="faq">
-      <details><summary>What exactly do you get access to?</summary><div class="a">A single IAM role with three AWS-managed read-only policies (<code>ViewOnlyAccess</code>, <code>AWSBillingReadOnlyAccess</code>, <code>ComputeOptimizerReadOnlyAccess</code>). The role can only be assumed by our audit account using an External ID unique to your order. We can't read S3 objects, database contents or secrets, and we can't change anything.</div></details>
-      <details><summary>What's free, and what do I pay for?</summary><div class="a">The scan and the summary are free: your monthly savings figure, how it splits between cleanup, resizing and commitments, and the biggest items we found. The full report (every resource, the evidence behind each figure, dry-run scripts, the plan and a walkthrough call) is <span data-price="founding">$299</span> at the founding price. You decide after you've seen the summary.</div></details>
-      <details><summary>When do I get my summary?</summary><div class="a">Within 24 hours of your read-only access working, not from when you book. We email you as soon as we've confirmed access.</div></details>
-      <details><summary>Can you check again next quarter or next year?</summary><div class="a">Yes. Choose "every quarter" or "every year" when you book and we'll remind you when it's due. Keep the findings file from your report, and the next one shows what you fixed and what's new. Returning clients pay less for the full report.</div></details>
-      <details><summary>Who runs the cleanup scripts?</summary><div class="a">You do. Scripts run in dry-run mode by default (they only list what they would change) and take a snapshot before any deletion. You review, you decide, you execute. Want us to do it? Add the "we apply the fixes" option.</div></details>
-      <details><summary>What if some resources are idle on purpose?</summary><div class="a">Tag them <code>Environment=DR</code>, <code>CostScope=Exclude</code> or <code>exommerce:skip</code> and the scan leaves them out: a disaster-recovery standby isn't waste. Tell us about any other tags you already use for this.</div></details>
+      <details><summary>What exactly do you get access to?</summary><div class="a">A single IAM role with three AWS-managed read-only policies (<code>ViewOnlyAccess</code>, <code>AWSBillingReadOnlyAccess</code>, <code>ComputeOptimizerReadOnlyAccess</code>). The role can only be assumed by our audit account using an External ID unique to your audit. We never ask for access keys or passwords. We can't read S3 objects, database contents or secrets, and we can't change anything.</div></details>
+      <details><summary>What's free, and what do I pay for?</summary><div class="a">The audit is free: your potential monthly savings, how they split between cleanup, rightsizing and commitments, the biggest opportunities and their severity, and a snapshot of your stack. If you want help acting on it, the ₹25,000 Cloud Optimization Engagement validates each opportunity against your environment, prioritizes them, and implements the ones you approve. It covers the opportunities from your audit; anything beyond that is scoped separately. Ongoing Cloud Optimization &amp; Support is available after that. You decide after you've seen your findings.</div></details>
+      <details><summary>When do I get my initial findings?</summary><div class="a">Within 24 hours of successful AWS access, not from when you request the audit. We work from the cost and usage history AWS already keeps, so there's nothing to install and no waiting period. We email you as soon as we've confirmed access.</div></details>
+      <details><summary>How firm are the savings figures?</summary><div class="a">They're potential savings until validated. In the engagement, each one is checked against how the resource is actually used before it becomes a recommendation, and only the recommendations you approve are implemented. Savings Plans are sized on your usage after cleanup and rightsizing, never on today's bill alone.</div></details>
+      <details><summary>What does Ongoing Cloud Optimization &amp; Support include?</summary><div class="a">Recurring cost reviews, quarterly or yearly, each compared with your previous audit so you see what you fixed and what's new, plus ongoing optimization, infrastructure efficiency work and implementation support. We agree the scope and price with you before it starts.</div></details>
+      <details><summary>Who makes the changes?</summary><div class="a">Nothing changes automatically: the audit is read-only. In the engagement, changes are made only for the opportunities you approve, in a window you choose, with a rollback step for each. Scripts run in dry-run mode by default (they only list what they would change) and take a snapshot before any deletion.</div></details>
+      <details><summary>What if some resources are idle on purpose?</summary><div class="a">Tag them <code>Environment=DR</code>, <code>CostScope=Exclude</code> or <code>exommerce:skip</code> and the audit leaves them out: a disaster-recovery standby isn't waste. We also check for scheduled jobs, auto-scaling groups, DNS records pointing at a resource, and addresses partners may have allowlisted, before anything is recommended for removal. Tell us about any other tags you already use for this.</div></details>
       <details><summary>Do you support Azure and Google Cloud?</summary><div class="a">AWS is live today. Azure and Google Cloud are in final testing. <a href="#" data-waitlist="Azure / GCP Audit" style="color:var(--brand-green);text-decoration:underline">Join the waitlist</a> and we'll notify you first.</div></details>
-      <details><summary>What if our account spends less than $3,000/month?</summary><div class="a">The free scan still works. Below about $3,000 a month there's often too little waste for the full report to be worth it, and we'll tell you so.</div></details>
-      <details><summary>Can you sign an NDA or DPA?</summary><div class="a">Yes. Email <a href="mailto:hello@exommerce.online" style="color:var(--brand-green);text-decoration:underline">hello@exommerce.online</a> before or after booking.</div></details>
-      <details><summary>How do we remove access afterwards?</summary><div class="a">Delete the IAM role; your summary email includes the one command. You can do it as soon as the summary arrives, because the scan is done by then.</div></details>
+      <details><summary>What if our account spends less than $3,000/month?</summary><div class="a">The free audit still works. Below about $3,000 a month there's often too little waste for a paid engagement to be worth it, and we'll tell you so.</div></details>
+      <details><summary>Can you sign an NDA or DPA?</summary><div class="a">Yes. Email <a href="mailto:hello@exommerce.online" style="color:var(--brand-green);text-decoration:underline">hello@exommerce.online</a> before or after requesting your audit.</div></details>
+      <details><summary>How do we remove access afterwards?</summary><div class="a">Delete the IAM role; the email with your initial findings includes the one command. You can do it as soon as your findings arrive, because the scan is done by then.</div></details>
     </div>
   </div>
 </section>
@@ -544,17 +513,17 @@ html:has(.bk[open]){overflow:hidden}
   <div class="wrap">
     <div class="terms">
       <span class="eyebrow">Service terms</span>
-      <h2 style="font-size:26px">AWS Cost Scan — Terms</h2>
-      <p style="color:var(--text3);font-size:14px;margin-bottom:18px">These terms apply to scans and reports booked through this page, in addition to our general <a href="terms.html" style="color:var(--brand-green);text-decoration:underline">Terms of Service</a>. By booking a scan, you agree to them.</p>
+      <h2 style="font-size:26px">Cloud Cost &amp; Infrastructure Audit — Terms</h2>
+      <p style="color:var(--text3);font-size:14px;margin-bottom:18px">These terms apply to audits and engagements requested through this page, in addition to our general <a href="terms.html" style="color:var(--brand-green);text-decoration:underline">Terms of Service</a>. By requesting an audit, you agree to them.</p>
       <ol>
-        <li><strong>Service.</strong> eXommerce LLP ("we") performs a read-only review of the customer's AWS account and sends a free summary of the savings found. The customer may then order a full report (resource-level findings, cleanup scripts and a plan) at the price shown when they order.</li>
-        <li><strong>Access &amp; authorization.</strong> The customer confirms they are authorized to grant access to the account. Access is read-only through a role the customer creates and can revoke at any time.</li>
-        <li><strong>Delivery time.</strong> The summary is sent within 24 hours of working read-only access being granted and verified. A full report is sent within one business day of payment.</li>
-        <li><strong>No changes by us.</strong> We do not modify, delete or create resources in the customer's account. Scripts we provide are recommendations, default to dry-run mode, and are executed solely at the customer's discretion and risk. The customer is responsible for reviewing scripts and taking backups before running them.</li>
-        <li><strong>Payment &amp; refunds.</strong> The scan and summary are free; nothing is charged unless the customer orders a full report. If a full report doesn't reflect the findings in the summary, or we don't deliver it within two business days of payment, the customer receives a full refund on request.</li>
-        <li><strong>Confidentiality &amp; data.</strong> We treat all account data as confidential, use it only to deliver the service, and delete it within 30 days of sending the summary or the full report, whichever is later. For scheduled re-scans we keep only contact details and the schedule. The customer should delete the access role once the summary arrives.</li>
-        <li><strong>Liability.</strong> Our total liability is limited to the fee paid for the service. We are not liable for indirect or consequential losses, or for outcomes of actions the customer takes based on the report.</li>
-        <li><strong>Testimonials.</strong> Founding-price customers agree to consider providing a short testimonial. Any published result is anonymized unless the customer approves otherwise.</li>
+        <li><strong>Service.</strong> eXommerce LLP ("we") performs a free, read-only review of the customer's AWS account and sends initial audit findings. The customer may then engage us for the Cloud Optimization Engagement, which validates, prioritizes and implements the optimization opportunities from the audit that the customer approves. Work beyond those approved opportunities, and Ongoing Cloud Optimization &amp; Support, are scoped and priced in writing before they start.</li>
+        <li><strong>Access &amp; authorization.</strong> The customer confirms they are authorized to grant access to the account. Access is read-only through a role the customer creates and can revoke at any time. We never ask for or store access keys, passwords, private keys or other credentials.</li>
+        <li><strong>Delivery time.</strong> Initial audit findings are sent within 24 hours of successful AWS access, meaning the read-only role has been created and verified. Engagement timelines are agreed when an engagement starts.</li>
+        <li><strong>No automatic changes.</strong> The audit does not modify, delete or create resources in the customer's account. Figures in the initial findings are potential savings; each is validated before it is recommended, and changes are made only for opportunities the customer approves in writing. Scripts default to dry-run mode, and the customer is responsible for confirming backups and change windows before changes are applied.</li>
+        <li><strong>Payment.</strong> The audit is free; nothing is charged unless the customer engages us. The Cloud Optimization Engagement is ₹25,000, invoiced when the customer confirms the engagement.</li>
+        <li><strong>Confidentiality &amp; data.</strong> We treat all account data as confidential and use it only to deliver the service. Detailed account data (resource IDs, configuration and the full findings) is deleted within 30 days of sending the initial findings, or of completing an engagement, whichever is later. We keep only the summary metadata needed for delivery, analysis and follow-up: the audit ID, contact and company details, spend range, savings totals, finding counts by category and severity, and the regions and services in use. For Ongoing Cloud Optimization &amp; Support, we also keep the previous findings so each review can be compared with the last. The customer should delete the access role once the initial findings arrive.</li>
+        <li><strong>Liability.</strong> Our total liability is limited to the fee paid for the service. We are not liable for indirect or consequential losses, or for outcomes of actions the customer takes based on the findings.</li>
+        <li><strong>Testimonials.</strong> We may ask for a short testimonial. Any published result is anonymized unless the customer approves otherwise.</li>
         <li><strong>Governing law.</strong> These terms are governed by the laws of India, with exclusive jurisdiction of the courts in Bengaluru, Karnataka.</li>
         <li><strong>Contact.</strong> hello@exommerce.online · +91 98442 65267</li>
       </ol>
@@ -566,9 +535,9 @@ html:has(.bk[open]){overflow:hidden}
 <section class="final">
   <div class="wrap center">
     <h2>See what you could cut from your next AWS bill. Free.</h2>
-    <p class="lede">Idle resources are billed every hour they run. Book a scan now and have your summary within 24 hours of access.</p>
+    <p class="lede">Idle resources are billed every hour they run. Request your free audit now and receive your initial findings within 24 hours of successful AWS access.</p>
     <div class="btns">
-      <a href="#book" class="btn btn-primary" data-buy="scan" data-track="final_buy">Get my free scan</a>
+      <a href="#book" class="btn btn-primary" data-buy="scan" data-track="final_buy">Get my free audit</a>
       <a href="#" class="btn btn-ghost" data-waitlist="Stress Test" data-track="final_waitlist">Launching soon? Join the Stress Test waitlist</a>
     </div>
   </div>
@@ -580,7 +549,7 @@ html:has(.bk[open]){overflow:hidden}
       <p>© <span id="yr"></span> eXommerce LLP · Bengaluru, India · <a href="mailto:hello@exommerce.online">hello@exommerce.online</a></p>
       <div class="ft-links">
         <a href="index.html">Main site</a>
-        <a href="#audit-terms">Scan terms</a>
+        <a href="#audit-terms">Audit terms</a>
         <a href="privacy.html">Privacy Policy</a>
         <a href="terms.html">Terms of Service</a>
       </div>
@@ -589,8 +558,8 @@ html:has(.bk[open]){overflow:hidden}
 </footer>
 
 <div class="sticky" aria-hidden="false">
-  <span><b>Free</b> AWS cost scan · summary in 24h</span>
-  <a href="#book" class="btn btn-primary" data-buy="scan" data-track="sticky_buy">Get free scan</a>
+  <span><b>Free</b> AWS audit · findings within 24h of access</span>
+  <a href="#book" class="btn btn-primary" data-buy="scan" data-track="sticky_buy">Get free audit</a>
 </div>
 
 <!-- Booking dialog: sent to the Apps Script mailer (case-study-mailer.gs), which
@@ -600,9 +569,9 @@ html:has(.bk[open]){overflow:hidden}
     <button type="button" class="bk-close" data-close aria-label="Close">&times;</button>
 
     <div id="bkForm">
-      <span class="eyebrow">Free AWS cost scan</span>
-      <h2 id="bkTitle">Get your free scan</h2>
-      <p class="sub">No payment details. We send setup instructions, usually the same day, and your summary within 24 hours of access.</p>
+      <span class="eyebrow">Free Cloud Cost &amp; Infrastructure Audit</span>
+      <h2 id="bkTitle">Request your free audit</h2>
+      <p class="sub">No payment details. Setup takes about 5 minutes, and you receive your initial audit findings within 24 hours of successful AWS access.</p>
       <form id="bookForm" novalidate>
         <label for="bkName">Your name</label>
         <input id="bkName" name="name" autocomplete="name" required maxlength="100" autofocus />
@@ -610,45 +579,95 @@ html:has(.bk[open]){overflow:hidden}
           <div><label for="bkEmail">Work email</label><input id="bkEmail" name="email" type="email" autocomplete="email" required maxlength="120" /></div>
           <div><label for="bkCompany">Company</label><input id="bkCompany" name="company" autocomplete="organization" required maxlength="120" /></div>
         </div>
-        <label for="bkSpend">Monthly AWS spend</label>
-        <select id="bkSpend" name="spend" required>
-          <option value="" selected disabled>Choose a range</option>
-          <option>Under $3k</option>
-          <option>$3k–$10k</option>
-          <option>$10k–$50k</option>
-          <option>$50k+</option>
-          <option>Not sure</option>
+        <div class="row2">
+          <div><label for="bkSite">Website <span class="opt">(optional)</span></label><input id="bkSite" name="company_site" inputmode="url" autocomplete="url" maxlength="200" placeholder="company.com" /></div>
+          <div><label for="bkRole">Your role</label>
+            <select id="bkRole" name="role" required>
+              <option value="" selected disabled>Choose one</option>
+              <option>Founder / CEO</option>
+              <option>CTO / VP Engineering</option>
+              <option>Head of Infrastructure / DevOps / SRE</option>
+              <option>Engineer</option>
+              <option>Finance / FinOps</option>
+              <option>Other</option>
+            </select></div>
+        </div>
+        <div class="row2">
+          <div><label for="bkIndustry">Industry</label>
+            <select id="bkIndustry" name="industry" required>
+              <option value="" selected disabled>Choose one</option>
+              <option>SaaS / software</option>
+              <option>E-commerce / retail</option>
+              <option>Fintech / financial services</option>
+              <option>Healthcare</option>
+              <option>Media / entertainment</option>
+              <option>Education</option>
+              <option>Logistics / mobility</option>
+              <option>IT services / agency</option>
+              <option>Other</option>
+            </select></div>
+          <div><label for="bkSize">Company size</label>
+            <select id="bkSize" name="company_size" required>
+              <option value="" selected disabled>People</option>
+              <option>1–10</option>
+              <option>11–50</option>
+              <option>51–200</option>
+              <option>201–1,000</option>
+              <option>1,000+</option>
+            </select></div>
+        </div>
+        <div class="row2">
+          <div><label for="bkProvider">Cloud provider</label>
+            <select id="bkProvider" name="provider" required>
+              <option value="" selected disabled>Choose one</option>
+              <option>AWS</option>
+              <option>AWS + other clouds</option>
+              <option>Azure</option>
+              <option>Google Cloud</option>
+              <option>Other</option>
+            </select></div>
+          <div><label for="bkSpend">Monthly cloud spend</label>
+            <select id="bkSpend" name="spend" required>
+              <option value="" selected disabled>Approximate range</option>
+              <option>Under $3k</option>
+              <option>$3k–$10k</option>
+              <option>$10k–$50k</option>
+              <option>$50k+</option>
+              <option>Not sure</option>
+            </select></div>
+        </div>
+        <p class="hint" id="bkNotAws" hidden>We audit AWS today. Request anyway and we'll let you know as soon as your cloud is supported.</p>
+        <p class="hint" id="bkLow" hidden>Under $3,000/month there's often little to find, but the free audit will tell you for sure.</p>
+        <label for="bkSource">How did you hear about us?</label>
+        <select id="bkSource" name="source" required>
+          <option value="" selected disabled>Choose one</option>
+          <option>LinkedIn</option>
+          <option>WhatsApp</option>
+          <option>Referred by someone</option>
+          <option>Google search</option>
+          <option>Event or meetup</option>
+          <option>Email</option>
+          <option>Other</option>
         </select>
-        <p class="hint" id="bkLow" hidden>Under $3,000/month there's often little to find, but the free scan will tell you for sure.</p>
-        <label for="bkCadence">Check again later?</label>
-        <select id="bkCadence" name="cadence">
-          <option value="once" selected>Just this once</option>
-          <option value="quarterly">Every quarter</option>
-          <option value="yearly">Every year</option>
-        </select>
-        <label for="bkPhone">Phone / WhatsApp <span class="opt">(optional)</span></label>
-        <input id="bkPhone" name="phone" type="tel" autocomplete="tel" maxlength="40" />
-        <label for="bkNotes">Anything we should know? <span class="opt">(optional)</span></label>
-        <textarea id="bkNotes" name="notes" maxlength="2000" placeholder="Regions you use, a deadline, an NDA request…"></textarea>
         <div class="hp" aria-hidden="true"><label for="bkWebsite">Website</label><input id="bkWebsite" name="website" tabindex="-1" autocomplete="off" /></div>
-        <div class="summary"><span>Scan and summary</span><b>Free</b></div>
-        <p class="fine" style="margin-top:8px">The full report is optional, <span data-price="founding">$299</span> at the founding price, and you decide after seeing your summary.</p>
+        <div class="summary"><span>Audit and initial findings</span><b>Free</b></div>
+        <p class="fine" style="margin-top:8px">The ₹25,000 Cloud Optimization Engagement is optional, and you decide after seeing your findings.</p>
         <p class="err" id="bkErr" role="alert" hidden></p>
-        <button type="submit" class="btn btn-primary btn-block" id="bkSubmit" style="margin-top:14px">Request my free scan</button>
-        <p class="fine">By booking you agree to the <a href="#audit-terms" data-close>scan terms</a> and our <a href="privacy.html">privacy policy</a>.</p>
+        <button type="submit" class="btn btn-primary btn-block" id="bkSubmit" style="margin-top:14px">Request my free audit</button>
+        <p class="fine">By requesting an audit you agree to the <a href="#audit-terms" data-close>audit terms</a> and our <a href="privacy.html">privacy policy</a>.</p>
       </form>
     </div>
 
     <div id="bkDone" class="bk-done" hidden>
       <div class="ok" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#109840" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-      <h2 id="bkDoneTitle" tabindex="-1">You're booked</h2>
-      <p>Your reference</p>
+      <h2 id="bkDoneTitle" tabindex="-1">Request received</h2>
+      <p>Your audit ID</p>
       <div class="ref" id="bkRef"></div>
       <p>We've sent a confirmation to <b id="bkDoneEmail"></b>. If it isn't there in a few minutes, check spam.</p>
       <ol>
         <li>We send your setup instructions, usually the same day.</li>
         <li>You create one read-only IAM role. It takes about 5 minutes.</li>
-        <li>Your free summary arrives within 24 hours of access working.</li>
+        <li>You receive your initial audit findings within 24 hours of successful AWS access.</li>
       </ol>
       <button type="button" class="btn btn-ghost" data-close>Close</button>
     </div>
@@ -657,19 +676,20 @@ html:has(.bk[open]){overflow:hidden}
 
 <script>
 /* ================= CONFIG =================
-   Every "Get my free scan" button opens the booking form. Bookings go to the Apps
-   Script mailer (the same one as the homepage contact form); if it can't be reached,
-   the visitor's email app opens with the booking filled in, so nothing is lost.
-   Payment for the full report is arranged by email after the free summary. */
+   Every "Get my free audit" button opens the request form. Requests go to the Apps
+   Script mailer (the same one as the homepage contact form), which gives each one an
+   audit ID; if it can't be reached, the visitor's email app opens with the request
+   filled in, so nothing is lost. The paid engagement is arranged by email after the
+   initial findings. */
 var CONFIG = {
   email: 'hello@exommerce.online',
   bookingEndpoint: 'https://script.google.com/macros/s/AKfycbyo6QASQ4wgBQxCiKid3dJZsCpRupRTFbisglyGsBHZuIRTFVBxv9trJx8xSjLScPgNEQ/exec'
 };
-var CADENCE_LABELS = { once: 'just this once', quarterly: 'every quarter', yearly: 'every year' };
 
+// Only the Stress Test waitlist line shows a price that depends on the visitor's currency.
 var PRICES = {
-  USD: { founding:'$299', regular:'$790', starter:'$499', scale:'$1,490', fixes:'+$490', stress1:'$1,200', stress2:'$2,400' },
-  INR: { founding:'₹19,999', regular:'₹49,999', starter:'₹29,999', scale:'₹99,999', fixes:'+₹29,999', stress1:'₹69,999', stress2:'₹1,49,999' }
+  USD: { stress1:'$1,200', stress2:'$2,400' },
+  INR: { stress1:'₹69,999', stress2:'₹1,49,999' }
 };
 
 var currency = 'USD';
@@ -685,14 +705,7 @@ function setCurrency(cur) {
     var v = PRICES[cur][el.getAttribute('data-price')];
     if (v) el.textContent = v;
   });
-  document.querySelectorAll('.cur-toggle button').forEach(function (b) {
-    b.setAttribute('aria-pressed', b.getAttribute('data-cur') === cur ? 'true' : 'false');
-  });
 }
-
-document.querySelectorAll('.cur-toggle button').forEach(function (b) {
-  b.addEventListener('click', function () { setCurrency(b.getAttribute('data-cur')); track('currency_toggle', { currency: b.getAttribute('data-cur') }); });
-});
 
 document.querySelectorAll('[data-buy]').forEach(function (el) {
   el.addEventListener('click', function (e) {
@@ -706,18 +719,20 @@ document.querySelectorAll('[data-buy]').forEach(function (el) {
 var bookDialog = document.getElementById('bookDialog');
 var bookTrigger = '';
 var EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;   // same rules as the Apps Script
-var PHONE_RE = /^[0-9+()\-.\s]{6,40}$/;
+var SITE_RE = /^(https?:\/\/)?[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}(\/\S*)?$/i;
+// Share links like /free-scan?ref=linkedin pre-fill "How did you hear about us?"
+var REF_SOURCES = { linkedin: 'LinkedIn', li: 'LinkedIn', whatsapp: 'WhatsApp', wa: 'WhatsApp', email: 'Email',
+                    google: 'Google search', referral: 'Referred by someone', event: 'Event or meetup' };
 
 function bookingMailto(d) {
-  var lines = ['Hi eXommerce,', '', "I'd like a free AWS cost scan.", '',
-    'Name:      ' + (d.name || ''),
-    'Company:   ' + (d.company || ''),
-    'AWS spend: ' + (d.spend || ''),
-    'Re-scan:   ' + (CADENCE_LABELS[d.cadence] || CADENCE_LABELS.once),
-    'Phone:     ' + (d.phone || '')];
-  if (d.notes) lines.push('', d.notes);
-  lines.push('', 'Thanks');
-  return 'mailto:' + CONFIG.email + '?subject=' + encodeURIComponent('Free AWS cost scan: ' + (d.company || 'booking'))
+  var lines = ['Hi eXommerce,', '', "I'd like a free Cloud Cost & Infrastructure Audit.", '',
+    'Name:       ' + (d.name || '') + (d.role ? ' (' + d.role + ')' : ''),
+    'Company:    ' + (d.company || '') + (d.company_site ? ' · ' + d.company_site : ''),
+    'Industry:   ' + (d.industry || '') + (d.company_size ? ' · ' + d.company_size + ' people' : ''),
+    'Cloud:      ' + (d.provider || '') + (d.spend ? ' · ' + d.spend + '/month' : ''),
+    'Heard via:  ' + (d.source || ''),
+    '', 'Thanks'];
+  return 'mailto:' + CONFIG.email + '?subject=' + encodeURIComponent('Free cloud audit request: ' + (d.company || 'new request'))
     + '&body=' + encodeURIComponent(lines.join('\r\n'));
 }
 
@@ -737,6 +752,15 @@ if (bookDialog) {
   document.getElementById('bkSpend').addEventListener('change', function () {
     document.getElementById('bkLow').hidden = this.value !== 'Under $3k';
   });
+  document.getElementById('bkProvider').addEventListener('change', function () {
+    document.getElementById('bkNotAws').hidden = this.value === '' || this.value.indexOf('AWS') === 0;
+  });
+
+  try {
+    var params = new URLSearchParams(location.search);
+    var heard = REF_SOURCES[(params.get('ref') || '').toLowerCase()] || REF_SOURCES[(params.get('utm_source') || '').toLowerCase()];
+    if (heard) document.getElementById('bkSource').value = heard;
+  } catch (e) {}
 
   // cloud-audit.html#book (or ?book=1, which /free-scan redirects to) opens the form
   // straight away, for links shared in emails, WhatsApp and LinkedIn.
@@ -744,7 +768,7 @@ if (bookDialog) {
 
   // The form is novalidate so this handler always runs and checks it itself;
   // a custom error is cleared as soon as the visitor edits that field.
-  ['bkEmail', 'bkPhone'].forEach(function (id) {
+  ['bkEmail', 'bkSite'].forEach(function (id) {
     document.getElementById(id).addEventListener('input', function () { this.setCustomValidity(''); });
   });
 
@@ -753,14 +777,14 @@ if (bookDialog) {
     var form = this;
     var val = function (id) { return document.getElementById(id).value.trim(); };
     var emailEl = document.getElementById('bkEmail');
-    var phoneEl = document.getElementById('bkPhone');
+    var siteEl = document.getElementById('bkSite');
     emailEl.setCustomValidity(!emailEl.value.trim() || EMAIL_RE.test(emailEl.value.trim()) ? '' : 'Please enter a full email address, like name@company.com');
-    phoneEl.setCustomValidity(!phoneEl.value.trim() || PHONE_RE.test(phoneEl.value.trim()) ? '' : 'Use digits, spaces and + ( ) - only');
+    siteEl.setCustomValidity(!siteEl.value.trim() || SITE_RE.test(siteEl.value.trim()) ? '' : 'Please enter a website address, like company.com');
     if (!form.checkValidity()) { form.reportValidity(); return; }
 
     var d = { name: val('bkName'), email: val('bkEmail').toLowerCase(), company: val('bkCompany'),
-              spend: document.getElementById('bkSpend').value, cadence: document.getElementById('bkCadence').value,
-              phone: val('bkPhone'), notes: val('bkNotes') };
+              company_site: val('bkSite'), role: val('bkRole'), industry: val('bkIndustry'),
+              company_size: val('bkSize'), provider: val('bkProvider'), spend: val('bkSpend'), source: val('bkSource') };
     if (document.getElementById('bkWebsite').value) return;   // honeypot: bots fill hidden fields
 
     var btn = document.getElementById('bkSubmit');
@@ -770,7 +794,7 @@ if (bookDialog) {
 
     function booked(reference) {
       btn.disabled = false; btn.textContent = label;
-      track('generate_lead', { form: 'free_scan', cadence: d.cadence, location: bookTrigger });
+      track('generate_lead', { form: 'free_scan', location: bookTrigger, spend: d.spend, provider: d.provider, source: d.source });
       document.getElementById('bkRef').textContent = reference;
       document.getElementById('bkDoneEmail').textContent = d.email;
       document.getElementById('bkForm').hidden = true;
@@ -780,9 +804,9 @@ if (bookDialog) {
     function viaEmailApp() {
       var href = bookingMailto(d);
       btn.disabled = false; btn.textContent = label;
-      err.textContent = 'One more step: your email app is opening with your booking filled in. Just press Send. If nothing opened, ';
+      err.textContent = 'One more step: your email app is opening with your request filled in. Just press Send. If nothing opened, ';
       var a = document.createElement('a');
-      a.href = href; a.textContent = 'email us your booking';
+      a.href = href; a.textContent = 'email us your request';
       err.appendChild(a); err.appendChild(document.createTextNode('.'));
       err.hidden = false;
       track('booking_fallback', { currency: currency, location: bookTrigger });
@@ -791,7 +815,6 @@ if (bookDialog) {
 
     var data = new URLSearchParams(d);
     data.set('form', 'audit_booking');
-    data.set('currency', currency);
     data.set('page', location.href);
     var ctl = typeof AbortController === 'function' ? new AbortController() : null;
     var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 20000);

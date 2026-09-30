@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sample Report — 24-Hour Cloud Cost Audit — eXommerce</title>
-<meta name="description" content="A sample 24-Hour Cloud Cost Audit report on a fictional demo AWS account: ranked findings, dollar savings, risk levels and dry-run cleanup scripts." />
+<title>Sample Report — Cloud Cost &amp; Infrastructure Audit — eXommerce</title>
+<meta name="description" content="A sample Cloud Cost &amp; Infrastructure Audit report on a fictional demo AWS account: ranked findings, potential dollar savings, risk levels and dry-run cleanup scripts." />
 <link rel="canonical" href="https://exommerce.online/sample-report.html" />
 <meta name="robots" content="index, follow" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23109840'/%3E%3Ctext x='32' y='44' font-family='Sora,sans-serif' font-weight='700' font-size='34' fill='%23FFFFFF' text-anchor='middle'%3Ee%3C/text%3E%3C/svg%3E" />
@@ -159,7 +159,7 @@ pre .k{color:var(--lime)}
     <a href="cloud-audit.html" aria-label="Back to the Cloud Audit"><img src="logo.png" alt="eXommerce.online" width="420" height="74" /></a>
     <div class="actions">
       <button class="btn btn-ghost" onclick="window.print()">Save as PDF</button>
-      <a class="btn btn-primary" href="cloud-audit.html#book">Get a free scan</a>
+      <a class="btn btn-primary" href="cloud-audit.html#book">Get a free audit</a>
     </div>
   </div>
 </div>
@@ -169,9 +169,9 @@ pre .k{color:var(--lime)}
 
   <!-- COVER -->
   <section class="sheet cover">
-    <span class="eyebrow">24-Hour Cloud Cost Audit · Report</span>
-    <h1>$3,523/month in actionable AWS savings identified</h1>
-    <p class="who">Prepared for <b>DemoCo</b> (fictional) · Signed off by <b>Bhavin Chawla</b>, Founder &amp; Principal Consultant</p>
+    <span class="eyebrow">Cloud Cost &amp; Infrastructure Audit · Report</span>
+    <h1>$3,523/month in potential AWS savings identified</h1>
+    <p class="who">Prepared for <b>DemoCo</b> (fictional) · Reviewed by the <b>eXommerce cloud optimization team</b></p>
     <div class="meta-grid">
       <div><span>AWS account</span><b>123456789012</b></div>
       <div><span>Regions scanned</span><b>us-east-1, ap-south-1</b></div>
@@ -186,7 +186,7 @@ pre .k{color:var(--lime)}
     <h2>The short version</h2>
     <p class="section-sub">23.8% of the monthly bill is idle, oversized or uncommitted. About a third of it can be removed this week with near-zero risk.</p>
     <div class="kpis">
-      <div class="kpi hero"><span>Monthly savings found</span><b>$3,523</b><small>23.8% of the $14,800 monthly bill</small></div>
+      <div class="kpi hero"><span>Potential monthly savings</span><b>$3,523</b><small>23.8% of the $14,800 monthly bill</small></div>
       <div class="kpi"><span>Annualized</span><b>$42,276</b><small>if all findings applied</small></div>
       <div class="kpi"><span>Findings</span><b>11</b><small>ranked by $ impact</small></div>
       <div class="kpi"><span>This week, low risk</span><b>$1,092</b><small>cleanup only, no resizing</small></div>
@@ -235,6 +235,7 @@ pre .k{color:var(--lime)}
       </table>
     </div>
     <p style="font-size:12px;color:var(--text3);margin-top:10px">Risk: <b>● Low</b> no service impact expected · <b>▲ Medium</b> brief restart or failover, schedule it · <b>◆ Review</b> financial commitment, no infrastructure change.</p>
+    <p style="font-size:12px;color:var(--text3);margin-top:6px">Status: every figure here is a <b>potential saving</b>. Each becomes a <b>validated recommendation</b> only after checks for disaster-recovery standbys, scheduled jobs, auto-scaling, DNS and vendor dependencies and backup retention, and is implemented only once <b>approved</b>. Nothing in the account is changed automatically.</p>
   </section>
 
   <!-- 4. DEEP DIVE -->
@@ -291,7 +292,7 @@ pre .k{color:var(--lime)}
       <div>
         <h3>Access (read-only)</h3>
         <ul>
-          <li>One IAM role, External ID-locked to this order</li>
+          <li>One IAM role, External ID-locked to this audit</li>
           <li><code>ViewOnlyAccess</code>, <code>AWSBillingReadOnlyAccess</code>, <code>ComputeOptimizerReadOnlyAccess</code></li>
           <li>No data access (S3 objects, database rows, secrets)</li>
           <li>No changes made to the account</li>
@@ -310,22 +311,21 @@ pre .k{color:var(--lime)}
     <p style="font-size:13px;color:var(--text3);margin-top:14px">Delivery bundle: this report (PDF), findings CSV with every resource ID, dry-run cleanup scripts, and access-removal commands.</p>
     <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--border);margin-top:22px;padding-top:18px">
       <div style="flex:1;min-width:240px">
-        <span class="eyebrow" style="margin-bottom:4px">Engineer sign-off</span>
-        <p style="font-size:14px;color:var(--text2)">Every finding in this report was checked against the account's own cost and usage data by a senior cloud engineer before delivery.</p>
+        <span class="eyebrow" style="margin-bottom:4px">Team review</span>
+        <p style="font-size:14px;color:var(--text2)">Every audit is reviewed by the eXommerce cloud optimization team before results are shared. Each finding in this report was checked against the account's own cost and usage data.</p>
       </div>
       <div style="border:1px solid var(--border-strong);border-radius:12px;padding:14px 18px;min-width:240px">
-        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3)">Reviewed &amp; signed off by</div>
-        <div style="font:700 16px var(--ff-display);margin-top:2px">Bhavin Chawla</div>
-        <div style="font-size:13px;color:var(--text2)">Founder &amp; Principal Consultant, eXommerce</div>
-        <div style="font-size:12px;color:var(--text3);margin-top:4px">Signed off: 30 Sep 2026 · Report ID DEMO-0001</div>
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3)">Reviewed by</div>
+        <div style="font:700 16px var(--ff-display);margin-top:2px">eXommerce cloud optimization team</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:4px">Reviewed: 30 Sep 2026 · Audit ID DEMO-0001</div>
       </div>
     </div>
   </section>
 
   <div class="cta">
     <h2>Want this for your AWS account?</h2>
-    <p>Start with a free scan: see your savings figure within 24 hours, then decide if you want the full report.</p>
-    <a class="btn btn-primary" style="padding:14px 26px;font-size:15px" href="cloud-audit.html#book">Get my free scan →</a>
+    <p>Start with the free audit: receive your initial findings within 24 hours of successful AWS access, then decide whether you want the ₹25,000 Cloud Optimization Engagement to act on them.</p>
+    <a class="btn btn-primary" style="padding:14px 26px;font-size:15px" href="cloud-audit.html#book">Get my free audit →</a>
   </div>
   <p class="fine">Sample only. DemoCo is fictional and not an eXommerce client. Prices are AWS us-east-1 on-demand list prices and may differ from your account's pricing, region or discounts. © <span id="yr"></span> eXommerce LLP</p>
 </main>
