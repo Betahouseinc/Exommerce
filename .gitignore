@@ -15,9 +15,13 @@ recovery-codes.txt
 *api*key*.txt
 *secret*.txt
 supabase*.txt
+*access*key*.txt
+*_accessKeys.csv
 
 # Cloud Audit scanner: internal tooling with its own git repo, kept out of this
-# public repo (and its scan output is customer data, which must never be committed)
+# public repo (and its scan output is customer data, which must never be committed),
+# including any archive of it, e.g. a zip made for CloudShell
 scanner/
+scanner*.zip
 __pycache__/
 .pytest_cache/
