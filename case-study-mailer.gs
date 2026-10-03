@@ -315,15 +315,16 @@ function handleAuditBooking(p) {
   }
   if (auditor) {
     try {
+      var intro = 'Hi ' + firstName(f.name) + ',\n\nHere is the one step we need from you: it gives us read-only '
+        + 'access to your AWS account. Copy the dark box exactly as it is.';
+      var steps = setupInstructions(reference, f.company, roleTemplate(reference, auditor, externalId), f.region);
       MailApp.sendEmail({
         to: f.email,
         replyTo: NOTIFY_TO,
         name: SENDER_NAME,
         subject: 'Set up your cloud audit (' + reference + '): about 5 minutes',
-        body: 'Hi ' + firstName(f.name) + ',\n\nHere is the one step we need from you: it gives us read-only '
-          + 'access to your AWS account.\n\n'
-          + setupInstructions(reference, f.company, roleTemplate(reference, auditor, externalId), f.region)
-          + '\n— ' + TEAM + '\n'
+        body: intro + '\n\n' + steps + '\n— ' + TEAM + '\n',
+        htmlBody: setupHtml(intro, steps)
       });
       setBookingCell(reference, 'Setup sent at', new Date());
     } catch (err) {
@@ -432,6 +433,37 @@ function setupInstructions(reference, customer, template, region) {
     + '```bash\n'
     + 'aws cloudformation delete-stack --region ' + region + ' --stack-name ' + stack + '\n'
     + '```\n';
+}
+
+// The instructions as HTML. Plain-text mail gets re-wrapped and space-stuffed on the way,
+// which breaks the YAML's indentation and splits commands; a <pre> block arrives intact.
+function setupHtml(intro, instructions) {
+  var inline = function (s) {
+    return esc(s).replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
+      .replace(/`([^`]+)`/g, '<code style="background:#F1F5F2;padding:1px 4px;border-radius:3px">$1</code>');
+  };
+  var html = '';
+  String(instructions).split(/```(?:bash)?\n?/).forEach(function (part, i) {
+    if (i % 2) {
+      html += '<pre style="background:#0F1A14;color:#E7F5EC;padding:14px 16px;border-radius:8px;font:13px/1.5 '
+        + 'Consolas,Menlo,monospace;white-space:pre;overflow-x:auto;margin:0 0 16px">' + esc(part.replace(/\n$/, '')) + '</pre>';
+      return;
+    }
+    part.split('\n\n').forEach(function (block) {
+      var m = block.match(/^(#{1,2}) (.*)(?:\n|$)/);
+      if (m) {     // a heading, then whatever follows it in the same block (its list)
+        html += '<p style="margin:18px 0 8px;font-size:' + (m[1].length === 1 ? 17 : 15)
+          + 'px;font-weight:700;color:#0B0D0C">' + inline(m[2]) + '</p>';
+        block = block.slice(m[0].length);
+      }
+      if (block.trim()) {
+        html += '<p style="margin:0 0 12px;font-size:14px;line-height:1.6">' + inline(block.trim()).replace(/\n/g, '<br>') + '</p>';
+      }
+    });
+  });
+  return '<div style="font-family:Arial,sans-serif;max-width:680px;margin:0 auto;color:#3F4852">'
+    + '<p style="margin:0 0 14px;font-size:15px;line-height:1.6">' + esc(intro).replace(/\n/g, '<br>') + '</p>'
+    + html + '<p style="margin:18px 0 0;font-size:14px">— ' + esc(TEAM) + '</p></div>';
 }
 
 // Writes one cell of an audit's row, found by its audit ID.

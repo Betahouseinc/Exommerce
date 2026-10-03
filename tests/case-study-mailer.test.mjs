@@ -177,6 +177,18 @@ test('with a region and our audit account set, setup instructions go out automat
   assert.ok(notice.body.includes(`--external-id ${ext}`) && notice.body.includes('emailed to them automatically'));
   assert.ok(isDate(cell(1, 'Setup sent at')));
   for (const m of sent) assert.ok(!/₹|25,000/.test(m.body), 'no price anywhere');
+
+  // Plain-text mail gets re-wrapped in transit, so the paste block must arrive in a <pre>, verbatim.
+  const unescape = s => s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+  const blocks = [...setup.htmlBody.matchAll(/<pre[^>]*>([\s\S]*?)<\/pre>/g)].map(m => unescape(m[1]));
+  const plain = [...setup.body.matchAll(/```bash\n([\s\S]*?)\n```/g)].map(m => m[1]);
+  assert.equal(blocks.length, 2);
+  assert.deepEqual(blocks, plain);
+  assert.ok(blocks[0].includes(`                sts:ExternalId: ${ext}`), 'YAML indentation intact');
+  for (const words of ['Sign in to the AWS console', 'Open <b>AWS CloudShell</b>', 'Paste this whole block',
+                       '<b>Can:</b> view resource configuration', 'We never need access keys']) {
+    assert.ok(setup.htmlBody.includes(words), `HTML keeps "${words}"`);
+  }
 });
 
 test('no automatic setup without a usable region, or for other clouds', () => {
