@@ -507,10 +507,12 @@ function buildDashboard() {
   var none = '"—"';
   // Audits that reached this stage or any later one (a referral that started with a scan
   // still counts as requested), from real timestamps only: nothing is backfilled.
+  // The *1 matters for Revenue, the only single-column stage: Sheets ranks FALSE above
+  // every number, so a bare (FALSE)>0 is TRUE and every empty row would count.
   var reached = function (stage) {
     return '((' + STAGES.slice(STAGE_NAMES.indexOf(stage)).map(function (s) {
       return '(' + range(s.column) + '<>"")';
-    }).join('+') + ')>0)';
+    }).join('+') + ')*1>0)';
   };
   var rows = [
     ['eXommerce audit beta', '', '', ''],

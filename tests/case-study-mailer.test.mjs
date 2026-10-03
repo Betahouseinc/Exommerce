@@ -377,7 +377,9 @@ test('dashboard: live formulas over the bookings tab, an empty state, no stored 
   const funnel = dash.slice(3, 13);
   assert.deepEqual(funnel.map(r => r[0]), ['Lead', 'Audit Requested', 'AWS Access Verified', 'Scan Started',
     'Scan Completed', 'Review Completed', 'Results Delivered', 'Paid Opportunity', 'Customer', 'Revenue']);
-  assert.equal(funnel[9][1], `=SUMPRODUCT(--((('Audit bookings'!${col('Revenue at')}2:${col('Revenue at')}<>""))>0))`);
+  // A lone comparison stays TRUE/FALSE, and in Sheets FALSE>0 is TRUE: it must become a number first.
+  assert.equal(funnel[9][1], `=SUMPRODUCT(--((('Audit bookings'!${col('Revenue at')}2:${col('Revenue at')}<>""))*1>0))`);
+  for (const row of funnel) assert.match(row[1], /\)\*1>0\)\)$/, row[0]);
   assert.equal((funnel[0][1].match(/<>""/g) || []).length, 10, 'Lead counts audits at any stage');
   assert.equal(funnel[1][2], '=IF($B$5=0,"—",B5/$B$5)', 'shares are of audit requests (row 5)');
 
