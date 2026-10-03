@@ -74,7 +74,14 @@ var BOOKING_HEADERS = ['Audit ID', 'Status'].concat(STAGES.map(function (s) { re
   'Monthly cloud spend', 'Source', 'Page',
   'Monthly AWS bill (USD)', 'Potential monthly savings (USD)', 'Potential annual savings (USD)',
   'Findings', 'Savings by category', 'Findings by severity', 'Problems found', 'Regions', 'Stack',
-  'Hours to results', 'Commercial outcome', 'Revenue (INR)', 'Next review', 'Last reminder', 'Notes']);
+  'Hours to results', 'Commercial outcome', 'Revenue (INR)', 'Next review', 'Last reminder', 'Notes',
+  // Added later: bookingSheet() appends new columns here, so existing ones never move.
+  'AWS region', 'External ID', 'Setup sent at']);
+
+// Regions offered on the form ("Not sure" or blank means we ask by email, as before).
+var AWS_REGIONS = ['us-east-1', 'us-east-2', 'us-west-1', 'us-west-2', 'ca-central-1', 'sa-east-1',
+  'eu-west-1', 'eu-west-2', 'eu-west-3', 'eu-central-1', 'eu-north-1', 'me-central-1',
+  'ap-south-1', 'ap-southeast-1', 'ap-southeast-2', 'ap-northeast-1', 'ap-northeast-2', 'ap-northeast-3'];
 
 // Only these values are accepted from the audit form.
 var FORM_OPTIONS = {
@@ -213,8 +220,11 @@ function handleAuditBooking(p) {
     name: clean(p.name, 100), email: clean(p.email, 120).toLowerCase(), company: clean(p.company, 120),
     site: clean(p.company_site, 200), role: clean(p.role, 60), industry: clean(p.industry, 60),
     size: clean(p.company_size, 20), provider: clean(p.provider, 30), spend: clean(p.spend, 20),
-    source: clean(p.source, 40), page: clean(p.page, 300)
+    source: clean(p.source, 40), page: clean(p.page, 300), region: clean(p.region, 20)
   };
+  if (f.region && f.region !== 'Not sure' && AWS_REGIONS.indexOf(f.region) < 0) {
+    return json({ ok: false, error: 'Please choose your main AWS region.' });
+  }
   if (!f.name || !f.company) return json({ ok: false, error: 'Please fill in your name and company.' });
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email)) return json({ ok: false, error: 'Please enter a valid work email.' });
   if (f.site && !/^(https?:\/\/)?[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}(\/\S*)?$/i.test(f.site)) {
@@ -234,11 +244,15 @@ function handleAuditBooking(p) {
 
   var reference = bookingReference();
   var now = new Date();
+  // With a known region and our audit account set, the setup instructions go out right away.
+  var auditor = isAws(f.provider) && AWS_REGIONS.indexOf(f.region) >= 0 ? auditorAccount() : '';
+  var externalId = auditor ? newExternalId(reference) : '';
   var row = auditRow({
     'Audit ID': reference, 'Status': 'Audit Requested', 'Lead at': now, 'Audit requested at': now,
     'Name': f.name, 'Email': f.email, 'Company': f.company, 'Website': f.site, 'Role': f.role,
     'Industry': f.industry, 'Company size': f.size, 'Cloud provider': f.provider,
-    'Monthly cloud spend': f.spend, 'Source': f.source, 'Page': f.page
+    'Monthly cloud spend': f.spend, 'Source': f.source, 'Page': f.page,
+    'AWS region': f.region, 'External ID': externalId
   });
   var failed = function (why) {   // still a lead, but the request never reached us
     row[BOOKING_HEADERS.indexOf('Status')] = 'Failed: ' + why;
@@ -246,7 +260,7 @@ function handleAuditBooking(p) {
     bookingSheet().appendRow(row.map(asText));
     return json({ ok: false, error: 'We could not take the request just now. Please email hello@exommerce.online.' });
   };
-  if (MailApp.getRemainingDailyQuota() < 2) return failed('daily email quota reached');
+  if (MailApp.getRemainingDailyQuota() < (auditor ? 3 : 2)) return failed('daily email quota reached');
 
   try {
     MailApp.sendEmail({
@@ -265,12 +279,19 @@ function handleAuditBooking(p) {
           + 'Page:      ' + f.page + '\n\n'
           + (isAws(f.provider) ? '' : 'Not on AWS: we audit AWS only for now, so add them to the Azure/GCP waitlist.\n\n')
           + (f.spend === 'Under $3k' ? 'Small account (under $3k/month): the findings may be modest; say so honestly.\n\n' : '')
-          + 'Their confirmation asks them to reply with their AWS account ID, regions, and whether they use '
-          + 'Organizations or Control Tower. Check that reply first: if an organization policy blocks regions, '
-          + 'scan with --regions.\n\n'
-          + 'Next: send the setup instructions. In the scanner folder:\n'
-          + '  python -m exaudit setup --reference ' + reference + ' --customer "' + f.company.replace(/"/g, "'") + '" --auditor <our account ID>\n'
-          + 'then reply to this email with out/' + reference + '/onboarding/setup-instructions.md.'
+          + (auditor
+            ? 'Setup instructions were emailed to them automatically (region ' + f.region + ').\n'
+              + 'When they reply with the role ARN, in the scanner folder:\n'
+              + '  python -m exaudit setup --reference ' + reference + ' --customer "' + f.company.replace(/"/g, "'")
+              + '" --auditor ' + auditor + ' --region ' + f.region + ' --external-id ' + externalId + '\n'
+              + '  python -m exaudit verify --reference ' + reference + ' --role-arn <their role ARN>\n'
+            : 'Their confirmation asks them to reply with their AWS account ID, regions, and whether they use '
+              + 'Organizations or Control Tower. Check that reply first: if an organization policy blocks regions, '
+              + 'scan with --regions.\n\n'
+              + 'Next: send the setup instructions. In the scanner folder:\n'
+              + '  python -m exaudit setup --reference ' + reference + ' --customer "' + f.company.replace(/"/g, "'")
+              + '" --auditor <our account ID> --region <their main region>\n'
+              + 'then reply to this email with out/' + reference + '/onboarding/setup-instructions.md.')
     });
     bookingSheet().appendRow(row.map(asText));
   } catch (err) {
@@ -286,11 +307,28 @@ function handleAuditBooking(p) {
       replyTo: NOTIFY_TO,
       name: SENDER_NAME,
       subject: 'Your free cloud cost & infrastructure audit (' + reference + ')',
-      body: bookingPlain(f.name, reference, f.provider),
-      htmlBody: bookingHtml(f.name, reference, f.provider)
+      body: bookingPlain(f.name, reference, f.provider, !!auditor),
+      htmlBody: bookingHtml(f.name, reference, f.provider, !!auditor)
     });
   } catch (err) {
     Logger.log('Audit ' + reference + ' confirmation failed: ' + err);
+  }
+  if (auditor) {
+    try {
+      MailApp.sendEmail({
+        to: f.email,
+        replyTo: NOTIFY_TO,
+        name: SENDER_NAME,
+        subject: 'Set up your cloud audit (' + reference + '): about 5 minutes',
+        body: 'Hi ' + firstName(f.name) + ',\n\nHere is the one step we need from you: it gives us read-only '
+          + 'access to your AWS account.\n\n'
+          + setupInstructions(reference, f.company, roleTemplate(reference, auditor, externalId), f.region)
+          + '\n— ' + TEAM + '\n'
+      });
+      setBookingCell(reference, 'Setup sent at', new Date());
+    } catch (err) {
+      Logger.log('Audit ' + reference + ' setup email failed: ' + err);
+    }
   }
 
   cache.put(key, reference, 600);
@@ -303,6 +341,107 @@ function bookingReference() {
   var suffix = '';
   for (var i = 0; i < 4; i++) suffix += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
   return 'AUD-' + Utilities.formatDate(new Date(), 'Asia/Kolkata', 'yyMMdd') + '-' + suffix;
+}
+
+// ---- Setup instructions, sent automatically --------------------------------------------
+// A copy of the scanner's onboarding.py (template, instructions, names). A test renders both
+// and compares them, so the role a customer creates is always the one the scanner expects.
+// Off until the Script Property AUDITOR_ACCOUNT_ID holds our audit account's 12-digit ID.
+function auditorAccount() {
+  var id = PropertiesService.getScriptProperties().getProperty('AUDITOR_ACCOUNT_ID') || '';
+  return /^\d{12}$/.test(id) ? id : '';
+}
+
+function auditSlug(reference) {
+  return String(reference).toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'audit';
+}
+
+function newExternalId(reference) {
+  return 'exommerce-' + auditSlug(reference) + '-' + Utilities.getUuid().replace(/-/g, '').slice(0, 24);
+}
+
+function roleTemplate(reference, auditor, externalId) {
+  return "AWSTemplateFormatVersion: '2010-09-09'\n"
+    + 'Description: >-\n'
+    + '  Read-only access for the eXommerce Cloud Cost and Infrastructure Audit (' + reference + ').\n'
+    + '  It can view configuration, metrics and billing, and cannot change anything or read your data.\n'
+    + '  Delete this stack to remove the access.\n'
+    + 'Resources:\n'
+    + '  AuditRole:\n'
+    + '    Type: AWS::IAM::Role\n'
+    + '    Properties:\n'
+    + '      RoleName: ' + ('eXommerceAuditReadOnly-' + auditSlug(reference)).slice(0, 64) + '\n'
+    + '      Description: eXommerce cloud audit ' + reference + ' (read-only)\n'
+    + '      MaxSessionDuration: 3600\n'
+    + '      AssumeRolePolicyDocument:\n'
+    + "        Version: '2012-10-17'\n"
+    + '        Statement:\n'
+    + '          - Effect: Allow\n'
+    + '            Principal:\n'
+    + '              AWS: arn:aws:iam::' + auditor + ':root\n'
+    + '            Action: sts:AssumeRole\n'
+    + '            Condition:\n'
+    + '              StringEquals:\n'
+    + '                sts:ExternalId: ' + externalId + '\n'
+    + '      ManagedPolicyArns:\n'
+    + '        - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess\n'
+    + '        - arn:aws:iam::aws:policy/AWSBillingReadOnlyAccess\n'
+    + '        - arn:aws:iam::aws:policy/ComputeOptimizerReadOnlyAccess\n'
+    + '      Tags:\n'
+    + '        - Key: purpose\n'
+    + '          Value: eXommerce cloud audit ' + reference + '\n'
+    + 'Outputs:\n'
+    + '  RoleArn:\n'
+    + '    Description: Send this to eXommerce\n'
+    + '    Value: !GetAtt AuditRole.Arn\n';
+}
+
+function setupInstructions(reference, customer, template, region) {
+  var stack = 'exommerce-audit-' + auditSlug(reference);
+  return '# Your free Cloud Cost & Infrastructure Audit (' + reference + '): grant read-only access\n\n'
+    + 'For ' + (customer || 'you') + '. It takes about 5 minutes.\n\n'
+    + '## Before you start\n'
+    + '- Sign in to the AWS console as someone who can create IAM roles.\n'
+    + '- If you use AWS Organizations, run this in the account you want audited.\n'
+    + '- So we can read Cost Explorer: the root user must have turned on **IAM access to billing\n'
+    + '  information** (Account → IAM user and role access to Billing information → Edit → Activate).\n'
+    + "  It's on in most accounts already.\n\n"
+    + '## Steps\n'
+    + '1. Open **AWS CloudShell** (the `>_` icon at the top of the console).\n'
+    + '2. Paste this whole block and press Enter:\n\n'
+    + '```bash\n'
+    + "cat > exommerce-audit-role.yaml <<'EOF'\n"
+    + template.replace(/\s+$/, '') + '\n'
+    + 'EOF\n'
+    + 'aws cloudformation deploy --region ' + region + ' --stack-name ' + stack + ' \\\n'
+    + '  --template-file exommerce-audit-role.yaml --capabilities CAPABILITY_NAMED_IAM\n'
+    + 'aws cloudformation describe-stacks --region ' + region + ' --stack-name ' + stack + ' \\\n'
+    + '  --query "Stacks[0].Outputs[?OutputKey==\'RoleArn\'].OutputValue" --output text\n'
+    + '```\n\n'
+    + '3. The last line prints a role ARN like `arn:aws:iam::123456789012:role/...`.\n'
+    + '   Reply to our email with it. You receive your initial audit findings within 24 hours of successful\n'
+    + "   AWS access, that is, once we've confirmed the role works.\n\n"
+    + "## What this role can and can't do\n"
+    + '- **Can:** view resource configuration, CloudWatch metrics, Cost Explorer and Compute Optimizer data.\n'
+    + "- **Can't:** change anything, or read your data (S3 objects, database contents, secrets).\n"
+    + "- Only eXommerce's audit account can use it, and only with the ID in the template, which is unique\n"
+    + '  to this audit.\n'
+    + '- We never need access keys or passwords: this role is all we use.\n\n'
+    + '## Removing access afterwards\n'
+    + 'Once you have your initial findings, the scan is done and you can remove our access. Run this in CloudShell:\n\n'
+    + '```bash\n'
+    + 'aws cloudformation delete-stack --region ' + region + ' --stack-name ' + stack + '\n'
+    + '```\n';
+}
+
+// Writes one cell of an audit's row, found by its audit ID.
+function setBookingCell(reference, header, value) {
+  var sheet = bookingSheet();
+  var values = sheet.getDataRange().getValues();
+  var c = values[0].indexOf(header);
+  for (var r = 1; r < values.length && c >= 0; r++) {
+    if (values[r][0] === reference) { sheet.getRange(r + 1, c + 1).setValue(value); return; }
+  }
 }
 
 function firstName(name) { return String(name).split(/\s+/)[0]; }
@@ -334,16 +473,27 @@ var NEVER_ASK = 'We never ask for access keys, passwords or root credentials. Th
 var NOT_AWS = 'We audit AWS today. Azure and Google Cloud are coming, and we\'ll let you know as soon as your '
   + 'cloud is supported.';
 
-function bookingPlain(name, reference, provider) {
+// When the setup instructions went out automatically, step 1 is already done and we know the region.
+function nextSteps(setupSent) {
+  return setupSent ? ['Your setup instructions are in a separate email we just sent.'].concat(NEXT_STEPS.slice(1))
+                   : NEXT_STEPS;
+}
+function getReady(setupSent) {
+  return setupSent ? GET_READY.slice(0, 2).concat([
+    'Tell us if you use AWS Organizations or Control Tower. Some organization policies block regions, and '
+      + 'knowing in advance avoids a re-run.'], GET_READY.slice(3)) : GET_READY;
+}
+
+function bookingPlain(name, reference, provider, setupSent) {
   return 'Hi ' + firstName(name) + ',\n\n'
     + 'Thanks for requesting the free eXommerce Cloud Cost & Infrastructure Audit. Your audit ID is '
     + reference + '.\n\n'
     + (isAws(provider) ? '' : NOT_AWS + '\n\n')
     + 'What happens next:\n'
-    + NEXT_STEPS.map(function (s, i) { return (i + 1) + '. ' + s; }).join('\n') + '\n\n'
+    + nextSteps(setupSent).map(function (s, i) { return (i + 1) + '. ' + s; }).join('\n') + '\n\n'
     + (isAws(provider)
       ? 'To get ready (optional, saves a day):\n'
-        + GET_READY.map(function (s) { return '- ' + s; }).join('\n') + '\n\n'
+        + getReady(setupSent).map(function (s) { return '- ' + s; }).join('\n') + '\n\n'
         + NEVER_ASK + '\n\n'
       : '')
     + REVIEWED + '\n\n'
@@ -351,7 +501,7 @@ function bookingPlain(name, reference, provider) {
     + '— ' + TEAM + '\n' + SITE + '/cloud-audit.html';
 }
 
-function bookingHtml(name, reference, provider) {
+function bookingHtml(name, reference, provider, setupSent) {
   var li = 'margin:0 0 8px;font-size:15px;line-height:1.6';
   var p = 'margin:0 0 14px;font-size:14px;line-height:1.6';
   return '<div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;color:#3F4852">'
@@ -364,13 +514,13 @@ function bookingHtml(name, reference, provider) {
     + (isAws(provider) ? '' : '<p style="' + p + '">' + esc(NOT_AWS) + '</p>')
     + '<p style="margin:0 0 8px;font-size:15px;font-weight:700;color:#0B0D0C">What happens next</p>'
     + '<ol style="margin:0 0 18px;padding-left:20px">'
-    + NEXT_STEPS.map(function (s) { return '<li style="' + li + '">' + esc(s) + '</li>'; }).join('')
+    + nextSteps(setupSent).map(function (s) { return '<li style="' + li + '">' + esc(s) + '</li>'; }).join('')
     + '</ol>'
     + (isAws(provider)
       ? '<p style="margin:0 0 8px;font-size:15px;font-weight:700;color:#0B0D0C">To get ready '
         + '<span style="font-weight:400;color:#6B7280">(optional, saves a day)</span></p>'
         + '<ul style="margin:0 0 16px;padding-left:20px">'
-        + GET_READY.map(function (s) { return '<li style="' + li + '">' + esc(s) + '</li>'; }).join('')
+        + getReady(setupSent).map(function (s) { return '<li style="' + li + '">' + esc(s) + '</li>'; }).join('')
         + '</ul>'
         + '<p style="margin:0 0 16px;font-size:14px;line-height:1.6;background:#EFF8F1;padding:12px 14px;border-radius:8px">'
         + esc(NEVER_ASK) + '</p>'
@@ -458,7 +608,19 @@ function bookingSheet() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName(BOOKING_SHEET);
   if (sheet && sheet.getLastRow() > 0) {
-    var headers = sheet.getRange(1, 1, 1, BOOKING_HEADERS.length).getValues()[0];
+    var width = Math.max(1, Math.min(sheet.getLastColumn(), BOOKING_HEADERS.length));
+    var headers = sheet.getRange(1, 1, 1, width).getValues()[0];
+    while (headers.length && headers[headers.length - 1] === '') headers.pop();
+    // Columns added since the tab was made go at the end: write their headings in, so
+    // existing columns (and the dashboard's formulas over them) never move.
+    if (headers.length < BOOKING_HEADERS.length &&
+        headers.join('\u0001') === BOOKING_HEADERS.slice(0, headers.length).join('\u0001')) {
+      var missing = BOOKING_HEADERS.length - sheet.getMaxColumns();
+      if (missing > 0) sheet.insertColumnsAfter(sheet.getMaxColumns(), missing);
+      sheet.getRange(1, headers.length + 1, 1, BOOKING_HEADERS.length - headers.length)
+        .setValues([BOOKING_HEADERS.slice(headers.length)]);
+      headers = BOOKING_HEADERS.slice();
+    }
     if (headers.join('\u0001') !== BOOKING_HEADERS.join('\u0001')) {
       sheet.setName(BOOKING_SHEET + ' (old format ' + Utilities.formatDate(new Date(), 'Asia/Kolkata', 'yyyy-MM-dd') + ')');
       sheet = null;

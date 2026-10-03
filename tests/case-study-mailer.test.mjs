@@ -30,6 +30,9 @@ function load({ quota = 100, failMailTo = null, token = null } = {}) {
     });
     return {
       getLastRow: () => rows.length,
+      getLastColumn: () => Math.max(0, ...rows.map(r => r.length)),
+      getMaxColumns: () => Math.max(26, ...rows.map(r => r.length)),
+      insertColumnsAfter: () => {},
       appendRow: r => rows.push(r),
       setFrozenRows: () => {},
       setName: n => { sheets[n] = rows; delete sheets[name]; },
@@ -146,6 +149,76 @@ test('confirmation email: 24-hour promise, team review, how to get ready, no pri
   }
   assert.ok(!sent[1].body.includes('Azure'), 'no not-on-AWS note for AWS customers');
   assert.ok(sent[0].body.includes('Check that reply first'), 'hello@ is reminded to read their account details');
+});
+
+test('automatic setup email is off until our audit account ID is set', () => {
+  const { post, sent, cell } = load();
+  post(request({ region: 'ap-south-1' }));
+  assert.equal(sent.length, 2, 'confirmation and hello@ only');
+  assert.equal(cell(1, 'AWS region'), 'ap-south-1');
+  assert.equal(cell(1, 'External ID'), '');
+  assert.match(sent[0].body, /--region <their main region>/);
+});
+
+test('with a region and our audit account set, setup instructions go out automatically', () => {
+  const { post, sent, cell, props } = load();
+  props.set('AUDITOR_ACCOUNT_ID', '111122223333');
+  const res = post(request({ region: 'ap-south-1' }));
+  assert.equal(sent.length, 3);
+  const [notice, confirm, setup] = sent;
+  const ext = cell(1, 'External ID');
+  assert.match(ext, new RegExp(`^exommerce-${res.reference.toLowerCase()}-[0-9a-f]{24}$`));
+  assert.equal(setup.to, 'asha@example.com');
+  assert.equal(setup.subject, `Set up your cloud audit (${res.reference}): about 5 minutes`);
+  assert.ok(setup.body.includes(`sts:ExternalId: ${ext}`) && setup.body.includes('AWS: arn:aws:iam::111122223333:root'));
+  assert.equal((setup.body.match(/--region ap-south-1/g) || []).length, 3);
+  assert.ok(confirm.body.includes('Your setup instructions are in a separate email we just sent.'));
+  assert.ok(!confirm.body.includes('regions you use'), 'we already know their region');
+  assert.ok(notice.body.includes(`--external-id ${ext}`) && notice.body.includes('emailed to them automatically'));
+  assert.ok(isDate(cell(1, 'Setup sent at')));
+  for (const m of sent) assert.ok(!/₹|25,000/.test(m.body), 'no price anywhere');
+});
+
+test('no automatic setup without a usable region, or for other clouds', () => {
+  for (const over of [{ region: 'Not sure' }, { region: '' }, { provider: 'Azure', region: 'ap-south-1' }]) {
+    const { post, sent, props } = load();
+    props.set('AUDITOR_ACCOUNT_ID', '111122223333');
+    assert.equal(post(request(over)).ok, true);
+    assert.equal(sent.length, 2, JSON.stringify(over));
+  }
+  const { post } = load();
+  assert.equal(post(request({ region: 'mars-1' })).error, 'Please choose your main AWS region.');
+});
+
+test('the emailed instructions are exactly what the scanner writes', async () => {
+  const { execFileSync } = await import('node:child_process');
+  const { existsSync } = await import('node:fs');
+  const { fileURLToPath } = await import('node:url');
+  const python = fileURLToPath(new URL('../scanner/.venv/Scripts/python.exe', import.meta.url));
+  if (!existsSync(python)) return;    // the scanner's environment isn't installed here
+  const { ctx } = load();
+  const ext = 'exommerce-aud-261004-abcd-0123456789abcdef01234567';
+  const js = ctx.setupInstructions('AUD-261004-ABCD', 'Acme Cloud',
+    ctx.roleTemplate('AUD-261004-ABCD', '111122223333', ext), 'ap-south-1');
+  const py = execFileSync(python, ['-c', [
+    'import sys; from exaudit import onboarding as o',
+    `t = o.template("AUD-261004-ABCD", o.principal_arn("111122223333"), "${ext}")`,
+    // bytes, not text: Windows would turn \n into \r\n and encode → in the console's code page
+    'sys.stdout.buffer.write(o.instructions("AUD-261004-ABCD", "Acme Cloud", t, "ap-south-1").encode("utf-8"))'].join('\n')],
+    { cwd: fileURLToPath(new URL('../scanner/', import.meta.url)), encoding: 'utf8' });
+  assert.equal(js, py);
+});
+
+test('a bookings tab from before the new columns gets them appended, not renamed', () => {
+  const { post, sheets, ctx } = load();
+  const old = ctx.BOOKING_HEADERS.slice(0, -3);
+  sheets['Audit bookings'] = [old.slice(), ['AUD-OLD-1', 'Audit Requested']];
+  post(request());
+  const rows = sheets['Audit bookings'];
+  assert.deepEqual(rows[0], ctx.BOOKING_HEADERS.slice());
+  assert.equal(rows[1][0], 'AUD-OLD-1', 'existing rows untouched');
+  assert.equal(rows.length, 3);
+  assert.ok(!Object.keys(sheets).some(n => n.includes('old format')));
 });
 
 test('not on AWS: the customer is told we audit AWS today', () => {

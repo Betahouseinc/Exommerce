@@ -633,6 +633,30 @@ html:has(.bk[open]){overflow:hidden}
             </select></div>
         </div>
         <p class="hint" id="bkNotAws" hidden>We audit AWS today. Request anyway and we'll let you know as soon as your cloud is supported.</p>
+        <div id="bkRegionWrap" hidden><label for="bkRegion">Main AWS region <span class="opt">(optional)</span></label>
+          <select id="bkRegion" name="region">
+            <option value="">Not sure</option>
+            <option value="ap-south-1">Asia Pacific (Mumbai) · ap-south-1</option>
+            <option value="ap-southeast-1">Asia Pacific (Singapore) · ap-southeast-1</option>
+            <option value="ap-southeast-2">Asia Pacific (Sydney) · ap-southeast-2</option>
+            <option value="ap-northeast-1">Asia Pacific (Tokyo) · ap-northeast-1</option>
+            <option value="ap-northeast-2">Asia Pacific (Seoul) · ap-northeast-2</option>
+            <option value="ap-northeast-3">Asia Pacific (Osaka) · ap-northeast-3</option>
+            <option value="me-central-1">Middle East (UAE) · me-central-1</option>
+            <option value="eu-west-1">Europe (Ireland) · eu-west-1</option>
+            <option value="eu-west-2">Europe (London) · eu-west-2</option>
+            <option value="eu-west-3">Europe (Paris) · eu-west-3</option>
+            <option value="eu-central-1">Europe (Frankfurt) · eu-central-1</option>
+            <option value="eu-north-1">Europe (Stockholm) · eu-north-1</option>
+            <option value="us-east-1">US East (N. Virginia) · us-east-1</option>
+            <option value="us-east-2">US East (Ohio) · us-east-2</option>
+            <option value="us-west-1">US West (N. California) · us-west-1</option>
+            <option value="us-west-2">US West (Oregon) · us-west-2</option>
+            <option value="ca-central-1">Canada (Central) · ca-central-1</option>
+            <option value="sa-east-1">South America (São Paulo) · sa-east-1</option>
+          </select>
+          <p class="hint">Where most of your workloads run. With it, your setup steps arrive by email straight away.</p>
+        </div>
         <p class="hint" id="bkLow" hidden>Under $3,000/month there's often little to find, but the free audit will tell you for sure.</p>
         <label for="bkSource">How did you hear about us?</label>
         <select id="bkSource" name="source" required>
@@ -753,6 +777,7 @@ if (bookDialog) {
   });
   document.getElementById('bkProvider').addEventListener('change', function () {
     document.getElementById('bkNotAws').hidden = this.value === '' || this.value.indexOf('AWS') === 0;
+    document.getElementById('bkRegionWrap').hidden = this.value.indexOf('AWS') !== 0;
   });
 
   try {
@@ -783,7 +808,8 @@ if (bookDialog) {
 
     var d = { name: val('bkName'), email: val('bkEmail').toLowerCase(), company: val('bkCompany'),
               company_site: val('bkSite'), role: val('bkRole'), industry: val('bkIndustry'),
-              company_size: val('bkSize'), provider: val('bkProvider'), spend: val('bkSpend'), source: val('bkSource') };
+              company_size: val('bkSize'), provider: val('bkProvider'), spend: val('bkSpend'), source: val('bkSource'),
+              region: val('bkProvider').indexOf('AWS') === 0 ? val('bkRegion') : '' };
     if (document.getElementById('bkWebsite').value) return;   // honeypot: bots fill hidden fields
 
     var btn = document.getElementById('bkSubmit');
