@@ -25,8 +25,7 @@
   "provider": { "@type": "Organization", "name": "eXommerce LLP", "url": "https://exommerce.online" },
   "areaServed": "Worldwide",
   "offers": [
-    { "@type": "Offer", "name": "Cloud Cost & Infrastructure Audit", "price": "0", "priceCurrency": "INR", "description": "Initial audit findings within 24 hours of successful AWS access" },
-    { "@type": "Offer", "name": "Cloud Optimization Engagement", "price": "25000", "priceCurrency": "INR", "description": "Validate, prioritize and implement approved optimization opportunities" }
+    { "@type": "Offer", "name": "Cloud Cost & Infrastructure Audit", "price": "0", "priceCurrency": "USD", "description": "Initial audit findings within 24 hours of successful AWS access" }
   ]
 }
 </script>
@@ -299,7 +298,7 @@ html:has(.bk[open]){overflow:hidden}
 <!-- ============ PRICING ============ -->
 <section id="pricing">
   <div class="wrap-md center">
-    <span class="eyebrow">Free audit · Fixed-price engagement · Ongoing support</span>
+    <span class="eyebrow">Free audit · Help acting on it · Ongoing support</span>
     <h2>Start free. Pay only for the fixes you want.</h2>
     <p class="lede" style="margin-bottom:36px">No discovery calls, no statements of work, and no payment details to get started.</p>
   </div>
@@ -330,10 +329,7 @@ html:has(.bk[open]){overflow:hidden}
         <p class="step-tag">Step 2 · only if you want it</p>
         <h3>Cloud Optimization Engagement</h3>
         <p class="hook">Validate, prioritize and implement the optimization opportunities you approve.</p>
-        <div class="price">
-          <span class="now">₹25,000</span>
-          <span class="per">per engagement</span>
-        </div>
+        <div class="price"><span class="small">Scoped with you</span></div>
         <p class="meta">Covers the opportunities from your audit that you approve</p>
         <ul class="checks">
           <li>Each opportunity validated against DR standbys, scheduled jobs, auto-scaling, DNS and vendor dependencies</li>
@@ -364,7 +360,7 @@ html:has(.bk[open]){overflow:hidden}
     <p class="table-cap" style="margin-top:22px">The audit is always free. Azure &amp; Google Cloud: <a href="#" data-waitlist="Azure / GCP Audit" data-track="waitlist_multicloud" style="color:var(--brand-green);text-decoration:underline">join the waitlist</a>.</p>
 
     <div class="soon-row">
-      <p><b>Coming soon: Peak Load Stress Test</b> (from <span data-price="stress1">$1,200</span>). Know whether your stack survives your busiest day before your customers find out it doesn't.</p>
+      <p><b>Coming soon: Peak Load Stress Test.</b> Know whether your stack survives your busiest day before your customers find out it doesn't.</p>
       <a href="#" class="btn btn-ghost" data-waitlist="Stress Test" data-track="waitlist_stress">Join the waitlist</a>
     </div>
   </div>
@@ -494,7 +490,7 @@ html:has(.bk[open]){overflow:hidden}
   <div class="wrap">
     <div class="faq">
       <details><summary>What exactly do you get access to?</summary><div class="a">A single IAM role with three AWS-managed read-only policies (<code>ViewOnlyAccess</code>, <code>AWSBillingReadOnlyAccess</code>, <code>ComputeOptimizerReadOnlyAccess</code>). The role can only be assumed by our audit account using an External ID unique to your audit. We never ask for access keys or passwords. We can't read S3 objects, database contents or secrets, and we can't change anything.</div></details>
-      <details><summary>What's free, and what do I pay for?</summary><div class="a">The audit is free: your potential monthly savings, how they split between cleanup, rightsizing and commitments, the biggest opportunities and their severity, and a snapshot of your stack. If you want help acting on it, the ₹25,000 Cloud Optimization Engagement validates each opportunity against your environment, prioritizes them, and implements the ones you approve. It covers the opportunities from your audit; anything beyond that is scoped separately. Ongoing Cloud Optimization &amp; Support is available after that. You decide after you've seen your findings.</div></details>
+      <details><summary>What's free, and what do I pay for?</summary><div class="a">The audit is free: your potential monthly savings, how they split between cleanup, rightsizing and commitments, the biggest opportunities and their severity, and a snapshot of your stack. If you want help acting on it, the Cloud Optimization Engagement validates each opportunity against your environment, prioritizes them, and implements the ones you approve. It's scoped with you after you've seen your findings. Ongoing Cloud Optimization &amp; Support is available after that. You decide after you've seen your findings.</div></details>
       <details><summary>When do I get my initial findings?</summary><div class="a">Within 24 hours of successful AWS access, not from when you request the audit. We work from the cost and usage history AWS already keeps, so there's nothing to install and no waiting period. We email you as soon as we've confirmed access.</div></details>
       <details><summary>How firm are the savings figures?</summary><div class="a">They're potential savings until validated. In the engagement, each one is checked against how the resource is actually used before it becomes a recommendation, and only the recommendations you approve are implemented. Savings Plans are sized on your usage after cleanup and rightsizing, never on today's bill alone.</div></details>
       <details><summary>What does Ongoing Cloud Optimization &amp; Support include?</summary><div class="a">Recurring cost reviews, quarterly or yearly, each compared with your previous audit so you see what you fixed and what's new, plus ongoing optimization, infrastructure efficiency work and implementation support. We agree the scope and price with you before it starts.</div></details>
@@ -520,7 +516,7 @@ html:has(.bk[open]){overflow:hidden}
         <li><strong>Access &amp; authorization.</strong> The customer confirms they are authorized to grant access to the account. Access is read-only through a role the customer creates and can revoke at any time. We never ask for or store access keys, passwords, private keys or other credentials.</li>
         <li><strong>Delivery time.</strong> Initial audit findings are sent within 24 hours of successful AWS access, meaning the read-only role has been created and verified. Engagement timelines are agreed when an engagement starts.</li>
         <li><strong>No automatic changes.</strong> The audit does not modify, delete or create resources in the customer's account. Figures in the initial findings are potential savings; each is validated before it is recommended, and changes are made only for opportunities the customer approves in writing. Scripts default to dry-run mode, and the customer is responsible for confirming backups and change windows before changes are applied.</li>
-        <li><strong>Payment.</strong> The audit is free; nothing is charged unless the customer engages us. The Cloud Optimization Engagement is ₹25,000, invoiced when the customer confirms the engagement.</li>
+        <li><strong>Payment.</strong> The audit is free. Any paid work is scoped and priced in writing before it starts.</li>
         <li><strong>Confidentiality &amp; data.</strong> We treat all account data as confidential and use it only to deliver the service. Detailed account data (resource IDs, configuration and the full findings) is deleted within 30 days of sending the initial findings, or of completing an engagement, whichever is later. We keep only the summary metadata needed for delivery, analysis and follow-up: the audit ID, contact and company details, spend range, savings totals, finding counts by category and severity, and the regions and services in use. For Ongoing Cloud Optimization &amp; Support, we also keep the previous findings so each review can be compared with the last. The customer should delete the access role once the initial findings arrive.</li>
         <li><strong>Liability.</strong> Our total liability is limited to the fee paid for the service. We are not liable for indirect or consequential losses, or for outcomes of actions the customer takes based on the findings.</li>
         <li><strong>Testimonials.</strong> We may ask for a short testimonial. Any published result is anonymized unless the customer approves otherwise.</li>
@@ -651,7 +647,7 @@ html:has(.bk[open]){overflow:hidden}
         </select>
         <div class="hp" aria-hidden="true"><label for="bkWebsite">Website</label><input id="bkWebsite" name="website" tabindex="-1" autocomplete="off" /></div>
         <div class="summary"><span>Audit and initial findings</span><b>Free</b></div>
-        <p class="fine" style="margin-top:8px">The ₹25,000 Cloud Optimization Engagement is optional, and you decide after seeing your findings.</p>
+        <p class="fine" style="margin-top:8px">Help acting on the findings is optional, and you decide after seeing them.</p>
         <p class="err" id="bkErr" role="alert" hidden></p>
         <button type="submit" class="btn btn-primary btn-block" id="bkSubmit" style="margin-top:14px">Request my free audit</button>
         <p class="fine">By requesting an audit you agree to the <a href="#audit-terms" data-close>audit terms</a> and our <a href="privacy.html">privacy policy</a>.</p>
@@ -718,25 +714,8 @@ var CONFIG = {
   bookingEndpoint: 'https://script.google.com/macros/s/AKfycbyo6QASQ4wgBQxCiKid3dJZsCpRupRTFbisglyGsBHZuIRTFVBxv9trJx8xSjLScPgNEQ/exec'
 };
 
-// Only the Stress Test waitlist line shows a price that depends on the visitor's currency.
-var PRICES = {
-  USD: { stress1:'$1,200', stress2:'$2,400' },
-  INR: { stress1:'₹69,999', stress2:'₹1,49,999' }
-};
-
-var currency = 'USD';
-try { if ((Intl.DateTimeFormat().resolvedOptions().timeZone || '') === 'Asia/Calcutta' || (Intl.DateTimeFormat().resolvedOptions().timeZone || '') === 'Asia/Kolkata') currency = 'INR'; } catch (e) {}
-
 function track(name, params) {
   if (typeof window.gtag === 'function') window.gtag('event', name, params || {});
-}
-
-function setCurrency(cur) {
-  currency = cur;
-  document.querySelectorAll('[data-price]').forEach(function (el) {
-    var v = PRICES[cur][el.getAttribute('data-price')];
-    if (v) el.textContent = v;
-  });
 }
 
 document.querySelectorAll('[data-buy]').forEach(function (el) {
@@ -826,7 +805,7 @@ if (bookDialog) {
       err.textContent = message || "We couldn't send your request just now. Please try again in a moment; "
         + 'your details are still filled in.';
       err.hidden = false;
-      track('booking_fallback', { currency: currency, location: bookTrigger });
+      track('booking_fallback', { location: bookTrigger });
     }
 
     var data = new URLSearchParams(d);
@@ -922,7 +901,6 @@ document.querySelectorAll('[data-track]').forEach(function (el) {
   el.addEventListener('click', function () { track('cta_click', { location: el.getAttribute('data-track') }); });
 });
 
-setCurrency(currency);
 document.getElementById('yr').textContent = new Date().getFullYear();
 </script>
 </body>

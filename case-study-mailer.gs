@@ -51,7 +51,7 @@ var CONTACT_HEADERS = ['Timestamp', 'First name', 'Last name', 'Email', 'Company
 // ---- Cloud Cost & Infrastructure Audit: one row per audit ID, through the whole funnel ----
 var BOOKING_SHEET   = 'Audit bookings';
 var DASHBOARD_SHEET = 'Beta dashboard';
-var ENGAGEMENT      = '₹25,000';            // paid Cloud Optimization Engagement
+var ENGAGEMENT      = '₹25,000';            // planned price of the paid engagement; not shown during beta
 var TEAM            = 'The eXommerce cloud optimization team';
 
 // Each stage gets a timestamp the first time the audit reaches it: from the website
@@ -265,6 +265,9 @@ function handleAuditBooking(p) {
           + 'Page:      ' + f.page + '\n\n'
           + (isAws(f.provider) ? '' : 'Not on AWS: we audit AWS only for now, so add them to the Azure/GCP waitlist.\n\n')
           + (f.spend === 'Under $3k' ? 'Small account (under $3k/month): the findings may be modest; say so honestly.\n\n' : '')
+          + 'Their confirmation asks them to reply with their AWS account ID, regions, and whether they use '
+          + 'Organizations or Control Tower. Check that reply first: if an organization policy blocks regions, '
+          + 'scan with --regions.\n\n'
           + 'Next: send the setup instructions. In the scanner folder:\n'
           + '  python -m exaudit setup --reference ' + reference + ' --customer "' + f.company.replace(/"/g, "'") + '" --auditor <our account ID>\n'
           + 'then reply to this email with out/' + reference + '/onboarding/setup-instructions.md.'
@@ -317,9 +320,17 @@ var NEXT_STEPS = [
   'You receive your initial audit findings within 24 hours of successful AWS access.'
 ];
 var REVIEWED = 'Every audit is reviewed by the eXommerce cloud optimization team before results are shared.';
-var PAID_NOTE = 'If you want help acting on the findings, the ' + ENGAGEMENT + ' Cloud Optimization Engagement '
-  + 'validates, prioritizes and implements the opportunities you approve. It\'s optional: you decide after '
-  + 'seeing your findings.';
+// What holds an audit up, learned from the first live runs. AWS customers only.
+var GET_READY = [
+  'Turn on Cost Explorer now (Billing and Cost Management → Cost Explorer). AWS takes about a day to fill it '
+    + 'in, and without it your findings won\'t include your bill figures.',
+  'Line up someone with admin access to your AWS console for 10 minutes. They create the read-only role.',
+  'Reply with your AWS account ID and the regions you use, and tell us if you use AWS Organizations or Control '
+    + 'Tower. Some organization policies block regions, and knowing in advance avoids a re-run.',
+  'Prefer to start with a non-production account? That\'s fine. Tell us which one.'
+];
+var NEVER_ASK = 'We never ask for access keys, passwords or root credentials. The role can only read, and you '
+  + 'can delete it at any time.';
 var NOT_AWS = 'We audit AWS today. Azure and Google Cloud are coming, and we\'ll let you know as soon as your '
   + 'cloud is supported.';
 
@@ -330,8 +341,12 @@ function bookingPlain(name, reference, provider) {
     + (isAws(provider) ? '' : NOT_AWS + '\n\n')
     + 'What happens next:\n'
     + NEXT_STEPS.map(function (s, i) { return (i + 1) + '. ' + s; }).join('\n') + '\n\n'
+    + (isAws(provider)
+      ? 'To get ready (optional, saves a day):\n'
+        + GET_READY.map(function (s) { return '- ' + s; }).join('\n') + '\n\n'
+        + NEVER_ASK + '\n\n'
+      : '')
     + REVIEWED + '\n\n'
-    + PAID_NOTE + '\n\n'
     + 'Questions? Just reply to this email.\n\n'
     + '— ' + TEAM + '\n' + SITE + '/cloud-audit.html';
 }
@@ -351,9 +366,16 @@ function bookingHtml(name, reference, provider) {
     + '<ol style="margin:0 0 18px;padding-left:20px">'
     + NEXT_STEPS.map(function (s) { return '<li style="' + li + '">' + esc(s) + '</li>'; }).join('')
     + '</ol>'
-    + '<p style="' + p + '">' + esc(REVIEWED) + '</p>'
-    + '<p style="margin:0 0 20px;font-size:14px;line-height:1.6;background:#EFF8F1;padding:12px 14px;border-radius:8px">'
-    + esc(PAID_NOTE) + '</p>'
+    + (isAws(provider)
+      ? '<p style="margin:0 0 8px;font-size:15px;font-weight:700;color:#0B0D0C">To get ready '
+        + '<span style="font-weight:400;color:#6B7280">(optional, saves a day)</span></p>'
+        + '<ul style="margin:0 0 16px;padding-left:20px">'
+        + GET_READY.map(function (s) { return '<li style="' + li + '">' + esc(s) + '</li>'; }).join('')
+        + '</ul>'
+        + '<p style="margin:0 0 16px;font-size:14px;line-height:1.6;background:#EFF8F1;padding:12px 14px;border-radius:8px">'
+        + esc(NEVER_ASK) + '</p>'
+      : '')
+    + '<p style="margin:0 0 20px;font-size:14px;line-height:1.6">' + esc(REVIEWED) + '</p>'
     + '<p style="margin:0;font-size:14px">Questions? Just reply to this email.</p>'
     + '<p style="margin:18px 0 0;font-size:14px">— ' + esc(TEAM) + '</p>'
     + '</div>'

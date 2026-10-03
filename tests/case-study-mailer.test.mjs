@@ -129,18 +129,23 @@ test('valid request: logged with an audit ID, hello@ notified, customer confirme
   assert.ok(sent[1].body.startsWith('Hi Asha,'));
 });
 
-test('confirmation email: 24-hour promise, team review, optional paid engagement, nothing personal', () => {
+test('confirmation email: 24-hour promise, team review, how to get ready, no price, nothing personal', () => {
   const { post, sent } = load();
   post(request());
   for (const text of [sent[1].body, sent[1].htmlBody]) {
     assert.ok(text.includes('You receive your initial audit findings within 24 hours of successful AWS access.'));
     assert.ok(text.includes('Every audit is reviewed by the eXommerce cloud optimization team before results are shared.'));
-    assert.ok(text.includes('₹25,000 Cloud Optimization Engagement'));
+    assert.ok(text.includes('To get ready'));
+    assert.ok(text.includes('Turn on Cost Explorer now'));
+    assert.ok(text.includes('AWS account ID and the regions you use'));
+    assert.ok(text.includes('We never ask for access keys, passwords or root credentials.'));
+    assert.ok(!/₹|25,000|INR|Engagement/.test(text), 'no paid offer or price during beta');
     assert.ok(text.includes('about 5 minutes'));
     assert.ok(text.includes('The eXommerce cloud optimization team'), 'signed by the team');
     assert.ok(!/bhavin|founder|personally|refund|guarantee|\$299/i.test(text), text);
   }
   assert.ok(!sent[1].body.includes('Azure'), 'no not-on-AWS note for AWS customers');
+  assert.ok(sent[0].body.includes('Check that reply first'), 'hello@ is reminded to read their account details');
 });
 
 test('not on AWS: the customer is told we audit AWS today', () => {
@@ -148,6 +153,7 @@ test('not on AWS: the customer is told we audit AWS today', () => {
   post(request({ provider: 'Google Cloud' }));
   assert.match(sent[0].body, /Not on AWS/);
   assert.match(sent[1].body, /We audit AWS today/);
+  assert.ok(!sent[1].body.includes('Cost Explorer'), 'no AWS setup steps for a cloud we don\'t audit yet');
   const mixed = load();
   mixed.post(request({ provider: 'AWS + other clouds' }));
   assert.ok(!/We audit AWS today/.test(mixed.sent[1].body));
